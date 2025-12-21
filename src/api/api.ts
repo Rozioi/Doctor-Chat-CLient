@@ -16,7 +16,7 @@ import type {
 } from "./types";
 
 export const api: AxiosInstance = axios.create({
-  baseURL: "https://incompletely-luxuriant-mastodon.cloudpub.ru/api/v1",
+  baseURL: "https://frightfully-desirable-baboon.cloudpub.ru/api/v1",
   headers: {
     "Content-Type": "application/json",
   },

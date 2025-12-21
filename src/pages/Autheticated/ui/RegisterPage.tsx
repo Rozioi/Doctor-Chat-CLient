@@ -30,10 +30,7 @@ const RegisterPage = () => {
   const handleRegister = async () => {
     if (!acceptedTerms) {
       messageApi.error(
-        t(
-          "auth.acceptTermsError",
-          "Необходимо принять условия использования",
-        ),
+        t("auth.acceptTermsError", "Необходимо принять условия использования"),
       );
       return;
     }
@@ -74,75 +71,73 @@ const RegisterPage = () => {
           <IoIosArrowBack />
         </div>
         <div className={styles.loginCard}>
-        <div className={styles.formContainer}>
+          <div className={styles.formContainer}>
             <h1 className={styles.title}>{t("auth.registerTitle")}</h1>
-            <p className={styles.subtitle}>
-              {t("auth.registerSubtitle")}
-            </p>
+            <p className={styles.subtitle}>{t("auth.registerSubtitle")}</p>
 
-          <div className={styles.inputWrapper}>
-            <label>
+            <div className={styles.inputWrapper}>
+              <label>
                 {t("auth.phoneLabel")}
-              <PhoneInput
-                country={"kz"}
-                value={phoneNumber}
-                onChange={setPhoneNumber}
-                inputClass={styles.phoneInput}
-                containerClass={styles.phoneContainer}
-                buttonClass={styles.flagDropdown}
-                dropdownClass={styles.countryList}
-                preferredCountries={["kz", "by", "ru", "ua"]}
-                placeholder="+7 (000) 000-00-00"
-                inputProps={{
-                  name: "phone",
-                  required: true,
-                  disabled: isSubmitting,
-                }}
-                enableSearch={true}
-                specialLabel={""}
+                <PhoneInput
+                  country={"kz"}
+                  value={phoneNumber}
+                  onChange={setPhoneNumber}
+                  inputClass={styles.phoneInput}
+                  containerClass={styles.phoneContainer}
+                  buttonClass={styles.flagDropdown}
+                  dropdownClass={styles.countryList}
+                  preferredCountries={["kz", "by", "ru", "ua"]}
+                  placeholder="+7 (000) 000-00-00"
+                  inputProps={{
+                    name: "phone",
+                    required: true,
+                    disabled: isSubmitting,
+                  }}
+                  enableSearch={true}
+                  specialLabel={""}
+                />
+              </label>
+            </div>
+
+            <div className={styles.privacyWrapper}>
+              <Checkbox
+                className={styles.checkbox}
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                disabled={isSubmitting}
               />
-            </label>
-          </div>
-
-          <div className={styles.privacyWrapper}>
-            <Checkbox
-              className={styles.checkbox}
-              checked={acceptedTerms}
-              onChange={(e) => setAcceptedTerms(e.target.checked)}
-              disabled={isSubmitting}
-            />
-            <p className={styles.privacyText}>
-                {t("auth.acceptPrefix", "Я принимаю")}{" "}
-              <a href="#" className={styles.link}>
+              <p className={styles.privacyText}>
+                {t("auth.acceptPreffix", "Я принимаю")}{" "}
+                <a href="#" className={styles.link}>
                   {t("auth.privacyLink", "политику конфиденциальности")}
-              </a>{" "}
+                </a>{" "}
                 {t("auth.and", "и")}{" "}
-              <a href="#" className={styles.link}>
+                <a href="#" className={styles.link}>
                   {t("auth.rulesLink", "правила пользования")}
-              </a>{" "}
+                </a>{" "}
                 {t("auth.appSuffix", "приложением")}
-            </p>
-          </div>
+              </p>
+            </div>
 
-          <button
-            className={styles.loginButton}
-            onClick={handleRegister}
-            disabled={isSubmitting || !acceptedTerms}
-          >
+            <button
+              className={styles.loginButton}
+              onClick={handleRegister}
+              disabled={isSubmitting || !acceptedTerms}
+            >
               {isSubmitting
                 ? t("auth.registerLoading")
                 : t("auth.registerButton")}
-          </button>
-          <a 
-            href="#" 
-            onClick={(e) => {
-              e.preventDefault();
-              goTo("/login");
-            }} 
-            className={styles.link}
-          >
-              {t("auth.goToLogin")}
-          </a>
+            </button>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                goTo("/login");
+              }}
+              className={styles.link}
+            >
+              {t("auth.loginButton")}
+            </a>
           </div>
         </div>
       </div>

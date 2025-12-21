@@ -42,6 +42,7 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
   const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState<"ru" | "en">("ru");
   const [messageApi, contextHolder] = message.useMessage();
+
   useEffect(() => {
     try {
       const savedLang =

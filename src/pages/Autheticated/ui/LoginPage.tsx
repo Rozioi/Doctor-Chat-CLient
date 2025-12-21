@@ -45,9 +45,7 @@ const LoginPage = () => {
         messageApi.success(t("auth.loginSuccess", "Вход выполнен успешно"));
         navigate("/home");
       } else {
-        messageApi.error(
-          response.error || t("auth.loginError", "Ошибка входа"),
-        );
+        messageApi.error(t("auth.loginError", "Ошибка входа"));
       }
     } catch (err) {
       messageApi.error(

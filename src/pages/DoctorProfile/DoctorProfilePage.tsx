@@ -22,7 +22,8 @@ interface MappedDoctorData {
 
 const getExperienceText = (years: number, t: any): string => {
   if (years === 1) return t("doctorProfilePage.experience.year");
-  if (years >= 2 && years <= 4) return t("doctorProfilePage.experience.years2_4");
+  if (years >= 2 && years <= 4)
+    return t("doctorProfilePage.experience.years2_4");
   return t("doctorProfilePage.experience.years5plus");
 };
 
@@ -71,8 +72,10 @@ export const DoctorProfilePage: React.FC = () => {
               : t("doctorProfilePage.defaults.doctor"),
             specialty:
               typeof doctor.specialization === "object"
-                ? (doctor.specialization as any)?.name || t("doctorProfilePage.defaults.specialist")
-                : doctor.specialization || t("doctorProfilePage.defaults.specialist"),
+                ? (doctor.specialization as any)?.name ||
+                  t("doctorProfilePage.defaults.specialist")
+                : doctor.specialization ||
+                  t("doctorProfilePage.defaults.specialist"),
             experience: `${Number(doctor.experience || 0)} ${getExperienceText(
               Number(doctor.experience || 0),
               t,
@@ -131,7 +134,9 @@ export const DoctorProfilePage: React.FC = () => {
   }, [id, slug, user]);
 
   if (loading) {
-    return <Loader fullScreen text={t("doctorProfilePage.loading")} size="large" />;
+    return (
+      <Loader fullScreen text={t("doctorProfilePage.loading")} size="large" />
+    );
   }
 
   if (error || !doctorData) {

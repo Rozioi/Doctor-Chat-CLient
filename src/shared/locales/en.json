@@ -23,6 +23,9 @@
     "userAgreementLink": "User Agreement",
     "privacyLink": "Privacy Policy",
     "termsOfUse": "terms of use",
+    "acceptPreffix": "I accept the",
+    "rulesLink": "terms of use",
+    "appSuffix": "of the application",
     "and": "and",
     "app": "application"
   },
