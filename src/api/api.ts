@@ -22,7 +22,7 @@ import type {
 } from "./types";
 
 export const api: AxiosInstance = axios.create({
-  baseURL: "https://frightfully-desirable-baboon.cloudpub.ru/api/v1",
+  baseURL: "https://doctor-chat-backend.vercel.app/api/v1",
   headers: {
     "Content-Type": "application/json",
   },
@@ -144,7 +144,10 @@ class ApiClient {
     data: CreateDoctorRequest,
   ): Promise<ApiResponse<{ user: User; doctor: DoctorProfile }>> {
     try {
-      const response = await api.post<{ user: User; doctor: DoctorProfile }>("/doctors", data);
+      const response = await api.post<{ user: User; doctor: DoctorProfile }>(
+        "/doctors",
+        data,
+      );
 
       if (response.data) {
         return {
@@ -847,9 +850,7 @@ class ApiClient {
     }
   }
 
-  async checkRobokassaStatus(
-    invoiceId: string,
-  ): Promise<ApiResponse<Payment>> {
+  async checkRobokassaStatus(invoiceId: string): Promise<ApiResponse<Payment>> {
     try {
       const response = await api.get<{
         success: boolean;
@@ -870,7 +871,8 @@ class ApiClient {
       if (axios.isAxiosError(error)) {
         return {
           success: false,
-          error: error.response?.data?.error || "Failed to check payment status",
+          error:
+            error.response?.data?.error || "Failed to check payment status",
         };
       }
       return {
