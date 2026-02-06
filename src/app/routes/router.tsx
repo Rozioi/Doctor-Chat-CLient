@@ -133,12 +133,13 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: ":slug",
-    element: (
-      <PublicLayout>
-        <RefundDocumentPage />
-      </PublicLayout>
-    ),
+    element: <PublicLayout />,
+    children: [
+      {
+        path: ":slug",
+        element: <RefundDocumentPage />,
+      },
+    ],
   },
   {
     path: "/welcome",
