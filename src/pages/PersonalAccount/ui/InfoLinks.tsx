@@ -24,11 +24,6 @@ const InfoLinks: React.FC = () => {
       icon: <MdArrowForwardIos />,
       link: "contacts",
     },
-    {
-      label: t("infoLinks.aboutServices"),
-      icon: <MdArrowForwardIos />,
-      link: "services",
-    },
   ];
 
   return (
