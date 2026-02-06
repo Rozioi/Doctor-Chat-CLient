@@ -1,12 +1,14 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Typography, Spin } from "antd";
-import workerSrc from "pdfjs-dist/build/pdf.worker.mjs?url";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 import { IoIosArrowBack } from "react-icons/io";
 import styles from "./InfoPage.module.scss";
 
-pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 const { Title } = Typography;
 
 export default function PdfViewer({
@@ -19,7 +21,7 @@ export default function PdfViewer({
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [loading, setLoading] = useState(true);
-  const { goTo } = useAppNavigation();
+  const { goBack } = useAppNavigation();
 
   useEffect(() => {
     setPageNumber(1);
@@ -29,12 +31,12 @@ export default function PdfViewer({
     setNumPages(numPages);
     setLoading(false);
   }
-  const docOptions = useMemo(() => ({ scale: 1.2 }), []);
+
 
   return (
     <div className={styles.pageContainer}>
       <div className={styles.header}>
-        <button className={styles.backButton} onClick={() => goTo(-1)}>
+        <button className={styles.backButton} onClick={goBack}>
           <IoIosArrowBack />
           <span>Назад</span>
         </button>
@@ -51,7 +53,6 @@ export default function PdfViewer({
         )}
 
         <Document
-          options={docOptions}
           file={fileUrl}
           onLoadSuccess={onDocumentLoadSuccess}
         >
@@ -73,9 +74,8 @@ export default function PdfViewer({
               <button
                 key={page}
                 onClick={() => setPageNumber(page)}
-                className={`${styles.pageButton} ${
-                  isActive ? styles.pageButtonActive : ""
-                }`}
+                className={`${styles.pageButton} ${isActive ? styles.pageButtonActive : ""
+                  }`}
               >
                 {page}
               </button>

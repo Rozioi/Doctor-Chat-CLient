@@ -1,11 +1,12 @@
 .page {
-    flex: 1 0 auto; /* растягивается, но не ломает скролл */
+    flex: 1 0 auto;
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 100%;
     background: #fff;
-    padding: 20px 28px 40px 28px;
+    padding: 0 28px 40px 28px;
+    /* Removed top padding as it's now global */
     box-sizing: border-box;
 }
 
@@ -14,12 +15,11 @@
     max-width: 100%;
     background: #ffffff;
     border-radius: 0;
-    padding: 20px 28px 40px 28px;
+    padding: 0 28px 40px 28px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     position: relative;
-    /* убираем flex-shrink и height, чтобы страница растягивалась */
 }
 
 .backButton {

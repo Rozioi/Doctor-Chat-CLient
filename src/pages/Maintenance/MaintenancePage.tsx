@@ -5,13 +5,7 @@ import styles from "./styles/MaintenancePage.module.scss";
 import { TbRefresh } from "react-icons/tb";
 import { useAppNavigation } from "../../shared/hooks/useAppNavigation";
 
-interface MaintenancePageProps {
-  onRetry?: () => void;
-}
-
-export const MaintenancePage: React.FC<MaintenancePageProps> = ({
-  onRetry,
-}) => {
+export const MaintenancePage: React.FC = () => {
   const { goTo } = useAppNavigation();
   return (
     <div className={styles.container}>

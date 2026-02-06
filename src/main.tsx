@@ -6,7 +6,7 @@ import { TelegramProvider } from "./app/providers/TelegramProvider";
 import { RouterProvider } from "react-router";
 import { router } from "./app/routes/router";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import AuthProvider from "./features/auth/context/AuthContext";
+import AuthProvider from "./features/auth/context/AuthContext.tsx";
 import "./shared/lib/i18n";
 
 const queryClient = new QueryClient({
@@ -16,8 +16,8 @@ const queryClient = new QueryClient({
       refetchOnMount: false,
       refetchOnReconnect: true,
       retry: 1,
-      staleTime: 5 * 60 * 1000, // 5 минут
-      gcTime: 10 * 60 * 1000, // 10 минут (было cacheTime)
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
     },
     mutations: {
       retry: 1,

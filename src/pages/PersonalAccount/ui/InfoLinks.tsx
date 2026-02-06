@@ -24,6 +24,11 @@ const InfoLinks: React.FC = () => {
       icon: <MdArrowForwardIos />,
       link: "contacts",
     },
+    {
+      label: t("infoLinks.aboutServices"),
+      icon: <MdArrowForwardIos />,
+      link: "services",
+    },
   ];
 
   return (
@@ -31,7 +36,7 @@ const InfoLinks: React.FC = () => {
       {links.map((item, index) => (
         <button
           key={index}
-          onClick={() => navigate(`/${item.link}`)} // переход на /:slug
+          onClick={() => navigate(`/${item.link}`)}
           className={styles.linkButton}
         >
           <span className={styles.text}>{item.label}</span>

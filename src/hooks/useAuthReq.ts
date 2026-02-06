@@ -3,6 +3,9 @@ import type {
   ApiResponse,
   CreateDoctorRequest,
   CreateUserRequest,
+  DoctorInput,
+  DoctorProfile,
+  LoginRequest,
   Role,
   TelegramInitData,
   User,
@@ -85,9 +88,9 @@ export const useAuthReq = () => {
   );
   const createDoctor = useCallback(
     async (
-      doctorData: Omit<CreateDoctorRequest, "telegramData" | "phoneNumber">,
+      doctorData: DoctorInput,
       phoneNumber: string,
-    ): Promise<ApiResponse<any>> => {
+    ): Promise<ApiResponse<{ user: User; doctor: DoctorProfile }>> => {
       if (!window.Telegram?.WebApp) {
         return {
           success: false,
@@ -105,11 +108,10 @@ export const useAuthReq = () => {
           };
         }
 
-        // ✅ Собираем всё как ожидает бэкенд
-        const createDoctorData = {
+        const createDoctorData: CreateDoctorRequest = {
           user: {
             telegramData,
-            phoneNumber: phoneNumber,
+            phoneNumber,
           },
           doctor: {
             ...doctorData,
@@ -118,7 +120,8 @@ export const useAuthReq = () => {
           },
         };
 
-        const response = await apiClient.createDoctor(createDoctorData);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const response = await (apiClient as any).createDoctor(createDoctorData);
 
         if (!response.success) {
           setError(response.error || "Failed to create doctor profile");
@@ -163,13 +166,14 @@ export const useAuthReq = () => {
           };
         }
 
-        const loginData = {
+        const loginData: LoginRequest = {
           telegramData: {
             id: telegramUser.id,
             username: telegramUser.username,
             first_name: telegramUser.first_name,
             last_name: telegramUser.last_name,
-            photo_url: telegramUser.photo_url,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            photo_url: (telegramUser as any).photo_url,
           },
           phoneNumber,
         };

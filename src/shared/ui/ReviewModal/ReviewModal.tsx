@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Modal, Rate, Input, Button, message } from "antd";
 import { useTranslation } from "react-i18next";
 import { apiClient } from "../../../api/api";
 import { useAuth } from "../../../features/auth/hooks/useAuth";
-import type { Review } from "../../../api/types";
+import type { Review, TelegramUser } from "../../../api/types";
+import { tg } from "../../../shared/lib/telegram";
 
 const { TextArea } = Input;
 
@@ -36,7 +37,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
 
     const telegramId =
       user?.telegramId ||
-      window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString();
+      (tg.initDataUnsafe.user as TelegramUser)?.id?.toString();
 
     if (!telegramId) {
       message.error(t("review.errors.unknownUser", "Не удалось определить пользователя"));
@@ -64,7 +65,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
           response.error || t("review.errors.createError", "Ошибка при создании отзыва"),
         );
       }
-    } catch (err) {
+    } catch {
       message.error(t("review.errors.createError", "Ошибка при создании отзыва"));
     } finally {
       setLoading(false);
@@ -127,4 +128,3 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
     </Modal>
   );
 };
-

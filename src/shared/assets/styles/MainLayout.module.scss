@@ -1,14 +1,16 @@
 .container {
     min-height: 100vh;
     min-width: 100vw;
-    background-color: var(#f5f5f5);
-    color: var(#000);
+    background-color: transparent;
+    color: var(--tg-theme-text-color, #000);
     position: relative;
+    padding-top: 24px;
+    /* Global safe area padding shifted here */
 }
 
 .content {
     padding-bottom: calc(84px + env(safe-area-inset-bottom));
-    height: 100vh;
+    min-height: calc(100vh - (84px + 24px));
     overflow-y: auto;
 
     -ms-overflow-style: none;

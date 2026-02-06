@@ -3,20 +3,18 @@ import { useNavigate } from "react-router";
 import { apiClient } from "../../api/api";
 import { Loader } from "../../shared/ui/Loader/Loader";
 
-export const ServerGuard = ({ children }) => {
+export const ServerGuard = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkServer = async () => {
       try {
-        const res = await apiClient.checkedServer();
-
-        if (!res.success) {
+        if (!(await apiClient.checkedServer()).success) {
           navigate("/tech", { replace: true });
           return;
         }
-      } catch (e) {
+      } catch {
         navigate("/tech", { replace: true });
         return;
       }
@@ -25,7 +23,7 @@ export const ServerGuard = ({ children }) => {
     };
 
     checkServer();
-  }, []);
+  }, [navigate]);
 
   if (loading) {
     return <Loader fullScreen text="Проверка сервера..." size="large" />;

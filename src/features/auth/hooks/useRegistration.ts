@@ -1,29 +1,10 @@
 import { useState, useCallback } from "react";
 import { useTelegram } from "../../../app/providers/useTelegram";
 import { authService } from "../../../api/services/auth.service";
-import type { Role, User } from "../../../api/types";
+import { tg } from "../../../shared/lib/telegram";
+import type { User } from "../../../api/types";
 
-export interface DoctorFormData {
-  specialization: string;
-  qualification: string;
-  experience: number;
-  description: string;
-  education: string;
-  certificates: string[];
-  consultationFee: number;
-  country: string;
-}
 
-const initialDoctorData: DoctorFormData = {
-  specialization: "",
-  qualification: "",
-  experience: 0,
-  description: "",
-  education: "",
-  certificates: [],
-  consultationFee: 0,
-  country: "",
-};
 
 export const useRegistration = () => {
   const { user: telegramUser } = useTelegram();
@@ -48,7 +29,7 @@ export const useRegistration = () => {
         telegramData: {
           user: telegramUser,
           auth_date: Math.floor(Date.now() / 1000),
-          hash: window.Telegram?.WebApp?.initDataUnsafe?.hash || "",
+          hash: tg.initDataUnsafe.hash || "",
         },
         role: "PATIENT",
         phoneNumber: phoneNumber || undefined,

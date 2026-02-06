@@ -9,6 +9,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import "react-phone-input-2/lib/style.css";
 import "antd/dist/reset.css";
 import { useTranslation } from "react-i18next";
+import { mapServerError } from "../../../shared/utils/errorMapper";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -52,9 +53,7 @@ const RegisterPage = () => {
       );
       navigate("/");
     } else {
-      messageApi.error(
-        error || t("auth.registerError", "Ошибка при регистрации"),
-      );
+      messageApi.error(mapServerError(error || ""));
     }
   };
 

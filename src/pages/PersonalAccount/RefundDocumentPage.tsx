@@ -13,7 +13,8 @@ type DocumentSlug =
   | "offer"
   | "paymentProc"
   | "contacts"
-  | "delivery";
+  | "delivery"
+  | "services";
 
 const RefundDocumentPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -21,11 +22,11 @@ const RefundDocumentPage: React.FC = () => {
   const pages: Record<DocumentSlug, InfoItem> = {
     terms: {
       title: "Пользовательское соглашение",
-      file: "terms.pdf",
+      file: "terms1.pdf",
     },
     privacy: {
       title: "Политика конфиденциальности",
-      file: "privacy.pdf",
+      file: "privacy1.pdf",
     },
     offer: {
       title: "Публичная оферта",
@@ -43,6 +44,10 @@ const RefundDocumentPage: React.FC = () => {
       title: "Доставка услуги",
       file: "delivery-methods.pdf",
     },
+    services: {
+      title: "Информация об услугах",
+      file: "Информация об услугах.pdf",
+    },
   };
 
   const isValidSlug = (s: string): s is DocumentSlug => {
@@ -53,8 +58,8 @@ const RefundDocumentPage: React.FC = () => {
   const page = pages[currentSlug];
 
   const pdfBaseUrl =
-    import.meta.env.VITE_PDF_BASE_URL ||
-    "https://famously-sumptuous-diamondback.cloudpub.ru/uploads/pdfs/";
+    import.meta.env.VITE_REACT_APP_PDF_BASE_URL ||
+    "https://frightfully-desirable-baboon.cloudpub.ru/uploads/pdfs/";
   const normalizeUrl = (base: string, file: string) => {
     const baseClean = base.endsWith("/") ? base : `${base}/`;
     const fileClean = file.startsWith("/") ? file.slice(1) : file;

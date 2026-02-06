@@ -1,9 +1,6 @@
 .infoBlock {
     width: 100%;
-    /* background: #ffffff; */
     border-radius: 16px;
-    /* padding: 20px; */
-    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); */
     font-family: "Inter", sans-serif;
     color: #333;
     box-sizing: border-box;
@@ -11,9 +8,6 @@
     text-align: left;
     margin-bottom: 36px;
 
-    @media (max-width: 768px) {
-        /* padding: 16px; */
-    }
 }
 
 .title {

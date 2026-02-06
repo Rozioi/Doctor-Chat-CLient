@@ -21,34 +21,45 @@
 
 body {
     scroll-behavior: smooth;
+    background-color: var(--tg-theme-bg-color, #ffffff);
 }
+
 a {
     font-weight: 500;
     color: #646cff;
     text-decoration: inherit;
 }
 
+html,
 body {
     margin: 0;
+    padding: 0 !important;
+    width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
 }
+
 * {
+    box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
     outline: none;
 }
-* {
-    -webkit-tap-highlight-color: transparent;
-}
+
 *:focus-visible {
     outline: none;
 }
+
 @media (prefers-color-scheme: light) {
     :root {
         color: #213547;
         background-color: #ffffff;
     }
+
     a:hover {
         color: #747bff;
     }
+
     button {
         background-color: #f9f9f9;
     }

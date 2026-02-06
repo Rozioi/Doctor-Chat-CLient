@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { List, Avatar, Card, Typography, Spin, message, Button } from "antd";
 import { MessageOutlined, StarOutlined } from "@ant-design/icons";
 import { IoIosArrowBack } from "react-icons/io";
 import { useAppNavigation } from "../../shared/hooks/useAppNavigation";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { apiClient } from "../../api/api";
-import type { Chat, Review } from "../../api/types";
-import WebApp from "@twa-dev/sdk";
+import type { Chat, Review, TelegramUser } from "../../api/types";
+import { tg } from "../../shared/lib/telegram";
 import styles from "./styles/ChatListPage.module.scss";
 import { useTranslation } from "react-i18next";
 import { ReviewModal } from "../../shared/ui/ReviewModal/ReviewModal";
@@ -24,16 +24,12 @@ const ChatListPage: React.FC = () => {
   const [reviews, setReviews] = useState<Record<number, Review>>({});
   const [messageApi, contextHolder] = message.useMessage();
 
-  useEffect(() => {
-    loadChats();
-  }, []);
-
-  const loadChats = async () => {
+  const loadChats = useCallback(async () => {
     try {
       setLoading(true);
       const telegramId =
         user?.telegramId ||
-        window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString();
+        (tg.initDataUnsafe.user as TelegramUser)?.id?.toString();
 
       if (!telegramId) {
         messageApi.error(
@@ -67,17 +63,17 @@ const ChatListPage: React.FC = () => {
       } else {
         messageApi.error(
           response.error ||
-            t("chats.errors.loadError", "Не удалось загрузить чаты"),
+          t("chats.errors.loadError", "Не удалось загрузить чаты"),
         );
       }
-    } catch (err) {
+    } catch {
       messageApi.error(
         t("chats.errors.loadError", "Ошибка при загрузке чатов"),
       );
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.telegramId, messageApi, t]);
 
   const handleOpenChat = (chat: Chat) => {
     try {
@@ -99,27 +95,31 @@ const ChatListPage: React.FC = () => {
   };
 
   const openTelegramLink = (url: string) => {
-    if (typeof WebApp !== "undefined" && WebApp.openLink) {
-      WebApp.openLink(url);
-    } else if (window.Telegram?.WebApp?.openLink) {
-      window.Telegram.WebApp.openLink(url);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((tg as any).openLink) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (tg as any).openLink(url);
     } else {
       window.open(url, "_blank");
     }
   };
 
+  useEffect(() => {
+    loadChats();
+  }, [loadChats]);
+
   const getChatTitle = (chat: Chat) => {
     if (user?.role === "DOCTOR") {
       return chat.patient
         ? `${chat.patient.firstName || ""} ${chat.patient.lastName || ""}`.trim() ||
-            chat.patient.username ||
-            t("chats.patient", "Пациент")
+        chat.patient.username ||
+        t("chats.patient", "Пациент")
         : t("chats.patient", "Пациент");
     } else {
       return chat.doctor
         ? `${chat.doctor.firstName || ""} ${chat.doctor.lastName || ""}`.trim() ||
-            chat.doctor.username ||
-            t("chats.doctor", "Врач")
+        chat.doctor.username ||
+        t("chats.doctor", "Врач")
         : t("chats.doctor", "Врач");
     }
   };
@@ -214,6 +214,25 @@ const ChatListPage: React.FC = () => {
                     handleOpenChat(chat);
                   }
                 }}
+                actions={
+                  chat.status === "COMPLETED" &&
+                    !reviews[chat.id] &&
+                    user?.role === "PATIENT"
+                    ? [
+                      <Button
+                        key="review"
+                        type="link"
+                        icon={<StarOutlined />}
+                        onClick={(e: React.MouseEvent) =>
+                          handleReviewClick(e, chat)
+                        }
+                        size="small"
+                      >
+                        {t("review.leaveReview", "Оставить отзыв")}
+                      </Button>,
+                    ]
+                    : []
+                }
               >
                 <List.Item.Meta
                   avatar={
@@ -244,25 +263,6 @@ const ChatListPage: React.FC = () => {
                             : t("chats.cancelled", "Отменен")}
                       </Text>
                     </div>
-                  }
-                  actions={
-                    chat.status === "COMPLETED" &&
-                    !reviews[chat.id] &&
-                    user?.role === "PATIENT"
-                      ? [
-                          <Button
-                            key="review"
-                            type="link"
-                            icon={<StarOutlined />}
-                            onClick={(e: React.MouseEvent) =>
-                              handleReviewClick(e, chat)
-                            }
-                            size="small"
-                          >
-                            {t("review.leaveReview", "Оставить отзыв")}
-                          </Button>,
-                        ]
-                      : []
                   }
                 />
               </List.Item>

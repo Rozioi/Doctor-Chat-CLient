@@ -9,6 +9,7 @@ import { useAppNavigation } from "../../../shared/hooks/useAppNavigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
+import { mapServerError } from "../../../shared/utils/errorMapper";
 
 const LoginPage = () => {
   const [phone, setPhone] = useState("");
@@ -45,15 +46,10 @@ const LoginPage = () => {
         messageApi.success(t("auth.loginSuccess", "Вход выполнен успешно"));
         navigate("/home");
       } else {
-        messageApi.error(t("auth.loginError", "Ошибка входа"));
+        messageApi.error(mapServerError(response.error || ""));
       }
-    } catch (err) {
-      messageApi.error(
-        t(
-          "auth.loginUnknownError",
-          "Произошла ошибка при входе. Попробуйте еще раз.",
-        ),
-      );
+    } catch (err: any) {
+      messageApi.error(mapServerError(err?.message || ""));
     } finally {
       setIsLoading(false);
     }
@@ -75,14 +71,14 @@ const LoginPage = () => {
               <label>
                 {t("auth.phoneLabel")}
                 <PhoneInput
-                  country={"kz"}
+                  country={"ru"}
                   value={phone}
                   onChange={setPhone}
                   inputClass={styles.phoneInput}
                   containerClass={styles.phoneContainer}
                   buttonClass={styles.flagDropdown}
                   dropdownClass={styles.countryList}
-                  preferredCountries={["kz", "by", "ru", "ua"]}
+                  preferredCountries={["ru", "by", "ua"]}
                   placeholder="+7 (000) 000-00-00"
                   inputProps={{
                     name: "phone",

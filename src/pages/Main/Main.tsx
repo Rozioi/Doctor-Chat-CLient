@@ -49,6 +49,7 @@ const Main = memo(() => {
           {t("main.analysisDecoding")}
         </button>
       </div>
+
       <InfoBlock />
     </div>
   );

@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router";
 import { NavBottomPanel } from "../shared/ui/NavBottomPanel/NavBottomPanel";
 import styles from "../shared/assets/styles/MainLayout.module.scss";
@@ -10,24 +10,13 @@ export const MainLayout = () => {
   const location = useLocation();
   const prevPathRef = useRef(location.pathname);
 
-  const [showOnboarding, setShowOnboarding] = useState(() => {
-    try {
-      return !localStorage.getItem("onboardingSeen");
-    } catch {
-      return false;
-    }
-  });
+
 
   useEffect(() => {
     const prev = prevPathRef.current;
     const curr = location.pathname;
     if (prev === "/onboarding" && curr !== "/onboarding") {
-      try {
-        localStorage.setItem("onboardingSeen", "true");
-      } catch {
-        // ignore
-      }
-      setShowOnboarding(false);
+      localStorage.setItem("onboardingSeen", "true");
     }
 
     prevPathRef.current = curr;
@@ -44,7 +33,7 @@ export const MainLayout = () => {
     };
 
     checkServer();
-  }, []);
+  }, [goTo]);
 
   return (
     <Suspense fallback={<Loader fullScreen text="Загрузка..." size="medium" />}>

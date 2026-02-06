@@ -7,7 +7,7 @@ import {
 
 export interface TelegramData {
   user: ReturnType<typeof getTelegramUser> | null;
-  theme: Record<string, any>;
+  theme: Record<string, string>;
   isReady: boolean;
 }
 
@@ -28,7 +28,7 @@ export function useTelegramWebApp(): TelegramData {
       tg.onEvent("themeChanged", themeHandler);
 
       return () => tg.offEvent("themeChanged", themeHandler);
-    } catch (err) {
+    } catch {
       setUser(getTelegramUser());
       setTheme(getTelegramTheme());
       setReady(true);

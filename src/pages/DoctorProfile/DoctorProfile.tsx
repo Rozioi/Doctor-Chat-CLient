@@ -1,71 +1,66 @@
 import type { FC } from "react";
-import { useState, useEffect } from "react";
-import { Card, Button, message, Select } from "antd";
+import { useState } from "react";
+import { Button, message, Select } from "antd";
 import {
   ArrowLeftOutlined,
+  HeartOutlined,
   ShareAltOutlined,
-  StarFilled,
+  StarOutlined,
 } from "@ant-design/icons";
 import styles from "./styles/DoctorProfile.module.scss";
-import WebApp from "@twa-dev/sdk";
 import { useTranslation } from "react-i18next";
+import { tg } from "../../shared/lib/telegram";
 
 interface DoctorProfileProps {
+  id: string | number;
   name: string;
   specialty: string;
-  experience: string;
-  reviews: string;
-  price: string;
-  about: string;
   rating: number;
-  image: string;
-  doctorId?: string | number;
+  reviewsCount?: number;
+  experience: string;
+  price: string;
+  about?: string;
+  image?: string;
   onBack?: () => void;
   onStartChat?: () => void;
-  hasActiveChat?: boolean;
 }
 
 export const DoctorProfile: FC<DoctorProfileProps> = ({
   name,
   specialty,
+  rating,
+  reviewsCount = 0,
   experience,
-  reviews,
   price,
   about,
-  rating,
   image,
-  doctorId,
   onBack,
   onStartChat,
-  hasActiveChat = false,
 }) => {
   const { t, i18n } = useTranslation();
-  const [language, setLanguage] = useState<"ru" | "en">("ru");
-  const [messageApi, contextHolder] = message.useMessage();
+  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+  const [, contextHolder] = message.useMessage();
 
-  useEffect(() => {
-    try {
-      const savedLang =
-        (localStorage.getItem("lang") as "ru" | "en" | null) || "ru";
-      setLanguage(savedLang === "en" || savedLang === "ru" ? savedLang : "ru");
-    } catch {
-      // ignore sto rage errors
-    }
-  }, []);
+  const handleLanguageChange = (value: string) => {
+    i18n.changeLanguage(value);
+    setSelectedLanguage(value);
+  };
 
   const shareProfile = () => {
     const shareText = `${t("chats.doctor", "Врач")}: ${name}\n${t("doctor.profile.specialty", "Специальность")}: ${specialty}\n${t("doctor.profile.rating", "Рейтинг")}: ${rating.toFixed(1)}\n${t("doctor.profile.experience", "Опыт")}: ${experience}\n${t("doctor.profile.price", "Стоимость")}: ${price}`;
     const shareUrl = window.location.href;
 
     try {
-      if (typeof WebApp !== "undefined" && WebApp.openLink) {
-        const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
-        WebApp.openLink(telegramShareUrl);
-      } else if (window.Telegram?.WebApp?.openLink) {
-        const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
-        window.Telegram.WebApp.openLink(telegramShareUrl);
+      const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if ((tg as any).openLink) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (tg as any).openLink(telegramShareUrl);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } else if ((window as any).Telegram?.WebApp?.openLink) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (window as any).Telegram.WebApp.openLink(telegramShareUrl);
       } else {
-        const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
         window.open(telegramShareUrl, "_blank");
       }
     } catch (error) {
@@ -76,15 +71,6 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
   };
 
   const handleStartChat = () => {
-    if (hasActiveChat) {
-      messageApi.warning(
-        t(
-          "doctor.profile.activeChatExists",
-          "У вас уже есть активный чат с этим врачом",
-        ),
-      );
-      return;
-    }
     if (onStartChat) {
       onStartChat();
     }
@@ -98,83 +84,58 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
         <div className={styles.overlay}>
           <div className={styles.topBar}>
             <Button
-              type="text"
               icon={<ArrowLeftOutlined />}
-              onClick={onBack}
               className={styles.iconButton}
+              onClick={onBack}
             />
             <div className={styles.topBarRight}>
-              <Select
-                value={language === "ru" ? "Русский" : "English"}
-                options={[
-                  { value: "Русский", label: "Русский" },
-                  { value: "English", label: "English" },
-                ]}
-                onChange={(value) => {
-                  if (value === "Русский") {
-                    setLanguage("ru");
-                    try {
-                      localStorage.setItem("lang", "ru");
-                    } catch {
-                      // ignore
-                    }
-                    i18n.changeLanguage("ru");
-                  } else if (value === "English") {
-                    setLanguage("en");
-                    try {
-                      localStorage.setItem("lang", "en");
-                    } catch {
-                      // ignore
-                    }
-                    i18n.changeLanguage("en");
-                  }
-                }}
-                size="small"
-                className={styles.languageSelect}
-              />
+              <div className={styles.languageSelect}>
+                <Select
+                  value={selectedLanguage}
+                  onChange={handleLanguageChange}
+                  size="small"
+                  bordered={false}
+                  options={[
+                    { value: "ru", label: "RU" },
+                    { value: "en", label: "EN" },
+                  ]}
+                />
+              </div>
               <Button
-                type="text"
                 icon={<ShareAltOutlined />}
-                onClick={shareProfile}
                 className={styles.iconButton}
+                onClick={shareProfile}
               />
+              <Button icon={<HeartOutlined />} className={styles.iconButton} />
             </div>
           </div>
 
           <div className={styles.infoBlock}>
-            <div className={styles.specialty}>
-              {t(`doctorRegistration.specializations.${specialty}`)}
-            </div>
+            <div className={styles.specialty}>{specialty}</div>
             <div className={styles.name}>{name}</div>
             <div className={styles.rating}>
-              <StarFilled className={styles.star} /> {rating.toFixed(1)}
+              <StarOutlined className={styles.star} />
+              {rating.toFixed(1)}
+              <span className={styles.reviewsCount}>
+                ({reviewsCount} {t("doctor.profile.reviews", "отзывов")})
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      <Card className={styles.card}>
-        <div className={styles.sectionTitle}>
-          {t("doctor.profile.mainInfo", "Основная информация")}
-        </div>
-
+      <div className={styles.card}>
         <div className={styles.infoRow}>
           <div className={styles.infoBox}>
             <div className={styles.value}>{experience}</div>
             <div className={styles.label}>
-              {t("doctor.profile.experience", "стаж")}
-            </div>
-          </div>
-          <div className={styles.infoBox}>
-            <div className={styles.value}>{reviews}</div>
-            <div className={styles.label}>
-              {t("doctor.profile.reviews", "отзывов")}
+              {t("doctor.profile.experience", "Опыт")}
             </div>
           </div>
           <div className={styles.infoBox}>
             <div className={styles.value}>{price}</div>
             <div className={styles.label}>
-              {t("doctor.profile.price", "стоимость")}
+              {t("doctor.profile.price", "Стоимость")}
             </div>
           </div>
         </div>
@@ -183,22 +144,19 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
           <div className={styles.aboutTitle}>
             {t("doctor.profile.about", "О враче")}
           </div>
-          <p className={styles.aboutText}>{about}</p>
+          <div className={styles.aboutText}>
+            {about || t("doctor.profile.noAbout", "Информация отсутствует")}
+          </div>
         </div>
 
-        {onStartChat && (
-          <Button
-            type="primary"
-            size="large"
-            block
-            className={styles.chatButton}
-            onClick={handleStartChat}
-            disabled={hasActiveChat}
-          >
-            {t("doctor.profile.startChat", "Начать чат")}
-          </Button>
-        )}
-      </Card>
+        <Button
+          type="primary"
+          className={styles.chatButton}
+          onClick={handleStartChat}
+        >
+          {t("doctor.profile.startChat", "Начать чат")}
+        </Button>
+      </div>
     </div>
   );
 };

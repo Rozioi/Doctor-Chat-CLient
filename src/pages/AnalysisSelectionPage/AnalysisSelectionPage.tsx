@@ -1,23 +1,28 @@
-import { useState, useEffect } from "react";
-import { Switch, Button, Typography, Space, ConfigProvider, Card, Avatar, Spin } from "antd";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Switch,
+  Button,
+  Typography,
+  Space,
+  ConfigProvider,
+  Card,
+  Avatar,
+  Spin,
+} from "antd";
 import { DoctorCard } from "../../shared/ui/DoctorCard/DoctorCard";
 import styles from "./styles/AnalysisSelectionPage.module.scss";
 import { IoIosArrowBack } from "react-icons/io";
 import { useAppNavigation } from "../../shared/hooks/useAppNavigation";
-import { SuccessModal } from "../../shared/ui/Modal/Modal";
-import { FaCheck } from "react-icons/fa";
-import { FaExclamation } from "react-icons/fa6";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { apiClient } from "../../api/api";
-import type { Chat, DoctorProfile, DoctorCardData } from "../../api/types";
+import type { Chat, DoctorProfile, DoctorCardData, TelegramUser } from "../../api/types";
 import { useTranslation } from "react-i18next";
-import WebApp from "@twa-dev/sdk";
+import { tg } from "../../shared/lib/telegram";
 
 const { Title, Text } = Typography;
 
 const AnalysisSelectionPage: React.FC = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAnalyses, setSelectedAnalyses] = useState<string[]>([
     "blood",
     "urine",
@@ -29,16 +34,12 @@ const AnalysisSelectionPage: React.FC = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    loadDoctorsWithChats();
-  }, []);
-
-  const loadDoctorsWithChats = async () => {
+  const loadDoctorsWithChats = useCallback(async () => {
     try {
       setLoadingChats(true);
       const telegramId =
-        user?.telegramId ||
-        window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString();
+        user?.id?.toString() ||
+        (tg.initDataUnsafe.user as TelegramUser)?.id?.toString();
 
       if (!telegramId) {
         setLoadingChats(false);
@@ -47,18 +48,21 @@ const AnalysisSelectionPage: React.FC = () => {
 
       const response = await apiClient.getChats(telegramId);
       if (response.success && response.data) {
-        // Фильтруем только активные чаты с типом analysis
         const activeAnalysisChats = response.data.filter(
           (chat) => chat.status === "ACTIVE" && chat.serviceType === "analysis",
         );
         setDoctorsWithChats(activeAnalysisChats);
       }
-    } catch (err) {
-      console.error("Ошибка загрузки чатов:", err);
+    } catch {
+      console.error("Ошибка загрузки чатов");
     } finally {
       setLoadingChats(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    loadDoctorsWithChats();
+  }, [loadDoctorsWithChats]);
 
   const handlePay = () => {
     if (selectedDoctor) {
@@ -73,10 +77,10 @@ const AnalysisSelectionPage: React.FC = () => {
         ? `https://t.me/${botUsername}?start=${chat.telegramChatId}`
         : `https://t.me/${botUsername}?start=chat_${chat.id}`;
 
-      if (typeof WebApp !== "undefined" && WebApp.openLink) {
-        WebApp.openLink(chatUrl);
-      } else if (window.Telegram?.WebApp?.openLink) {
-        window.Telegram.WebApp.openLink(chatUrl);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if ((tg as any).openLink) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (tg as any).openLink(chatUrl);
       } else {
         window.open(chatUrl, "_blank");
       }
@@ -89,7 +93,10 @@ const AnalysisSelectionPage: React.FC = () => {
     { label: t("analysis.blood", "Общий анализ крови"), key: "blood" },
     { label: t("analysis.bio", "Биохимия крови"), key: "bio" },
     { label: t("analysis.urine", "Общий анализ мочи"), key: "urine" },
-    { label: t("analysis.stool", "Копрограмма (общий анализ кала)"), key: "stool" },
+    {
+      label: t("analysis.stool", "Копрограмма (общий анализ кала)"),
+      key: "stool",
+    },
   ];
 
   const [doctors, setDoctors] = useState<DoctorCardData[]>([]);
@@ -109,11 +116,7 @@ const AnalysisSelectionPage: React.FC = () => {
     return flags[country] || "🌍";
   };
 
-  useEffect(() => {
-    loadDoctors();
-  }, []);
-
-  const loadDoctors = async () => {
+  const loadDoctors = useCallback(async () => {
     try {
       setLoadingDoctors(true);
       const response = await apiClient.getDoctors();
@@ -125,8 +128,8 @@ const AnalysisSelectionPage: React.FC = () => {
               id: String(doctorProfile.id),
               name: doctorProfile.user
                 ? `${doctorProfile.user.firstName || ""} ${doctorProfile.user.lastName || ""}`.trim() ||
-                  doctorProfile.user.username ||
-                  t("chats.doctor", "Врач")
+                doctorProfile.user.username ||
+                t("chats.doctor", "Врач")
                 : t("chats.doctor", "Врач"),
               country: doctorProfile.country || "",
               countryFlag: getCountryFlag(doctorProfile.country || ""),
@@ -146,7 +149,11 @@ const AnalysisSelectionPage: React.FC = () => {
     } finally {
       setLoadingDoctors(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    loadDoctors();
+  }, [loadDoctors]);
 
   const toggleAnalysis = (key: string, checked: boolean) => {
     setSelectedAnalyses((prev) =>
@@ -159,8 +166,8 @@ const AnalysisSelectionPage: React.FC = () => {
   const getDoctorName = (chat: Chat) => {
     return chat.doctor
       ? `${chat.doctor.firstName || ""} ${chat.doctor.lastName || ""}`.trim() ||
-          chat.doctor.username ||
-          t("chats.doctor", "Врач")
+      chat.doctor.username ||
+      t("chats.doctor", "Врач")
       : t("chats.doctor", "Врач");
   };
 
@@ -182,7 +189,10 @@ const AnalysisSelectionPage: React.FC = () => {
         </div>
 
         <Title level={5} className={styles.subtitle}>
-          {t("analysis.title", "Выберите анализ и получите расшифровку онлайн:")}
+          {t(
+            "analysis.title",
+            "Выберите анализ и получите расшифровку онлайн:",
+          )}
         </Title>
 
         <Space direction="vertical" className={styles.switchList}>
@@ -200,7 +210,10 @@ const AnalysisSelectionPage: React.FC = () => {
         {doctorsWithChats.length > 0 && (
           <>
             <Title level={5} className={styles.subtitle}>
-              {t("analysis.doctorsWithChats", "Врачи с которыми у вас есть чат:")}
+              {t(
+                "analysis.doctorsWithChats",
+                "Врачи с которыми у вас есть чат:",
+              )}
             </Title>
             {loadingChats ? (
               <Spin />
@@ -215,12 +228,18 @@ const AnalysisSelectionPage: React.FC = () => {
                   >
                     <div className={styles.chatCardContent}>
                       <Avatar
-                        src={chat.doctor?.photoUrl || "https://i.pravatar.cc/150?img=60"}
+                        src={
+                          chat.doctor?.photoUrl ||
+                          "https://i.pravatar.cc/150?img=60"
+                        }
                         size={40}
                       />
                       <div className={styles.chatCardInfo}>
                         <Text strong>{getDoctorName(chat)}</Text>
-                        <Text type="secondary" className={styles.chatCardService}>
+                        <Text
+                          type="secondary"
+                          className={styles.chatCardService}
+                        >
                           {t("chats.analysis", "Расшифровка анализов")}
                         </Text>
                       </div>

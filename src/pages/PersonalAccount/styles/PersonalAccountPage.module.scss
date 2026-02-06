@@ -1,13 +1,14 @@
 .container {
     display: flex;
     justify-content: center;
-    padding: 2rem;
+    padding: 20px 24px 40px;
     min-height: 100vh;
     width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: auto;
     position: relative;
+    background: linear-gradient(180deg, #f5f7ff 0%, #ffffff 40%, #f5f7ff 100%);
 }
 
 .card {
@@ -15,10 +16,10 @@
     border-radius: 16px;
     background-color: transparent;
     border: none;
+
     :global(.ant-card-body) {
         padding: 0;
     }
-    //  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .title {

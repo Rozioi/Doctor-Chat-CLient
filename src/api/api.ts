@@ -4,15 +4,21 @@ import type {
   Balance,
   Chat,
   CreateChatRequest,
-  CreateDoctorRequest,
   CreatePaymentRequest,
   CreateReviewRequest,
   CreateUserRequest,
+  CreateDoctorRequest,
   DoctorInput,
+  DoctorProfile,
   LoginRequest,
   Payment,
   Review,
   User,
+  InitRobokassaRequest,
+  RobokassaInitResponse,
+  GeneratePDFRequest,
+  UploadPDFRequest,
+  PDFDocument,
 } from "./types";
 
 export const api: AxiosInstance = axios.create({
@@ -37,11 +43,6 @@ api.interceptors.response.use(
 
 api.interceptors.request.use(
   (config) => {
-    // You can add auth token here if needed
-    // const token = localStorage.getItem('token');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
     return config;
   },
   (error) => {
@@ -85,6 +86,7 @@ class ApiClient {
       };
     }
   }
+
   async getUserByTelegramId(telegramId: string): Promise<ApiResponse<User>> {
     try {
       const response = await api.get<User>(`/users/check/${telegramId}`);
@@ -137,13 +139,12 @@ class ApiClient {
       };
     }
   }
-  async createDoctor(
-    data: CreateDoctorRequest | Omit<CreateDoctorRequest, "telegramData">,
-  ): Promise<ApiResponse<DoctorInput>> {
-    try {
-      const { telegramData, ...doctorData } = data as CreateDoctorRequest;
 
-      const response = await api.post<DoctorInput>("/doctors", doctorData);
+  async createDoctor(
+    data: CreateDoctorRequest,
+  ): Promise<ApiResponse<{ user: User; doctor: DoctorProfile }>> {
+    try {
+      const response = await api.post<{ user: User; doctor: DoctorProfile }>("/doctors", data);
 
       if (response.data) {
         return {
@@ -169,6 +170,7 @@ class ApiClient {
       };
     }
   }
+
   async getDoctorById(
     id: string | number,
   ): Promise<ApiResponse<DoctorInput & { id: number; user?: User }>> {
@@ -191,6 +193,7 @@ class ApiClient {
       };
     }
   }
+
   async getDoctorByUserId(
     userId: string | number,
   ): Promise<ApiResponse<DoctorInput & { id: number; user?: User }>> {
@@ -213,6 +216,7 @@ class ApiClient {
       };
     }
   }
+
   async getDoctors(): Promise<
     ApiResponse<(DoctorInput & { id: number; user?: User })[]>
   > {
@@ -235,6 +239,7 @@ class ApiClient {
       };
     }
   }
+
   async updateDoctor(
     id: string | number,
     data: Partial<DoctorInput>,
@@ -309,7 +314,6 @@ class ApiClient {
       const formData = new FormData();
       formData.append("file", file);
 
-      // Используем прямой URL для загрузки, так как /upload не в /api/v1
       const uploadUrl =
         api.defaults.baseURL?.replace("/api/v1", "") ||
         "https://famously-sumptuous-diamondback.cloudpub.ru";
@@ -391,7 +395,7 @@ class ApiClient {
   }
 
   async sendChatInvite(
-    patientId: string,
+    patientId: string | number,
     doctorId: number,
   ): Promise<ApiResponse<{ success: boolean; message: string }>> {
     try {
@@ -563,9 +567,6 @@ class ApiClient {
     }
   }
 
-  /**
-   * Генерирует PDF документ
-   */
   async generatePDF(
     data: GeneratePDFRequest,
   ): Promise<ApiResponse<PDFDocument>> {
@@ -599,9 +600,6 @@ class ApiClient {
     }
   }
 
-  /**
-   * Загружает PDF файл
-   */
   async uploadPDF(data: UploadPDFRequest): Promise<ApiResponse<PDFDocument>> {
     try {
       const formData = new FormData();
@@ -651,9 +649,6 @@ class ApiClient {
     }
   }
 
-  /**
-   * Получает PDF документ по ID
-   */
   async getPDFDocument(id: number): Promise<ApiResponse<PDFDocument>> {
     try {
       const response = await api.get<{
@@ -685,17 +680,11 @@ class ApiClient {
     }
   }
 
-  /**
-   * Получает URL для доступа к PDF файлу
-   */
   getPDFFileUrl(id: number): string {
     const baseUrl = api.defaults.baseURL?.replace("/api/v1", "") || "";
     return `${baseUrl}/api/v1/pdf/${id}/file`;
   }
 
-  /**
-   * Получает список PDF документов пользователя
-   */
   async getPDFDocumentsByUser(
     userId: number,
   ): Promise<ApiResponse<PDFDocument[]>> {
@@ -729,9 +718,6 @@ class ApiClient {
     }
   }
 
-  /**
-   * Получает список PDF документов чата
-   */
   async getPDFDocumentsByChat(
     chatId: number,
   ): Promise<ApiResponse<PDFDocument[]>> {
@@ -765,9 +751,6 @@ class ApiClient {
     }
   }
 
-  /**
-   * Удаляет PDF документ
-   */
   async deletePDFDocument(id: number): Promise<ApiResponse<void>> {
     try {
       const response = await api.delete<{
@@ -798,9 +781,6 @@ class ApiClient {
     }
   }
 
-  /**
-   * Создает отзыв на врача
-   */
   async createReview(data: CreateReviewRequest): Promise<ApiResponse<Review>> {
     try {
       const response = await api.post<{
@@ -832,18 +812,15 @@ class ApiClient {
     }
   }
 
-  /**
-   * Получает отзывы на врача
-   */
-  async getReviewsByDoctor(
-    doctorProfileId: number,
-  ): Promise<ApiResponse<Review[]>> {
+  async initRobokassaPayment(
+    data: InitRobokassaRequest,
+  ): Promise<ApiResponse<RobokassaInitResponse>> {
     try {
-      const response = await api.get<{
+      const response = await api.post<{
         success: boolean;
-        data?: Review[];
+        data: RobokassaInitResponse;
         error?: string;
-      }>(`/reviews/doctor/${doctorProfileId}`);
+      }>("/payments/robokassa/init", data);
       if (response.data.success && response.data.data) {
         return {
           success: true,
@@ -852,13 +829,15 @@ class ApiClient {
       }
       return {
         success: false,
-        error: response.data.error || "Failed to get reviews",
+        error: response.data.error || "Failed to initialize Robokassa payment",
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return {
           success: false,
-          error: error.response?.data?.error || "Failed to get reviews",
+          error:
+            error.response?.data?.error ||
+            "Failed to initialize Robokassa payment",
         };
       }
       return {
@@ -868,9 +847,39 @@ class ApiClient {
     }
   }
 
-  /**
-   * Получает отзыв по ID чата
-   */
+  async checkRobokassaStatus(
+    invoiceId: string,
+  ): Promise<ApiResponse<Payment>> {
+    try {
+      const response = await api.get<{
+        success: boolean;
+        data: Payment;
+        error?: string;
+      }>(`/payments/robokassa/status/${invoiceId}`);
+      if (response.data.success && response.data.data) {
+        return {
+          success: true,
+          data: response.data.data,
+        };
+      }
+      return {
+        success: false,
+        error: response.data.error || "Failed to check payment status",
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          error: error.response?.data?.error || "Failed to check payment status",
+        };
+      }
+      return {
+        success: false,
+        error: "Unknown error occurred",
+      };
+    }
+  }
+
   async getReviewByChat(chatId: number): Promise<ApiResponse<Review>> {
     try {
       const response = await api.get<{
@@ -886,13 +895,13 @@ class ApiClient {
       }
       return {
         success: false,
-        error: response.data.error || "Failed to get review",
+        error: response.data.error || "Failed to fetch review",
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return {
           success: false,
-          error: error.response?.data?.error || "Failed to get review",
+          error: error.response?.data?.error || "Failed to fetch review",
         };
       }
       return {

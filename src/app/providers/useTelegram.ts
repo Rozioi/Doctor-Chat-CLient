@@ -1,8 +1,15 @@
 import { useContext } from "react";
-import { TelegramContext } from "./TelegramProvider";
+import { TelegramContext } from "./telegramContext";
+import type { TelegramData } from "../../processes/telegram-integration/useTelegramWebApp";
 
-export const useTelegram = () => {
-  const ctx = useContext(TelegramContext);
-  if (!ctx) throw new Error("useTelegram must be used within TelegramProvider");
-  return ctx;
+export const useTelegram = (): TelegramData => {
+  const context = useContext(TelegramContext);
+  if (!context) {
+    return {
+      user: null,
+      theme: {},
+      isReady: false,
+    };
+  }
+  return context;
 };

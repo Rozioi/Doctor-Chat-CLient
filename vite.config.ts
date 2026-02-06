@@ -9,36 +9,27 @@ export default defineConfig({
       "rozioi.pro",
       "madly-modern-brill.cloudpub.ru",
       "rampantly-reasonable-millipede.cloudpub.ru",
+      "soundly-primary-protozoa.cloudpub.ru",
     ],
   },
   assetsInclude: ["**/*.md"],
   build: {
-    // Оптимизация сборки
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true, // Удаляет console.log в production
-        drop_debugger: true,
-      },
-    },
-    // Code splitting
+    minify: "esbuild",
     rollupOptions: {
       output: {
         manualChunks: {
-          // Разделяем vendor библиотеки на отдельные чанки
           "react-vendor": ["react", "react-dom", "react-router"],
           "ui-vendor": ["antd"],
+          "pdf-vendor": ["react-pdf", "pdfjs-dist"],
           "query-vendor": ["@tanstack/react-query"],
           "telegram-vendor": ["@twa-dev/sdk"],
+          "utils-vendor": ["axios", "swiper", "i18next", "react-i18next"],
         },
       },
     },
-    // Оптимизация размера чанков
     chunkSizeWarningLimit: 1000,
-    // Включение source maps только для production debugging
     sourcemap: false,
   },
-  // Оптимизация зависимостей
   optimizeDeps: {
     include: [
       "react",

@@ -3,6 +3,18 @@ import { lazy, Suspense } from "react";
 import { MainLayout } from "../../layouts/MainLayout";
 import { ProtectedRoute } from "../ui/ProtectedRoute";
 import { Loader } from "../../shared/ui/Loader/Loader";
+import { LoadingFallback } from "../../shared/ui/Loader/LoadingFallback";
+import { ServerGuard } from "../ui/ServerGuard";
+import { PublicLayout } from "../../layouts/PublicLayout";
+const PersonalAccountPage = lazy(
+  () => import("../../pages/PersonalAccount/PersonalAccountPage"),
+);
+const DoctorProfilePage = lazy(() =>
+  import("../../pages/DoctorProfile/DoctorProfilePage").then((module) => ({
+    default: module.DoctorProfilePage,
+  })),
+);
+const PdfViewer = lazy(() => import("../../shared/ui/InfoPage/InfoPage"));
 
 const preloadMain = () => import("../../pages/Main/Main");
 const preloadSearch = () => import("../../pages/DoctorSearch/DoctorSearch");
@@ -26,7 +38,6 @@ const AnalysisSelectionPage = lazy(
 const DoctorSearchPage = lazy(
   () => import("../../pages/DoctorSearch/DoctorSearch"),
 );
-import PersonalAccountPage from "../../pages/PersonalAccount/PersonalAccountPage";
 
 const RefundDocumentPage = lazy(
   () => import("../../pages/PersonalAccount/RefundDocumentPage"),
@@ -35,15 +46,19 @@ const MaintenancePage = lazy(
   () => import("../../pages/Maintenance/MaintenancePage"),
 );
 const PaymentPage = lazy(() => import("../../pages/Payment/PaymentPage"));
+const TermsOfServicePage = lazy(
+  () => import("../../pages/Legal/TermsOfServicePage"),
+);
+const PrivacyPolicyPage = lazy(
+  () => import("../../pages/Legal/PrivacyPolicyPage"),
+);
+const PaymentSuccessPage = lazy(
+  () => import("../../pages/Payment/PaymentSuccessPage"),
+);
+const PaymentFailPage = lazy(
+  () => import("../../pages/Payment/PaymentFailPage"),
+);
 const ChatListPage = lazy(() => import("../../pages/ChatList/ChatListPage"));
-import { DoctorProfilePage } from "../../pages/DoctorProfile/DoctorProfilePage";
-import { ServerGuard } from "../ui/ServerGuard";
-import { PublicLayout } from "../../layouts/PublicLayout";
-// import InfoPage from "../../shared/ui/InfoPage/InfoPage";
-import PdfViewer from "../../shared/ui/InfoPage/InfoPage";
-// const DoctorProfilePage = lazy(
-//   () => import("../../pages/DoctorProfile/DoctorProfilePage"),
-// );
 
 if (typeof window !== "undefined") {
   if ("requestIdleCallback" in window) {
@@ -61,10 +76,6 @@ if (typeof window !== "undefined") {
     }, 100);
   }
 }
-
-const LoadingFallback = () => (
-  <Loader fullScreen text="Загрузка..." size="large" />
-);
 
 export const router = createBrowserRouter([
   {
@@ -86,6 +97,10 @@ export const router = createBrowserRouter([
       { path: "payment", element: <PaymentPage /> },
       { path: "chat", element: <ChatListPage /> },
       { path: "profile", element: <PersonalAccountPage /> },
+      { path: "terms", element: <TermsOfServicePage /> },
+      { path: "privacy", element: <PrivacyPolicyPage /> },
+      { path: "payment/success", element: <PaymentSuccessPage /> },
+      { path: "payment/fail", element: <PaymentFailPage /> },
 
       {
         path: "search/doctor/:id",
@@ -117,7 +132,14 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  { path: ":slug", element: <RefundDocumentPage /> },
+  {
+    path: ":slug",
+    element: (
+      <PublicLayout>
+        <RefundDocumentPage />
+      </PublicLayout>
+    ),
+  },
   {
     path: "/welcome",
     element: (
@@ -154,7 +176,7 @@ export const router = createBrowserRouter([
     path: "/info",
     element: (
       <Suspense fallback={<LoadingFallback />}>
-        <PdfViewer fileUrl="a.pdf" />
+        <PdfViewer fileUrl="a.pdf" title="Информация" />
       </Suspense>
     ),
   },

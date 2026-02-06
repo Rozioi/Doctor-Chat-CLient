@@ -12,6 +12,7 @@ import type { DoctorInput } from "../../../api/types";
 import { useAuthReq } from "../../../hooks/useAuthReq";
 import { useAppNavigation } from "../../../shared/hooks/useAppNavigation";
 import { IoIosArrowBack } from "react-icons/io";
+import { mapServerError } from "../../../shared/utils/errorMapper";
 
 const { TextArea } = Input;
 
@@ -52,11 +53,9 @@ const DoctorRegisterPage = () => {
 
   const { createDoctor } = useAuthReq();
 
-  useEffect(() => {
-    // Небольшая задержка для гарантии, что DOM полностью загружен
-  }, []);
+  useEffect(() => { }, []);
 
-  const handleChange = (field: keyof DoctorInput, value: any) => {
+  const handleChange = (field: keyof DoctorInput, value: string | number | string[]) => {
     setDoctorData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -108,9 +107,7 @@ const DoctorRegisterPage = () => {
       );
 
       if (!doctorResponse.success) {
-        messageApi.error(
-          doctorResponse.error || t("doctorRegistration.errors.createError"),
-        );
+        messageApi.error(mapServerError(doctorResponse.error || ""));
         setIsSubmitting(false);
         return;
       }
@@ -124,12 +121,8 @@ const DoctorRegisterPage = () => {
         navigate("/login");
         setIsSubmitting(false);
       }, 2000);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : t("doctorRegistration.errors.registrationError");
-      messageApi.error(errorMessage);
+    } catch (err: any) {
+      messageApi.error(mapServerError(err?.message || ""));
       setIsSubmitting(false);
     }
   };
@@ -192,7 +185,7 @@ const DoctorRegisterPage = () => {
                 handleChange("qualification", val);
               }}
               value={doctorData.specialization || undefined}
-              options={Object.entries(SPECIALIZATIONS).map(([key, label]) => ({
+              options={Object.entries(SPECIALIZATIONS).map(([key]) => ({
                 value: key,
                 label: t(`doctorRegistration.specializations.${key}`),
               }))}
@@ -298,6 +291,7 @@ const DoctorRegisterPage = () => {
                 </div>
               )}
               styles={{
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 control: (base: any, state: any) => ({
                   ...base,
                   backgroundColor: "#f6f8ff",
@@ -312,16 +306,19 @@ const DoctorRegisterPage = () => {
                   padding: "2px 4px",
                   "&:hover": { borderColor: "#8eb4ff" },
                 }),
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 placeholder: (base: any) => ({
                   ...base,
                   color: "#b3b8c6",
                   fontSize: 14,
                 }),
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 menu: (base: any) => ({
                   ...base,
                   zIndex: 9999,
                   borderRadius: 12,
                 }),
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 singleValue: (base: any) => ({
                   ...base,
                   color: "#2f2f2f",
@@ -329,8 +326,9 @@ const DoctorRegisterPage = () => {
                 }),
               }}
               value={
-                options.find((opt) => opt.value === doctorData.country) || null
+                options.find((opt: { value: string }) => opt.value === doctorData.country) || null
               }
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               onChange={(opt: any) => handleChange("country", opt?.value || "")}
               isDisabled={isSubmitting}
             />

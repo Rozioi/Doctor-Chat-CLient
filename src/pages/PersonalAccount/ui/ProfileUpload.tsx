@@ -4,6 +4,7 @@ import { MdAddAPhoto } from "react-icons/md";
 import { useAuth } from "../../../features/auth/hooks/useAuth";
 import { apiClient } from "../../../api/api";
 import { useTranslation } from "react-i18next";
+import { tg } from "../../../shared/lib/telegram";
 import styles from "../styles/ProfileUpload.module.scss";
 
 const ProfileUpload: React.FC = () => {
@@ -15,8 +16,10 @@ const ProfileUpload: React.FC = () => {
   useEffect(() => {
     if (user?.photoUrl) {
       setPhotoUrl(user.photoUrl);
-    } else if (window.Telegram?.WebApp?.initDataUnsafe?.user?.photo_url) {
-      setPhotoUrl(window.Telegram.WebApp.initDataUnsafe.user.photo_url);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } else if ((tg.initDataUnsafe.user as any)?.photo_url) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setPhotoUrl((tg.initDataUnsafe.user as any).photo_url);
     }
   }, [user]);
 
@@ -31,7 +34,7 @@ const ProfileUpload: React.FC = () => {
       return false;
     }
 
-    if (!user?.telegramId) {
+    if (!user?.id) {
       message.error(t("profileUpload.errors.unknownUser"));
       return false;
     }
@@ -48,8 +51,10 @@ const ProfileUpload: React.FC = () => {
         message.error(uploadResponse.error || t("profileUpload.errors.uploadError"));
         if (user?.photoUrl) {
           setPhotoUrl(user.photoUrl);
-        } else if (window.Telegram?.WebApp?.initDataUnsafe?.user?.photo_url) {
-          setPhotoUrl(window.Telegram.WebApp.initDataUnsafe.user.photo_url);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } else if ((tg.initDataUnsafe.user as any)?.photo_url) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setPhotoUrl((tg.initDataUnsafe.user as any).photo_url);
         } else {
           setPhotoUrl(null);
         }
@@ -58,7 +63,7 @@ const ProfileUpload: React.FC = () => {
       }
 
       const updateResponse = await apiClient.updateUserPhotoUrl(
-        user.telegramId,
+        String(user.id),
         uploadResponse.data.url,
       );
 
@@ -76,18 +81,22 @@ const ProfileUpload: React.FC = () => {
         message.error(updateResponse.error || t("profileUpload.errors.updateError"));
         if (user?.photoUrl) {
           setPhotoUrl(user.photoUrl);
-        } else if (window.Telegram?.WebApp?.initDataUnsafe?.user?.photo_url) {
-          setPhotoUrl(window.Telegram.WebApp.initDataUnsafe.user.photo_url);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } else if ((tg.initDataUnsafe.user as any)?.photo_url) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setPhotoUrl((tg.initDataUnsafe.user as any).photo_url);
         } else {
           setPhotoUrl(null);
         }
       }
-    } catch (error) {
+    } catch {
       message.error(t("profileUpload.errors.generalError"));
       if (user?.photoUrl) {
         setPhotoUrl(user.photoUrl);
-      } else if (window.Telegram?.WebApp?.initDataUnsafe?.user?.photo_url) {
-        setPhotoUrl(window.Telegram.WebApp.initDataUnsafe.user.photo_url);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } else if ((tg.initDataUnsafe.user as any)?.photo_url) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setPhotoUrl((tg.initDataUnsafe.user as any).photo_url);
       } else {
         setPhotoUrl(null);
       }

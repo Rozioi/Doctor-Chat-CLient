@@ -1,36 +1,13 @@
-import React, {
-  createContext,
+import {
   useState,
-  useContext,
-  ReactNode,
+  type ReactNode,
   useEffect,
 } from "react";
 import axios from "axios";
 import { useAuthReq } from "../../../hooks/useAuthReq";
 import { apiClient } from "../../../api/api";
-
-interface User {
-  id: string;
-  phoneNumber: string;
-  telegramData?: any;
-  username?: string;
-  firstName?: string;
-  lastName?: string;
-  photoUrl?: string;
-  role?: string;
-}
-
-interface AuthContextType {
-  user: User | null;
-  isLogin: boolean;
-  loginFunc: (
-    phoneNumber: string,
-  ) => Promise<{ success: boolean; error?: string; user?: User }>;
-  logout: () => Promise<void>;
-  isLoading: boolean;
-}
-
-export const authContext = createContext<AuthContextType | null>(null);
+import type { User } from "../../../api/types";
+import { authContext } from "./authContextInstance";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -98,6 +75,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
           }
         }
       } catch (error) {
+        console.error("Auto login error:", error);
         localStorage.removeItem("isLogin");
         localStorage.removeItem("user");
         localStorage.removeItem("telegramData");
@@ -107,7 +85,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     autoLogin();
-  }, []);
+  }, [login]);
 
   const loginFunc = async (phoneNumber: string) => {
     try {
@@ -133,6 +111,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         return { success: false, error: response.error || "Ошибка входа" };
       }
     } catch (err) {
+      console.error("Login error:", err);
       const errorMessage =
         err instanceof Error
           ? err.message
@@ -150,7 +129,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       // await axios.post("/api/logout");
     } catch (err) {
-      // Игнорируем ошибки при выходе
+      console.error("Logout error:", err);
     } finally {
       setUser(null);
       setIsLogin(false);

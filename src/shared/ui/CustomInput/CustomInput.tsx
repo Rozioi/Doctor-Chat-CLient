@@ -8,11 +8,11 @@ interface CustomInputProps {
   placeholder?: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export const CustomInput: FC<CustomInputProps> = ({
-  type = "text", // 'text' | 'password'
+  type = "text",
   placeholder = "",
   value,
   onChange,

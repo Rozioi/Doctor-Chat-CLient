@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    padding-top: 30px;
+    padding-top: 0;
     box-sizing: border-box;
     overflow-x: hidden;
 }
@@ -19,6 +19,7 @@
     position: relative;
     width: 60vw;
     max-width: 300px;
+    margin-top: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,10 +61,12 @@
         margin: 5px 0;
     }
 }
+
 .text-title {
     display: flex;
     flex-direction: row;
 }
+
 .text {
     font-size: 2rem;
     font-family: Arial, Helvetica, sans-serif;
@@ -99,6 +102,7 @@
         height: 1.5px;
         background: linear-gradient(to right, #969696, #303030);
     }
+
     &::after {
         content: "";
         position: absolute;
@@ -109,6 +113,7 @@
         background: linear-gradient(to right, #969696, #303030);
     }
 }
+
 .buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -118,6 +123,7 @@
     width: 70%;
     margin-top: 5px;
 }
+
 .login,
 .register {
     display: flex;
@@ -175,6 +181,7 @@
 .primaryButton {
     background: linear-gradient(150deg, #4d7bfb 0%, #89bdff 100%);
     color: white;
+
     &:hover {
         opacity: 0.9;
     }
@@ -183,6 +190,7 @@
 .secondaryButton {
     background: linear-gradient(150deg, #059b67 0%, #2edaa9 100%);
     color: white;
+
     &:hover {
         opacity: 0.9;
     }
@@ -192,9 +200,11 @@
     .title {
         font-size: 1.6rem;
     }
+
     .description {
         font-size: 1rem;
     }
+
     .buttons {
         width: 90%;
     }

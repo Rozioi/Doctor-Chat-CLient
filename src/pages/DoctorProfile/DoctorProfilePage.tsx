@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router";
 import { DoctorProfile } from "./DoctorProfile";
 import { useAppNavigation } from "../../shared/hooks/useAppNavigation";
@@ -20,7 +20,7 @@ interface MappedDoctorData {
   about: string;
 }
 
-const getExperienceText = (years: number, t: any): string => {
+const getExperienceText = (years: number, t: (key: string) => string): string => {
   if (years === 1) return t("doctorProfilePage.experience.year");
   if (years >= 2 && years <= 4)
     return t("doctorProfilePage.experience.years2_4");
@@ -36,102 +36,79 @@ export const DoctorProfilePage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [doctorData, setDoctorData] = useState<MappedDoctorData | null>(null);
   const [doctorId, setDoctorId] = useState<string | number | null>(null);
-  const [hasActiveChat, setHasActiveChat] = useState(false);
 
-  useEffect(() => {
-    const fetchDoctor = async () => {
-      let doctorId: string | null = null;
 
-      if (slug) {
-        doctorId = extractIdFromSlug(slug);
-        if (!doctorId) {
-          setError(t("doctorProfilePage.errors.invalidSlug"));
-          setLoading(false);
-          return;
-        }
-      } else if (id) {
-        doctorId = id;
-      } else {
-        setError(t("doctorProfilePage.errors.noId"));
+  const fetchDoctor = useCallback(async () => {
+    let doctorIdStr: string | null = null;
+
+    if (slug) {
+      doctorIdStr = extractIdFromSlug(slug);
+      if (!doctorIdStr) {
+        setError(t("doctorProfilePage.errors.invalidSlug"));
         setLoading(false);
         return;
       }
+    } else if (id) {
+      doctorIdStr = id;
+    } else {
+      setError(t("doctorProfilePage.errors.noId"));
+      setLoading(false);
+      return;
+    }
 
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await apiClient.getDoctorById(doctorId);
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await apiClient.getDoctorById(doctorIdStr);
 
-        if (response.success && response.data) {
-          const doctor = response.data as DoctorProfileType;
-          const mappedData: MappedDoctorData = {
-            name: doctor.user
-              ? `${doctor.user.firstName || ""} ${doctor.user.lastName || ""}`.trim() ||
-                doctor.user.username ||
-                t("doctorProfilePage.defaults.doctor")
-              : t("doctorProfilePage.defaults.doctor"),
-            specialty:
-              typeof doctor.specialization === "object"
-                ? (doctor.specialization as any)?.name ||
-                  t("doctorProfilePage.defaults.specialist")
-                : doctor.specialization ||
-                  t("doctorProfilePage.defaults.specialist"),
-            experience: `${Number(doctor.experience || 0)} ${getExperienceText(
-              Number(doctor.experience || 0),
-              t,
-            )}`,
-            reviews: "0",
-            price: `${Number(doctor.consultationFee || 0).toLocaleString("ru-RU")} ₸`,
-            rating: Number(doctor.rating) || 0,
-            image: doctor.user?.photoUrl || "https://i.pravatar.cc/300?img=60",
-            about: doctor.description || t("doctorProfilePage.defaults.noInfo"),
-          };
+      if (response.success && response.data) {
+        const doctor = response.data as DoctorProfileType;
+        const mappedData: MappedDoctorData = {
+          name: doctor.user
+            ? `${doctor.user.firstName || ""} ${doctor.user.lastName || ""}`.trim() ||
+            doctor.user.username ||
+            t("doctorProfilePage.defaults.doctor")
+            : t("doctorProfilePage.defaults.doctor"),
+          specialty:
+            typeof doctor.specialization === "object"
+              ? (doctor.specialization as { name: string })?.name ||
+              t("doctorProfilePage.defaults.specialist")
+              : (doctor.specialization as string) ||
+              t("doctorProfilePage.defaults.specialist"),
+          experience: `${Number(doctor.experience || 0)} ${getExperienceText(
+            Number(doctor.experience || 0),
+            t,
+          )}`,
+          reviews: "0",
+          price: `${Number(doctor.consultationFee || 0).toLocaleString("ru-RU")} ₸`,
+          rating: Number(doctor.rating) || 0,
+          image: doctor.user?.photoUrl || "https://i.pravatar.cc/300?img=60",
+          about: doctor.description || t("doctorProfilePage.defaults.noInfo"),
+        };
 
-          setDoctorData(mappedData);
-          setDoctorId(doctor.id);
+        setDoctorData(mappedData);
+        setDoctorId(doctor.id);
 
-          // Проверяем активный чат
-          if (user?.id && doctor.user?.id) {
-            checkActiveChat(doctor.user.id);
-          }
-        } else {
-          setError(response.error || t("doctorProfilePage.errors.notFound"));
+        if (user?.id && doctor.user?.id) {
+          // checkActiveChat(doctor.user.id);
         }
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error
-            ? err.message
-            : t("doctorProfilePage.errors.loadError");
-        setError(errorMessage);
-      } finally {
-        setLoading(false);
+      } else {
+        setError(response.error || t("doctorProfilePage.errors.notFound"));
       }
-    };
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : t("doctorProfilePage.errors.loadError");
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, [id, slug, t, user?.id]);
 
-    const checkActiveChat = async (doctorUserId: number) => {
-      try {
-        const telegramId =
-          user?.telegramId ||
-          window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString();
-        if (!telegramId) return;
-
-        const response = await apiClient.getChats(telegramId);
-        if (response.success && response.data) {
-          const activeChat = response.data.find(
-            (chat) =>
-              chat.status === "ACTIVE" &&
-              chat.doctorId === doctorUserId &&
-              chat.serviceType === "consultation",
-          );
-          setHasActiveChat(!!activeChat);
-        }
-      } catch (err) {
-        console.error(t("doctorProfilePage.errors.checkChatError"), err);
-      }
-    };
-
+  useEffect(() => {
     fetchDoctor();
-  }, [id, slug, user]);
+  }, [fetchDoctor]);
 
   if (loading) {
     return (
@@ -179,11 +156,12 @@ export const DoctorProfilePage: React.FC = () => {
 
   return (
     <DoctorProfile
+      id={doctorId!}
       {...doctorData}
-      doctorId={doctorId || undefined}
       onBack={goBack}
       onStartChat={handleStartChat}
-      hasActiveChat={hasActiveChat}
     />
   );
 };
+
+export default DoctorProfilePage;

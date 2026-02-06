@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   Typography,
-  Tag,
   Divider,
   message,
   Modal,
@@ -28,8 +27,7 @@ const PersonalAccountPage: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const [balance, setBalance] = useState(0);
-  const [loadingBalance, setLoadingBalance] = useState(true);
+  const [balance] = useState(0);
   const [messageApi, contextHolder] = message.useMessage();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -62,9 +60,9 @@ const PersonalAccountPage: React.FC = () => {
         user.firstName && user.lastName
           ? `${user.firstName} ${user.lastName}`
           : user.firstName ||
-            user.lastName ||
-            user.username ||
-            t("profile.user");
+          user.lastName ||
+          user.username ||
+          t("profile.user");
       setName(fullName);
       setPhone(user.phoneNumber || "");
 
@@ -78,8 +76,8 @@ const PersonalAccountPage: React.FC = () => {
           telegramUser.first_name && telegramUser.last_name
             ? `${telegramUser.first_name} ${telegramUser.last_name}`
             : telegramUser.first_name ||
-              telegramUser.username ||
-              t("profile.user");
+            telegramUser.username ||
+            t("profile.user");
         setName(fullName);
       }
     }
@@ -93,7 +91,7 @@ const PersonalAccountPage: React.FC = () => {
         setDoctorProfile(response.data);
       }
     } catch (err) {
-      // Можно добавить логирование в production
+      console.error(err);
     }
   };
   const handleLogout = () => {
@@ -108,13 +106,14 @@ const PersonalAccountPage: React.FC = () => {
       setShowLogoutModal(false);
       navigate("/login");
     } catch (err) {
+      console.error(err);
       messageApi.error(t("profile.deleteError"));
     } finally {
       setLogoutLoading(false);
     }
   };
-  const hadleDelete = () => {
-    setShowLogoutModal(true);
+  const handleDelete = () => {
+    setShowDeleteModal(true);
   };
 
   const confirmLogout = async () => {
@@ -125,7 +124,10 @@ const PersonalAccountPage: React.FC = () => {
       setShowLogoutModal(false);
       navigate("/login");
     } catch (err) {
-      messageApi.error(t("profile.logoutError"));
+      console.error(err);
+      messageApi.error(t("profile.logoutSuccess"));
+      setShowLogoutModal(false);
+      navigate("/login");
     } finally {
       setLogoutLoading(false);
     }
@@ -243,7 +245,7 @@ const PersonalAccountPage: React.FC = () => {
           block
           icon={<LogoutOutlined />}
           className={styles.logoutButton}
-          onClick={hadleDelete}
+          onClick={handleDelete}
           loading={logoutLoading}
         >
           {t("profile.deleteAccount")}

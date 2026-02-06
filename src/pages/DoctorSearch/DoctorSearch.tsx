@@ -64,8 +64,8 @@ const DoctorSearchPage: React.FC = () => {
                 id: String(doctorProfile.id),
                 name: doctorProfile.user
                   ? `${doctorProfile.user.firstName || ""} ${doctorProfile.user.lastName || ""}`.trim() ||
-                    doctorProfile.user.username ||
-                    "Врач"
+                  doctorProfile.user.username ||
+                  "Врач"
                   : "Врач",
                 country: doctorProfile.country || "Не указано",
                 countryFlag: getCountryFlag(doctorProfile.country || ""),
@@ -96,7 +96,7 @@ const DoctorSearchPage: React.FC = () => {
     };
 
     loadDoctors();
-  }, []);
+  }, [messageApi, t]);
 
   const handleToggleCategory = (category: string) => {
     setOpenCategory((prev: string | null) =>

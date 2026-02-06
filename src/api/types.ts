@@ -1,26 +1,59 @@
-export interface LoginRequest {
-  phoneNumber: string;
-}
-
-export interface CreateUserRequest {
-  phoneNumber: string;
-  telegramId: string;
-  firstName?: string;
-  lastName?: string;
+export interface TelegramUser {
+  id: number;
   username?: string;
+  first_name?: string;
+  last_name?: string;
+  photo_url?: string;
+  language_code?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 }
 
 export interface User {
-  id: number;
-  telegramId: string;
+  id: string | number;
+  telegramId?: string;
+  phoneNumber?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  telegramData?: any;
   username?: string;
   firstName?: string;
   lastName?: string;
-  phoneNumber?: string;
   photoUrl?: string;
-  role: "PATIENT" | "DOCTOR" | "ADMIN";
-  createdAt: Date;
+  role?: Role | string;
+  createdAt?: string | Date;
 }
+
+export interface AuthContextType {
+  user: User | null;
+  isLogin: boolean;
+  loginFunc: (
+    phoneNumber: string,
+  ) => Promise<{ success: boolean; error?: string; user?: User }>;
+  logout: () => Promise<void>;
+  isLoading: boolean;
+}
+
+export interface TelegramInitData {
+  query_id?: string;
+  user?: TelegramUser;
+  auth_date?: number;
+  hash?: string;
+}
+
+export interface LoginRequest {
+  telegramData: TelegramUser;
+  phoneNumber: string;
+}
+
+export type Role = "PATIENT" | "DOCTOR" | "ADMIN";
+
+export interface CreateUserRequest {
+  telegramData: TelegramInitData;
+  phoneNumber?: string;
+  role: Role;
+}
+
+
 
 export interface DoctorInput {
   specialization: string;
@@ -31,7 +64,14 @@ export interface DoctorInput {
   certificates: string[];
   consultationFee: number;
   country: string;
-  cardNumber?: string;
+}
+
+export interface CreateDoctorRequest {
+  user: {
+    telegramData: TelegramUser;
+    phoneNumber: string;
+  };
+  doctor: DoctorInput;
 }
 
 export interface DoctorProfile {
@@ -49,20 +89,6 @@ export interface DoctorProfile {
   isAvailable: boolean;
   user?: User;
   category?: string;
-  specialization?: string;
-}
-
-export interface TelegramInitData {
-  query_id?: string;
-  user?: {
-    id: number;
-    first_name?: string;
-    last_name?: string;
-    username?: string;
-    language_code?: string;
-  };
-  auth_date?: number;
-  hash?: string;
 }
 
 export interface DoctorCardData {
@@ -107,7 +133,7 @@ export interface Balance {
   userId: number;
 }
 
-export type PaymentMethod = "BALANCE" | "CARD" | "BANK_TRANSFER";
+export type PaymentMethod = "BALANCE" | "CARD" | "BANK_TRANSFER" | "ROBOKASSA";
 export type PaymentStatus = "PENDING" | "COMPLETED" | "FAILED" | "CANCELLED" | "REFUNDED";
 
 export interface Payment {
@@ -175,8 +201,37 @@ export interface CreateReviewRequest {
   telegramId: string;
 }
 
+export interface GeneratePDFRequest {
+  documentType: PDFDocumentType;
+  userId?: number;
+  chatId?: number;
+  metadata?: Record<string, unknown>;
+}
+
+export interface UploadPDFRequest {
+  file: File;
+  documentType: PDFDocumentType;
+  userId?: number;
+  chatId?: number;
+  metadata?: Record<string, unknown>;
+}
+
+export interface InitRobokassaRequest {
+  doctorId: number;
+  amount: number;
+  serviceType: string;
+  description?: string;
+  telegramId?: string;
+}
+
+export interface RobokassaInitResponse {
+  paymentUrl: string;
+  invoiceId: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
   error?: string;
+  message?: string;
 }

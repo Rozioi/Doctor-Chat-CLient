@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import { Card, Typography, Button, Input, Divider, Tag, message } from "antd";
-import {
-  MedicineBoxOutlined,
-  DollarOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+import { Card, Typography, Button, Input, message } from "antd";
+import { MedicineBoxOutlined, EditOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 
 const { Text, Title } = Typography;
@@ -30,10 +26,11 @@ const DoctorProfileSection: React.FC<Props> = ({ profile, onSave }) => {
   const { t } = useTranslation();
   const [description, setDescription] = useState(profile.description || "");
   const [saving, setSaving] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const handleSave = async () => {
     if (description.trim().length < 10) {
-      message.error(t("doctorProfile.descriptionError"));
+      messageApi.error(t("doctorProfile.descriptionError"));
       return;
     }
 
@@ -41,7 +38,7 @@ const DoctorProfileSection: React.FC<Props> = ({ profile, onSave }) => {
       setSaving(true);
       await onSave({ consultationFee: fee, description });
       setEditMode(null);
-      message.success(t("doctorProfile.updated"));
+      messageApi.success(t("doctorProfile.updated"));
     } finally {
       setSaving(false);
     }
@@ -57,6 +54,7 @@ const DoctorProfileSection: React.FC<Props> = ({ profile, onSave }) => {
         overflow: "hidden",
       }}
     >
+      {contextHolder}
       <div
         style={{
           padding: 20,
