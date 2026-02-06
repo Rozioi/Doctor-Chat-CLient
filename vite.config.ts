@@ -9,6 +9,8 @@ export default defineConfig({
       "rozioi.pro",
       "madly-modern-brill.cloudpub.ru",
       "rampantly-reasonable-millipede.cloudpub.ru",
+      "doctor-chat-backend.vercel.app",
+      "doctor-chat-c-lient.vercel.app",
       "soundly-primary-protozoa.cloudpub.ru",
     ],
   },
