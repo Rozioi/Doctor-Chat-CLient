@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import {
   Button,
   Card,
@@ -49,8 +49,8 @@ const PaymentPage: React.FC = () => {
         const doctor = response.data;
         const name = doctor.user
           ? `${doctor.user.firstName || ""} ${doctor.user.lastName || ""}`.trim() ||
-          doctor.user.username ||
-          "Врач"
+            doctor.user.username ||
+            "Врач"
           : "Врач";
         const price = Number(doctor.consultationFee || 0);
         setDoctorData({ name, price });
@@ -64,30 +64,33 @@ const PaymentPage: React.FC = () => {
     if (doctorIdParam) loadDoctorData();
   }, [doctorIdParam, loadDoctorData]);
 
-  const checkActiveChat = useCallback(async (doctorId: number): Promise<boolean> => {
-    try {
-      const telegramId =
-        user?.id?.toString() ||
-        tg.initDataUnsafe?.user?.id?.toString();
-      if (!telegramId) return false;
+  const checkActiveChat = useCallback(
+    async (doctorId: number): Promise<boolean> => {
+      try {
+        const telegramId =
+          user?.id?.toString() || tg.initDataUnsafe?.user?.id?.toString();
+        if (!telegramId) return false;
 
-      const response = await apiClient.getChats(telegramId);
-      if (response.success && response.data) {
-        const activeChat = response.data.find(
-          (chat) =>
-            chat.status === "ACTIVE" &&
-            chat.doctorId === doctorId &&
-            chat.serviceType ===
-            (serviceType === "analysis" ? "analysis" : "consultation"),
-        );
-        return !!activeChat;
+        const response = await apiClient.getChats(telegramId);
+        if (response.success && response.data) {
+          const activeChat = response.data.find(
+            (chat) =>
+              chat.status === "ACTIVE" &&
+              chat.doctorId === doctorId &&
+              chat.serviceType ===
+                (serviceType === "analysis" ? "analysis" : "consultation"),
+          );
+          return !!activeChat;
+        }
+        return false;
+      } catch (err) {
+        console.error("Ошибка проверки активного чата:", err);
+        return false;
       }
-      return false;
-    } catch (err) {
-      console.error("Ошибка проверки активного чата:", err);
-      return false;
-    }
-  }, [user?.id, serviceType]);
+    },
+    [user?.id, serviceType],
+  );
+  const navigate = useNavigate();
 
   const handlePayment = async () => {
     if (!doctorIdParam || !doctorData) {
@@ -96,7 +99,6 @@ const PaymentPage: React.FC = () => {
       );
       return;
     }
-
     const doctorIdNum = Number(doctorIdParam);
     const amount = doctorData.price;
 
@@ -115,8 +117,7 @@ const PaymentPage: React.FC = () => {
 
     try {
       const telegramId =
-        user?.id?.toString() ||
-        tg.initDataUnsafe?.user?.id?.toString();
+        user?.id?.toString() || tg.initDataUnsafe?.user?.id?.toString();
 
       if (!telegramId) {
         messageApi.error(
@@ -137,7 +138,7 @@ const PaymentPage: React.FC = () => {
       } else {
         messageApi.error(
           response.error ||
-          t("payment.errors.initError", "Ошибка при инициализации платежа"),
+            t("payment.errors.initError", "Ошибка при инициализации платежа"),
         );
       }
     } catch (err) {
@@ -230,35 +231,38 @@ const PaymentPage: React.FC = () => {
         okText={t("payment.offerOk", "Продолжить")}
         cancelText={t("payment.offerCancel", "Отмена")}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: 12, padding: "10px 0" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+            padding: "10px 0",
+          }}
+        >
           <Checkbox
             checked={isOfferAccepted}
             onChange={(e) => setIsOfferAccepted(e.target.checked)}
           >
             <Text>
-              {t("payment.offerTextPrefix", "Я принимаю условия")}
-              {" "}
+              {t("payment.offerTextPrefix", "Я принимаю условия")}{" "}
               <a
-                href="/terms"
-                target="_blank"
-                rel="noopener noreferrer"
                 style={{ color: "#3b82f6" }}
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
+                  navigate("/terms");
                 }}
               >
                 {t("payment.offerLink", "Договора публичной оферты")}
-              </a>
-              {" "}
-              {t("payment.offerAnd", "и")}
-              {" "}
+              </a>{" "}
+              {t("payment.offerAnd", "и")}{" "}
               <a
-                href="/privacy"
-                target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: "#3b82f6" }}
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
+                  navigate("/privacy");
                 }}
               >
                 {t("payment.privacyLink", "Политики конфиденциальности")}
@@ -266,9 +270,7 @@ const PaymentPage: React.FC = () => {
             </Text>
           </Checkbox>
           <div style={{ marginTop: 8 }}>
-            <Text type="secondary">
-              Платежи защищены системой Robokassa
-            </Text>
+            <Text type="secondary">Платежи защищены системой Robokassa</Text>
           </div>
         </div>
       </Modal>
