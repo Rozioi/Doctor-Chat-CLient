@@ -13,12 +13,24 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useAppNavigation } from "../../shared/hooks/useAppNavigation";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { apiClient } from "../../api/api";
+import { Loader } from "../../shared/ui/Loader/Loader";
 const { Title, Text } = Typography;
 
 const PersonalAccountPage: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, isLoading: isAuthLoading } = useAuth();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const [pageLoading, setPageLoading] = useState(() => {
+    // If we have cached user and doctorProfile (if needed), we don't need a full screen loader
+    const hasUser = !!localStorage.getItem("user");
+    const isDoctor = JSON.parse(localStorage.getItem("user") || "{}")?.role === "DOCTOR";
+    const hasDoctorProfile = !!localStorage.getItem("doctorProfile");
+
+    if (hasUser && (!isDoctor || hasDoctorProfile)) {
+      return false;
+    }
+    return true;
+  });
   const [balance] = useState(0);
   const [messageApi, contextHolder] = message.useMessage();
   const [name, setName] = useState("");
@@ -30,7 +42,14 @@ const PersonalAccountPage: React.FC = () => {
     consultationFee: number | string;
     description: string;
     specialization: string;
-  } | null>(null);
+  } | null>(() => {
+    try {
+      const saved = localStorage.getItem("doctorProfile");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -47,19 +66,23 @@ const PersonalAccountPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (isAuthLoading) return;
+
     if (user) {
       const fullName =
         user.firstName && user.lastName
           ? `${user.firstName} ${user.lastName}`
           : user.firstName ||
-            user.lastName ||
-            user.username ||
-            t("profile.user");
+          user.lastName ||
+          user.username ||
+          t("profile.user");
       setName(fullName);
       setPhone(user.phoneNumber || "");
 
       if (user.role === "DOCTOR" && user.id) {
-        loadDoctorProfile(user.id);
+        loadDoctorProfile(user.id).finally(() => setPageLoading(false));
+      } else {
+        setPageLoading(false);
       }
     } else {
       if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
@@ -68,12 +91,13 @@ const PersonalAccountPage: React.FC = () => {
           telegramUser.first_name && telegramUser.last_name
             ? `${telegramUser.first_name} ${telegramUser.last_name}`
             : telegramUser.first_name ||
-              telegramUser.username ||
-              t("profile.user");
+            telegramUser.username ||
+            t("profile.user");
         setName(fullName);
       }
+      setPageLoading(false);
     }
-  }, [user, t]);
+  }, [user, t, isAuthLoading]);
 
   const loadDoctorProfile = async (userId: string | number) => {
     try {
@@ -81,6 +105,7 @@ const PersonalAccountPage: React.FC = () => {
       if (response.success && response.data) {
         console.log(response.data);
         setDoctorProfile(response.data);
+        localStorage.setItem("doctorProfile", JSON.stringify(response.data));
       }
     } catch (err) {
       console.error(err);
@@ -128,6 +153,10 @@ const PersonalAccountPage: React.FC = () => {
   const cancelLogout = () => {
     setShowLogoutModal(false);
   };
+
+  if (isAuthLoading || pageLoading) {
+    return <Loader fullScreen />;
+  }
 
   return (
     <div className={styles.container}>

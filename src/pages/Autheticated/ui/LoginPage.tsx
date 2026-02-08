@@ -27,7 +27,13 @@ const LoginPage = () => {
       setPhone(savedPhone);
     }
   }, []);
+  const URL = import.meta.env.VITE_REACT_APP_PDF_BASE_URL;
 
+  const downloadOffer = (e: React.MouseEvent, fileName: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(`${URL}${fileName}`, "_blank");
+  };
   const handleLogin = async () => {
     if (!phone || phone.length < 10) {
       messageApi.error(
@@ -106,7 +112,7 @@ const LoginPage = () => {
 
             <div className={styles.legalLinks}>
               <a
-                href="/terms"
+                onClick={(e) => downloadOffer(e, "terms1.pdf")}
                 rel="noopener noreferrer"
                 className={styles.legalLink}
               >
@@ -116,7 +122,7 @@ const LoginPage = () => {
               <span className={styles.dot}>•</span>
 
               <a
-                href="/privacy"
+                onClick={(e) => downloadOffer(e, "privacy.pdf")}
                 rel="noopener noreferrer"
                 className={styles.legalLink}
               >

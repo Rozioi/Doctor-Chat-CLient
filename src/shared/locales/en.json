@@ -268,75 +268,112 @@
   },
   "info": {
     "advantages": {
-      "title": "Benefits of using Doctor Chat:",
+      "title": "About Us:",
       "europeanStandards": {
-        "title": "Access to European medical standards:",
-        "point1": "Consultations from qualified doctors from European countries without leaving your country!",
-        "point2": "High quality service standards and medical recommendations."
+        "title": "WHAT IS MED EXPERT EU?",
+        "point1": "Independent expertise from European doctors.",
+        "point2": "Objective evaluation of diagnosis and treatment without visas or language barriers.",
+        "point3": "Second Opinion Service.",
+        "point4": "Not a primary consultation, but a strategic analysis."
       },
       "speed": {
-        "title": "Speed and convenience:",
-        "point1": "Ability to get consultation without leaving home.",
-        "point2": "Quick response — from a minute to an hour. Online \"live queue\" format."
+        "title": "WHO CONDUCTS THE AUDIT?",
+        "point1": "Specialized European experts (*Fachärzte*).",
+        "point2": "Quick response—from a minute to an hour. Online live queue format."
       },
       "channels": {
-        "title": "Variety of communication channels:",
-        "point1": "Ability to use text, photo, audio and video formats to communicate with the doctor."
+        "title": "WHAT DO YOU RECEIVE?",
+        "point1": "Expert report (PDF): Official written document from a European specialist.",
+        "point2": "Detailed review of your situation.",
+        "point3": "Roadmap: Step-by-step recommendations on which tests to take and which can be skipped.",
+        "point4": "Adaptation of expert recommendations by a local partner doctor."
       },
       "privacy": {
-        "title": "Confidentiality and security:",
-        "point1": "Full anonymity and protection of your data is guaranteed."
+        "title": "HOW DOES THE AUDIT WORK?",
+        "point1": "You send your data, questions, MRI, and test results via a secure chat.",
+        "point2": "The expert reviews the data and may ask clarifying questions directly in chat.",
+        "point3": "The doctor identifies possible diagnostic errors, hidden risks, or outdated methods (per Guidelines).",
+        "point4": "You receive a PDF with a clear treatment strategy based on European evidence-based medicine."
       },
       "alternative": {
-        "title": "Safe alternative to self-diagnosis:",
-        "point1": "Getting professional advice instead of harmful \"self-treatment\" using the internet."
+        "title": "WHAT TO DO WITH THE EUROPEAN REPORT?",
+        "point1": "The European expert provides a strategy, but prescriptions and referrals are valid only from a local doctor. We bridge this gap."
       },
       "feedback": {
-        "title": "Feedback and service improvement:",
-        "point1": "Ability to leave a review and influence service improvement."
+        "title": "Feedback and Service Improvement:",
+        "point1": "Click the green button in the menu. A coordinator will match you with a licensed doctor in your city.",
+        "point2": "Attend the consultation. The doctor is ready to work according to international standards.",
+        "point3": "The doctor reviews the Med Expert report and adapts European protocols to your country (medications and tests).",
+        "point4": "You receive a PDF with a clear treatment strategy based on evidence-based medicine."
+      },
+      "joy": {
+        "title": "You leave the office with official documents:",
+        "point1": "Valid prescriptions.",
+        "point2": "Referrals for procedures and tests.",
+        "point3": "Treatment plan under supervision of a local specialist."
+      },
+      "important": {
+        "title": "Only MED EXPERT EU partner doctors work with our expertise form.",
+        "point1": "External clinics may refuse to process European-style documents. Our local doctor:",
+        "point2": "Adapts prescriptions.",
+        "point3": "Provides referrals for procedures and tests.",
+        "point4": "Takes treatment under supervision."
+      },
+      "profit": {
+        "title": "WHY IS THIS COST-EFFECTIVE?",
+        "point1": "European expertise at the price of a dinner.",
+        "point2": "Access to the 'Gold Standard' of medicine without travel costs.",
+        "point3": "In-person consultation in the EU: from €2,000.",
+        "point4": "Med Expert online audit—98% savings at the same expertise level.",
+        "point5": "EU: ~€3,000 (consultation + flight), Med Expert: ~€40."
       }
     },
     "problems": {
-      "title": "Modern Patient Problems:",
-      "access": {
-        "title": "Lack of access to quality medical services:",
-        "point1": "Difficulties finding qualified specialists in your region",
-        "point2": "Long waiting time for doctor appointment."
+      "title": "Why do people turn to us?",
+      "diagnosis": {
+        "title": "DO YOU DOUBT YOUR DIAGNOSIS?",
+        "point1": "You received a diagnosis but are unsure of its accuracy?",
+        "point2": "Our experts conduct an independent audit to confirm or refute your doctor’s conclusions.",
+        "point3": "No attempt to sell unnecessary services."
       },
-      "doubts": {
-        "title": "Doubts and need for additional information:",
-        "point1": "Uncertainty after previous diagnosis or treatment.",
-        "point2": "Need to hear a second opinion."
+      "treatment": {
+        "title": "TREATMENT NOT WORKING?",
+        "point1": "Therapy has been ongoing for months without results?",
+        "point2": "The protocol may be outdated.",
+        "point3": "We select a modern treatment plan based on international standards."
       },
-      "fear": {
-        "title": "Fear and uncertainty about health:",
-        "point1": "Not understanding test results and desiring consultation without stress and rush."
+      "surgery": {
+        "title": "WAS SURGERY RECOMMENDED?",
+        "point1": "Don’t rush under the knife.",
+        "point2": "Often, conservative treatment methods are available in Europe.",
+        "point3": "We check if your problem can be solved without surgery."
       },
-      "time": {
-        "title": "Time and logistical constraints:",
-        "point1": "Lack of time to visit a doctor at the office or hospital.",
-        "point2": "When abroad, there are difficulties accessing local medical services."
+      "check": {
+        "title": "WANT TO VERIFY PRESCRIPTIONS?",
+        "point1": "Taking a pile of pills?",
+        "point2": "We check each prescription against Evidence-Based Medicine principles.",
+        "point3": "Remove unnecessary ones, keep only what truly works."
       },
-      "visits": {
-        "title": "Desire to avoid unnecessary visits:",
-        "point1": "Need only for informational support.",
-        "point2": "Preference to get consultation quickly and without formalities."
+      "secondOpinion": {
+        "title": "THE 'SECOND OPINION' ISSUE:",
+        "point1": "Patients visit 3–4 doctors and get different diagnoses.",
+        "point2": "You need an authoritative figure to make a final decision.",
+        "point3": "A European doctor acts as an independent highest authority (arbiter)."
       },
-      "discomfort": {
-        "title": "Discomfort and embarrassment:",
-        "point1": "Inconvenience or shyness when discussing personal health issues face to face.",
-        "point2": "Preference for confidentiality and anonymity when interacting with a doctor"
-      },
-      "psychological": {
-        "title": "Psychological comfort:",
-        "point1": "Stress and anxiety caused by waiting for a doctor visit or unpleasant visits to medical facilities."
+      "trust": {
+        "title": "CRISIS OF TRUST:",
+        "point1": "Stereotypes: 'they don’t treat properly,' 'over-treat,' or give wrong diagnoses.",
+        "point2": "People go abroad for treatment.",
+        "point3": "SOLUTION: 'Medical tourism from your sofa.' Access European quality without flights or visas."
       }
     },
     "warning": {
       "title": "Important!",
-      "text1": "The legislation of the RK does not provide for prescribing prescription drugs, prescribing a course of treatment and making a diagnosis during an online consultation. For this, you need to make an appointment for an in-person visit.",
-      "text2": "The consultation is informational, not medical.",
-      "emergency": "In case of emergency, call an ambulance at 112!"
+      "text1": "The consultation is informational and provides an expert strategy ('Second Opinion'), but is not a medical service. European experts are not responsible for self-treatment based on the data provided.",
+      "text2Title": "Implementation via Partners",
+      "text2": "To turn the European report into official prescriptions and referrals, use the service to find a partner doctor in your region (green button). Only an in-person doctor decides on treatment tactics and bears responsibility.",
+      "emergencyTitle": "NOT FOR EMERGENCIES!",
+      "emergency": "In case of life-threatening situations, call 112."
     }
   },
   "profileUpload": {
@@ -372,8 +409,8 @@
     }
   },
   "infoLinks": {
-    "delivery": "How the product is received",
-    "paymentProc": "How the payment is made",
+    "delivery": "RULES FOR PROVIDING AND RECEIVING SERVICES",
+    "paymentProc": "RULES FOR PAYMENT AND REFUND",
     "contacts": "Feedback"
   }
 }

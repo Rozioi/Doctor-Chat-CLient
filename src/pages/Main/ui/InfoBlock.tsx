@@ -15,6 +15,8 @@ export const InfoBlock = () => {
           points: [
             t("info.advantages.europeanStandards.point1"),
             t("info.advantages.europeanStandards.point2"),
+            t("info.advantages.europeanStandards.point3"),
+            t("info.advantages.europeanStandards.point4"),
           ],
           image: "/images/advantages/1.png",
         },
@@ -28,12 +30,22 @@ export const InfoBlock = () => {
         },
         {
           title: t("info.advantages.channels.title"),
-          points: [t("info.advantages.channels.point1")],
+          points: [
+            t("info.advantages.channels.point1"),
+            t("info.advantages.channels.point2"),
+            t("info.advantages.channels.point3"),
+            t("info.advantages.channels.point4"),
+          ],
           image: "/images/advantages/3.png",
         },
         {
           title: t("info.advantages.privacy.title"),
-          points: [t("info.advantages.privacy.point1")],
+          points: [
+            t("info.advantages.privacy.point1"),
+            t("info.advantages.privacy.point2"),
+            t("info.advantages.privacy.point3"),
+            t("info.advantages.privacy.point4"),
+          ],
           image: "/images/advantages/4.png",
         },
         {
@@ -43,64 +55,102 @@ export const InfoBlock = () => {
         },
         {
           title: t("info.advantages.feedback.title"),
-          points: [t("info.advantages.feedback.point1")],
+          points: [
+            t("info.advantages.feedback.point1"),
+            t("info.advantages.feedback.point2"),
+            t("info.advantages.feedback.point3"),
+            t("info.advantages.feedback.point4"),
+          ],
           image: "/images/advantages/6.png",
+        },
+        {
+          title: t("info.advantages.joy.title"),
+          points: [
+            t("info.advantages.joy.point1"),
+            t("info.advantages.joy.point2"),
+            t("info.advantages.joy.point3"),
+          ],
+          image: "/images/advantages/1.png",
+        },
+        {
+          title: t("info.advantages.important.title"),
+          points: [
+            t("info.advantages.important.point1"),
+            t("info.advantages.important.point2"),
+            t("info.advantages.important.point3"),
+            t("info.advantages.important.point4"),
+          ],
+          image: "/images/advantages/2.png",
+        },
+        {
+          title: t("info.advantages.profit.title"),
+          points: [
+            t("info.advantages.profit.point1"),
+            t("info.advantages.profit.point2"),
+            t("info.advantages.profit.point3"),
+            t("info.advantages.profit.point4"),
+            t("info.advantages.profit.point5"),
+          ],
+          image: "/images/advantages/1.png",
         },
       ],
     },
     {
       title: t("info.problems.title"),
-
       data: [
         {
-          title: t("info.problems.access.title"),
+          title: t("info.problems.diagnosis.title"),
           points: [
-            t("info.problems.access.point1"),
-            t("info.problems.access.point2"),
+            t("info.problems.diagnosis.point1"),
+            t("info.problems.diagnosis.point2"),
+            t("info.problems.diagnosis.point3"),
           ],
           image: "/images/problems/1.png",
         },
         {
-          title: t("info.problems.doubts.title"),
+          title: t("info.problems.treatment.title"),
           points: [
-            t("info.problems.doubts.point1"),
-            t("info.problems.doubts.point2"),
+            t("info.problems.treatment.point1"),
+            t("info.problems.treatment.point2"),
+            t("info.problems.treatment.point3"),
           ],
           image: "/images/problems/2.png",
         },
         {
-          title: t("info.problems.fear.title"),
-          points: [t("info.problems.fear.point1")],
+          title: t("info.problems.surgery.title"),
+          points: [
+            t("info.problems.surgery.point1"),
+            t("info.problems.surgery.point2"),
+            t("info.problems.surgery.point3"),
+          ],
           image: "/images/problems/3.png",
         },
         {
-          title: t("info.problems.time.title"),
+          title: t("info.problems.check.title"),
           points: [
-            t("info.problems.time.point1"),
-            t("info.problems.time.point2"),
+            t("info.problems.check.point1"),
+            t("info.problems.check.point2"),
+            t("info.problems.check.point3"),
           ],
           image: "/images/problems/4.png",
         },
         {
-          title: t("info.problems.visits.title"),
+          title: t("info.problems.secondOpinion.title"),
           points: [
-            t("info.problems.visits.point1"),
-            t("info.problems.visits.point2"),
+            t("info.problems.secondOpinion.point1"),
+            t("info.problems.secondOpinion.point2"),
+            t("info.problems.secondOpinion.point3"),
           ],
           image: "/images/problems/5.png",
         },
         {
-          title: t("info.problems.discomfort.title"),
+          title: t("info.problems.trust.title"),
           points: [
-            t("info.problems.discomfort.point1"),
-            t("info.problems.discomfort.point2"),
+            t("info.problems.trust.point1"),
+            t("info.problems.trust.point2"),
+            t("info.problems.trust.point3"),
           ],
           image: "/images/problems/6.png",
-        },
-        {
-          title: t("info.problems.psychological.title"),
-          points: [t("info.problems.discomfort.point1")],
-          image: "/images/problems/7.png",
         },
       ],
     },

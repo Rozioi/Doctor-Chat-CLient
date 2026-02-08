@@ -10,18 +10,18 @@ const InfoLinks: React.FC = () => {
   const downloadOffer = (e: React.MouseEvent, fileName: string) => {
     e.preventDefault();
     e.stopPropagation();
-    window.open(`${URL}/${fileName}`, "_blank");
+    window.open(`${URL}${fileName}`, "_blank");
   };
   const links = [
     {
       label: t("infoLinks.delivery"),
       icon: <MdArrowForwardIos />,
-      link: "delivery-methods.pdf",
+      link: "pravila_uslug.pdf",
     },
     {
       label: t("infoLinks.paymentProc"),
       icon: <MdArrowForwardIos />,
-      link: "payment-procedure.pdf",
+      link: "pravila_oplaty.pdf",
     },
     {
       label: t("infoLinks.contacts"),

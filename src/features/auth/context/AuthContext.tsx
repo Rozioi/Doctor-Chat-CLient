@@ -5,7 +5,6 @@ import {
 } from "react";
 import axios from "axios";
 import { useAuthReq } from "../../../hooks/useAuthReq";
-import { apiClient } from "../../../api/api";
 import type { User } from "../../../api/types";
 import { authContext } from "./authContextInstance";
 
@@ -18,67 +17,48 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const autoLogin = async () => {
       try {
-        const savedPhoneNumber = localStorage.getItem("phoneNumber");
-        const savedTelegramData = localStorage.getItem("telegramData");
         const savedUser = localStorage.getItem("user");
         const savedIsLogin = localStorage.getItem("isLogin");
+        const savedPhoneNumber = localStorage.getItem("phoneNumber");
+        const savedTelegramData = localStorage.getItem("telegramData");
 
-        if (savedPhoneNumber && savedTelegramData && window.Telegram?.WebApp) {
-          const currentTelegramUser =
-            window.Telegram.WebApp.initDataUnsafe.user;
-          const savedTelegramUser = JSON.parse(savedTelegramData);
-
-          if (
-            currentTelegramUser?.id &&
-            currentTelegramUser.id === savedTelegramUser?.id
-          ) {
-            const check = await apiClient.getUserByTelegramId(
-              String(currentTelegramUser.id),
-            );
-
-            if (check.success && check.data) {
-              const response = await login(savedPhoneNumber);
-
-              if (response.success && response.data) {
-                const userData = response.data;
-                setUser(userData);
-                setIsLogin(true);
-
-                localStorage.setItem("isLogin", "true");
-                localStorage.setItem("user", JSON.stringify(userData));
-                localStorage.setItem("phoneNumber", savedPhoneNumber);
-                localStorage.setItem("telegramData", savedTelegramData);
-              } else {
-                localStorage.removeItem("isLogin");
-                localStorage.removeItem("user");
-                localStorage.removeItem("telegramData");
-              }
-            } else {
-              localStorage.removeItem("isLogin");
-              localStorage.removeItem("user");
-              localStorage.removeItem("telegramData");
-            }
-          } else {
-            localStorage.removeItem("isLogin");
-            localStorage.removeItem("user");
-            localStorage.removeItem("telegramData");
-          }
-        } else if (savedIsLogin === "true" && savedUser) {
+        // 1. Immediately set user from cache if available
+        if (savedIsLogin === "true" && savedUser) {
           try {
             const parsedUser = JSON.parse(savedUser);
             setUser(parsedUser);
             setIsLogin(true);
-          } catch {
-            localStorage.removeItem("isLogin");
-            localStorage.removeItem("user");
-            localStorage.removeItem("telegramData");
+            // We can stop loading here to show UI immediately
+            setIsLoading(false);
+          } catch (e) {
+            console.error("Error parsing saved user", e);
+          }
+        }
+
+        // 2. Perform background verification/update if needed
+        if (savedPhoneNumber && savedTelegramData && window.Telegram?.WebApp) {
+          const currentTelegramUser = window.Telegram.WebApp.initDataUnsafe.user;
+          const savedTelegramUser = JSON.parse(savedTelegramData);
+
+          if (currentTelegramUser?.id && currentTelegramUser.id === savedTelegramUser?.id) {
+            // We directly use login because even if user is not found, login handles it.
+            // No need to call getUserByTelegramId separately if we are going to call login anyway.
+            const response = await login(savedPhoneNumber);
+
+            if (response.success && response.data) {
+              const userData = response.data;
+              setUser(userData);
+              setIsLogin(true);
+              localStorage.setItem("user", JSON.stringify(userData));
+              localStorage.setItem("isLogin", "true");
+            } else {
+              // Only logout if verification fails explicitly
+              logout();
+            }
           }
         }
       } catch (error) {
         console.error("Auto login error:", error);
-        localStorage.removeItem("isLogin");
-        localStorage.removeItem("user");
-        localStorage.removeItem("telegramData");
       } finally {
         setIsLoading(false);
       }

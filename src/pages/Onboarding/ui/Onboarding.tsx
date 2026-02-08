@@ -35,14 +35,19 @@ export const OnBoardingPage = () => {
         <div className={styles["blur-bg"]}></div>
       </div>
       <div className={styles["text-container"]}>
-        <h1 style={{ color: "white", fontSize: "1.9rem" }}>Doctor Chat</h1>
+        <h1 style={{ color: "white", fontSize: "1.9rem" }}>MED EXPERT EU</h1>
         <h1 className={styles.text}>{t("onboarding.title")}</h1>
         <p
           className={styles["description"]}
           dangerouslySetInnerHTML={{
             __html: t("onboarding.description", {
               interpolation: { escapeValue: false },
-            }).replace(/<bold>/g, '<strong style="font-weight: bold; color: #50d6ba;">').replace(/<\/bold>/g, '</strong>')
+            })
+              .replace(
+                /<bold>/g,
+                '<strong style="font-weight: bold; color: #50d6ba;">',
+              )
+              .replace(/<\/bold>/g, "</strong>"),
           }}
         />
       </div>
