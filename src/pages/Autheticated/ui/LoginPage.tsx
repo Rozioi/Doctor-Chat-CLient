@@ -122,7 +122,7 @@ const LoginPage = () => {
               <span className={styles.dot}>•</span>
 
               <a
-                onClick={(e) => downloadOffer(e, "privacy.pdf")}
+                onClick={(e) => downloadOffer(e, "privacy1.pdf")}
                 rel="noopener noreferrer"
                 className={styles.legalLink}
               >
