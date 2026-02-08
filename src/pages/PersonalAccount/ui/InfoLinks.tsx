@@ -1,28 +1,32 @@
 import React from "react";
 import styles from "../styles/InfoLinks.module.scss";
 import { MdArrowForwardIos } from "react-icons/md";
-import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 
 const InfoLinks: React.FC = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
+  const URL = import.meta.env.VITE_REACT_APP_PDF_BASE_URL;
 
+  const downloadOffer = (e: React.MouseEvent, fileName: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(`${URL}/${fileName}`, "_blank");
+  };
   const links = [
     {
       label: t("infoLinks.delivery"),
       icon: <MdArrowForwardIos />,
-      link: "delivery",
+      link: "delivery-methods.pdf",
     },
     {
       label: t("infoLinks.paymentProc"),
       icon: <MdArrowForwardIos />,
-      link: "infoLinks.paymentProc",
+      link: "payment-procedure.pdf",
     },
     {
       label: t("infoLinks.contacts"),
       icon: <MdArrowForwardIos />,
-      link: "contacts",
+      link: "contacts.pdf",
     },
   ];
 
@@ -31,7 +35,7 @@ const InfoLinks: React.FC = () => {
       {links.map((item, index) => (
         <button
           key={index}
-          onClick={() => navigate(`/${item.link}`)}
+          onClick={(e) => downloadOffer(e, item.link)}
           className={styles.linkButton}
         >
           <span className={styles.text}>{item.label}</span>

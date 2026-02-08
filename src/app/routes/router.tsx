@@ -38,20 +38,10 @@ const AnalysisSelectionPage = lazy(
 const DoctorSearchPage = lazy(
   () => import("../../pages/DoctorSearch/DoctorSearch"),
 );
-
-const RefundDocumentPage = lazy(
-  () => import("../../pages/PersonalAccount/RefundDocumentPage"),
-);
 const MaintenancePage = lazy(
   () => import("../../pages/Maintenance/MaintenancePage"),
 );
 const PaymentPage = lazy(() => import("../../pages/Payment/PaymentPage"));
-const TermsOfServicePage = lazy(
-  () => import("../../pages/Legal/TermsOfServicePage"),
-);
-const PrivacyPolicyPage = lazy(
-  () => import("../../pages/Legal/PrivacyPolicyPage"),
-);
 const PaymentSuccessPage = lazy(
   () => import("../../pages/Payment/PaymentSuccessPage"),
 );
@@ -97,8 +87,6 @@ export const router = createBrowserRouter([
       { path: "payment", element: <PaymentPage /> },
       { path: "chat", element: <ChatListPage /> },
       { path: "profile", element: <PersonalAccountPage /> },
-      { path: "terms", element: <TermsOfServicePage /> },
-      { path: "privacy", element: <PrivacyPolicyPage /> },
       { path: "payment/success", element: <PaymentSuccessPage /> },
       { path: "payment/fail", element: <PaymentFailPage /> },
 
@@ -129,15 +117,6 @@ export const router = createBrowserRouter([
       {
         path: ":slug",
         element: <DoctorProfilePage />,
-      },
-    ],
-  },
-  {
-    element: <PublicLayout />,
-    children: [
-      {
-        path: ":slug",
-        element: <RefundDocumentPage />,
       },
     ],
   },

@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Input,
-  Button,
-  Card,
-  Typography,
-  Divider,
-  message,
-  Modal,
-} from "antd";
+import { Input, Button, Card, Typography, Divider, message, Modal } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -60,9 +52,9 @@ const PersonalAccountPage: React.FC = () => {
         user.firstName && user.lastName
           ? `${user.firstName} ${user.lastName}`
           : user.firstName ||
-          user.lastName ||
-          user.username ||
-          t("profile.user");
+            user.lastName ||
+            user.username ||
+            t("profile.user");
       setName(fullName);
       setPhone(user.phoneNumber || "");
 
@@ -76,8 +68,8 @@ const PersonalAccountPage: React.FC = () => {
           telegramUser.first_name && telegramUser.last_name
             ? `${telegramUser.first_name} ${telegramUser.last_name}`
             : telegramUser.first_name ||
-            telegramUser.username ||
-            t("profile.user");
+              telegramUser.username ||
+              t("profile.user");
         setName(fullName);
       }
     }

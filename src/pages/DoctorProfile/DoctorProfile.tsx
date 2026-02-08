@@ -111,7 +111,12 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
           </div>
 
           <div className={styles.infoBlock}>
-            <div className={styles.specialty}>{specialty}</div>
+            <div className={styles.specialty}>
+              {t(
+                `doctorRegistration.specializations.${specialty.toLocaleLowerCase()}`,
+                `${specialty}`,
+              )}
+            </div>
             <div className={styles.name}>{name}</div>
             <div className={styles.rating}>
               <StarOutlined className={styles.star} />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import {
   Button,
   Card,
@@ -90,7 +90,13 @@ const PaymentPage: React.FC = () => {
     },
     [user?.id, serviceType],
   );
-  const navigate = useNavigate();
+  const URL = import.meta.env.VITE_REACT_APP_PDF_BASE_URL;
+
+  const downloadOffer = (e: React.MouseEvent, fileName: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(`${URL}/${fileName}`, "_blank");
+  };
 
   const handlePayment = async () => {
     if (!doctorIdParam || !doctorData) {
@@ -176,13 +182,13 @@ const PaymentPage: React.FC = () => {
             <Text className={styles.price}>
               {doctorData.price.toLocaleString("ru-RU")} ₸
             </Text>
-            <Button
+            {/*<Button
               type="link"
               onClick={() => (window.location.href = "/service")}
               style={{ padding: 0, height: "auto", marginTop: 8 }}
             >
               {t("payment.aboutServices")}
-            </Button>
+            </Button>*/}
           </div>
         )}
 
@@ -247,22 +253,20 @@ const PaymentPage: React.FC = () => {
               {t("payment.offerTextPrefix", "Я принимаю условия")}{" "}
               <a
                 style={{ color: "#3b82f6" }}
+                download
                 onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  navigate("/terms");
+                  downloadOffer(e, "terms1.pdf");
                 }}
               >
                 {t("payment.offerLink", "Договора публичной оферты")}
               </a>{" "}
-              {t("payment.offerAnd", "и")}{" "}
+              {t("payment.andPay", "и")}{" "}
               <a
                 rel="noopener noreferrer"
                 style={{ color: "#3b82f6" }}
+                download
                 onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  navigate("/privacy");
+                  downloadOffer(e, "privacy1.pdf");
                 }}
               >
                 {t("payment.privacyLink", "Политики конфиденциальности")}
@@ -270,7 +274,9 @@ const PaymentPage: React.FC = () => {
             </Text>
           </Checkbox>
           <div style={{ marginTop: 8 }}>
-            <Text type="secondary">Платежи защищены системой Robokassa</Text>
+            <Text type="secondary">
+              {t("payment.robo", "Платежи защищены системой Robokassa")}
+            </Text>
           </div>
         </div>
       </Modal>

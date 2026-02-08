@@ -64,8 +64,8 @@ const DoctorSearchPage: React.FC = () => {
                 id: String(doctorProfile.id),
                 name: doctorProfile.user
                   ? `${doctorProfile.user.firstName || ""} ${doctorProfile.user.lastName || ""}`.trim() ||
-                  doctorProfile.user.username ||
-                  "Врач"
+                    doctorProfile.user.username ||
+                    "Врач"
                   : "Врач",
                 country: doctorProfile.country || "Не указано",
                 countryFlag: getCountryFlag(doctorProfile.country || ""),
@@ -119,6 +119,7 @@ const DoctorSearchPage: React.FC = () => {
         <IoIosArrowBack />
       </div>
       <h2 className={styles.title}>{t("doctor.search.title")}</h2>
+      <p className={styles.description}>{t("doctor.search.description")}</p>
 
       {error && !loading && (
         <div

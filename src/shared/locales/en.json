@@ -40,6 +40,11 @@
     "offerTextPrefix": "I agree with the terms of the",
     "offerTextSuffix": "for the provision of services.",
     "offerLink": "public offer",
+    "privacyLink": "Privacy Policy",
+    "offerOk": "Continue",
+    "offerCancel": "Cancel",
+    "andPay": "and",
+    "robo": "Payments are protected by the Robokassa system",
     "cardNumber": "Card number",
     "cardExpiry": "Expiry date",
     "cardCVC": "CVC",
@@ -110,7 +115,8 @@
     },
     "search": {
       "title": "Find a doctor",
-      "enCatANDName": "Enter a name or a category",
+      "description": "Choose a direction, Order a specialization that requires a European passport",
+      "enCatANDName": "Find a specialization",
       "noResults": "No doctors found"
     }
   },
@@ -243,10 +249,22 @@
     }
   },
   "main": {
-    "title": "Doctor chat",
-    "description": "— mobile application for online consultations with qualified doctors from Germany and Europe. Ask questions in chat and get recommendations from specialists.",
-    "searchSpecialist": "Find Specialist",
-    "analysisDecoding": "Analysis Interpretation"
+    "title": "MED EXPERT EU",
+    "description": "Independent expertise from doctors from Europe. Without visas and language barrier.",
+    "searchSpecialist": "Get an Examination",
+    "analysisDecoding": "Adaptation + Local Doctor"
+  },
+  "adaptModal": {
+    "title": "Adaptation and support",
+    "fstText": "The conclusions of European doctors are an expert opinion, but they are not an official document in pharmacies in your city.",
+    "secondText": "It is important: only MED EXPERT EU partner doctors work with our examination form. Third-party clinics may refuse to review euro-sample documents.",
+    "list": {
+      "title": "Our local doctor:",
+      "one": "Adapts the appointment to prescriptions",
+      "two": "Will send for procedures and tests",
+      "three": "Will take the treatment under ĸ monitoring."
+    },
+    "button": "Choose a partner doctor (Telegram) "
   },
   "info": {
     "advantages": {
