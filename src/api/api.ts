@@ -22,7 +22,7 @@ import type {
 } from "./types";
 
 export const api: AxiosInstance = axios.create({
-  baseURL: "https://doctor-chat-backend.vercel.app/api/v1",
+  baseURL: "https://doctor-chat-backend-production.up.railway.app/api/v1",
   headers: {
     "Content-Type": "application/json",
   },
