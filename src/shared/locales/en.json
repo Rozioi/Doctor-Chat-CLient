@@ -37,9 +37,10 @@
     "successTitle": "Payment was successful!",
     "successText": "Payment was successful! Check your Telegram — we sent you a message with a button to open the chat with the doctor.",
     "offerTitle": "Offer agreement",
-    "offerTextPrefix": "I agree with the terms of the",
+    "offerTextPrefix": "I accept the terms",
+    "offerTextPrefix2": "I consent to the processing and transfer of my medical data in accordance with",
     "offerTextSuffix": "for the provision of services.",
-    "offerLink": "public offer",
+    "offerLink": "Offer",
     "privacyLink": "Privacy Policy",
     "offerOk": "Continue",
     "offerCancel": "Cancel",
@@ -278,8 +279,9 @@
       },
       "speed": {
         "title": "WHO CONDUCTS THE AUDIT?",
-        "point1": "Specialized European experts (*Fachärzte*).",
-        "point2": "Quick response—from a minute to an hour. Online live queue format."
+        "point1": "Specialized experts in Europe (*Fachärzte*).",
+        "point2": "These are current certified specialist doctors from clinics in Germany and other European countries..",
+        "point3": "Prompt response - a ready-made solution in 24 hours."
       },
       "channels": {
         "title": "WHAT DO YOU RECEIVE?",

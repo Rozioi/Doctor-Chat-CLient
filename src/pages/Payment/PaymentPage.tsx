@@ -258,9 +258,13 @@ const PaymentPage: React.FC = () => {
                   downloadOffer(e, "terms1.pdf");
                 }}
               >
-                {t("payment.offerLink", "Договора публичной оферты")}
+                {t("payment.offerLink", "Оферты")}
               </a>{" "}
               {t("payment.andPay", "и")}{" "}
+              {t(
+                "payment.offerTextPrefix2",
+                "даю согласие на обработку и передачу моих медицинских данных согласно",
+              )}{" "}
               <a
                 rel="noopener noreferrer"
                 style={{ color: "#3b82f6" }}
@@ -269,7 +273,7 @@ const PaymentPage: React.FC = () => {
                   downloadOffer(e, "privacy1.pdf");
                 }}
               >
-                {t("payment.privacyLink", "Политики конфиденциальности")}
+                {t("payment.privacyLink", "Политике конфиденциальности")}
               </a>
             </Text>
           </Checkbox>

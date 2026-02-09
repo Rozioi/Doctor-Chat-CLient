@@ -25,6 +25,7 @@ export const InfoBlock = () => {
           points: [
             t("info.advantages.speed.point1"),
             t("info.advantages.speed.point2"),
+            t("info.advantages.speed.point3"),
           ],
           image: "/images/advantages/2.png",
         },
