@@ -23,7 +23,7 @@ import type {
 
 const BASE_URL =
   import.meta.env.VITE_SERVER_API_BASE_URL ||
-  "doctor-chat-backend-production.up.railway.app/";
+  "https://doctor-chat-backend-production.up.railway.app/";
 
 export const api: AxiosInstance = axios.create({
   baseURL: `${BASE_URL.replace(/\/$/, "")}/api/v1`,
