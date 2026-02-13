@@ -114,6 +114,7 @@ class ApiClient {
 
   async completeChat(id: number): Promise<ApiResponse<User>> {
     try {
+      console.log(id);
       return {
         success: false,
         error: "Unknown error occurred",
