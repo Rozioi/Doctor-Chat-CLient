@@ -112,6 +112,26 @@ class ApiClient {
     }
   }
 
+  async completeChat(id: number): Promise<ApiResponse<User>> {
+    try {
+      return {
+        success: false,
+        error: "Unknown error occurred",
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          error: error.response?.data?.error || "Failed to complete chat",
+        };
+      }
+      return {
+        success: false,
+        error: "Unknown error occurred",
+      };
+    }
+  }
+
   async loginUser(data: LoginRequest): Promise<ApiResponse<User>> {
     try {
       const response = await api.post<{
