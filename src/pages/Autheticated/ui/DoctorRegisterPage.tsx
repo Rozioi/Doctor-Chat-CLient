@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
-import { Input, Select, Button, Checkbox, message } from "antd";
+import { Input, Select, Button, Checkbox, message, Upload } from "antd";
 import PhoneInput from "react-phone-input-2";
 import SelectCountry from "react-select";
 import countryList from "react-select-country-list";
@@ -11,7 +11,7 @@ import styles from "../styles/DoctorRegisterPage.module.scss";
 import type { DoctorInput } from "../../../api/types";
 import { useAuthReq } from "../../../hooks/useAuthReq";
 import { useAppNavigation } from "../../../shared/hooks/useAppNavigation";
-import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowBack, IoIosCloudUpload } from "react-icons/io";
 import { mapServerError } from "../../../shared/utils/errorMapper";
 
 const { TextArea } = Input;
@@ -40,6 +40,19 @@ const DoctorRegisterPage = () => {
     psychiatrist: t("doctorRegistration.psychiatrist"),
     dermatologist: t("doctorRegistration.dermatologist"),
   };
+
+  const LANGUAGES = [
+    { value: "Russian", label: "Русский" },
+    { value: "English", label: "English" },
+    { value: "Kazakh", label: "Қазақша" },
+    { value: "Uzbek", label: "O'zbekcha" },
+    { value: "Turkish", label: "Türkçe" },
+    { value: "German", label: "Deutsch" },
+    { value: "French", label: "Français" },
+    { value: "Spanish", label: "Español" },
+  ];
+
+  const [fileList, setFileList] = useState<any[]>([]);
   const [doctorData, setDoctorData] = useState<DoctorInput>({
     specialization: "",
     qualification: "",
@@ -49,6 +62,8 @@ const DoctorRegisterPage = () => {
     certificates: [],
     consultationFee: 0,
     country: "",
+    languages: [],
+    approbationUrl: "",
   });
 
   const { createDoctor } = useAuthReq();
@@ -98,10 +113,25 @@ const DoctorRegisterPage = () => {
     setIsSubmitting(true);
 
     try {
+      let finalApprobationUrl = doctorData.approbationUrl;
+
+      if (fileList.length > 0 && fileList[0].originFileObj) {
+        const { apiClient } = await import("../../../api/api");
+        const uploadRes = await apiClient.uploadAvatar(fileList[0].originFileObj);
+        if (uploadRes.success && uploadRes.data) {
+          finalApprobationUrl = uploadRes.data.url;
+        } else {
+          messageApi.error(t("profileUpload.errors.uploadError"));
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       const doctorResponse = await createDoctor(
         {
           ...doctorData,
           specialization: doctorData.specialization || doctorData.qualification,
+          approbationUrl: finalApprobationUrl,
         },
         phoneNumber,
       );
@@ -332,6 +362,38 @@ const DoctorRegisterPage = () => {
               onChange={(opt: any) => handleChange("country", opt?.value || "")}
               isDisabled={isSubmitting}
             />
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.label}>
+              {t("doctorRegistration.languages")}
+            </label>
+            <Select
+              mode="multiple"
+              placeholder={t("doctorRegistration.languagesPlaceholder")}
+              className={styles.select}
+              onChange={(val) => handleChange("languages", val)}
+              value={doctorData.languages}
+              options={LANGUAGES}
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.label}>
+              {t("doctorRegistration.qualificationFile")}
+            </label>
+            <Upload
+              fileList={fileList}
+              onChange={({ fileList }) => setFileList(fileList)}
+              beforeUpload={() => false}
+              maxCount={1}
+              disabled={isSubmitting}
+            >
+              <Button icon={<IoIosCloudUpload size={20} />} className={styles.uploadButton}>
+                {t("doctorRegistration.uploadFile")}
+              </Button>
+            </Upload>
           </div>
 
           <div className={styles.privacyWrapper}>

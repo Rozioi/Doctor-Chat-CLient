@@ -18,6 +18,7 @@ export interface User {
   username?: string;
   firstName?: string;
   lastName?: string;
+  patronymic?: string;
   photoUrl?: string;
   role?: Role | string;
   createdAt?: string | Date;
@@ -63,6 +64,8 @@ export interface DoctorInput {
   education: string;
   certificates: string[];
   consultationFee: number;
+  languages?: string[];
+  approbationUrl?: string;
   country: string;
 }
 
@@ -87,6 +90,8 @@ export interface DoctorProfile {
   country: string;
   consultationFee: number;
   isAvailable: boolean;
+  languages?: string[];
+  approbationUrl?: string;
   user?: User;
   category?: string;
 }

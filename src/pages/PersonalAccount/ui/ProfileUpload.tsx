@@ -34,7 +34,7 @@ const ProfileUpload: React.FC = () => {
       return false;
     }
 
-    if (!user?.id) {
+    if (!user?.id || !user?.telegramId) {
       message.error(t("profileUpload.errors.unknownUser"));
       return false;
     }
@@ -63,7 +63,7 @@ const ProfileUpload: React.FC = () => {
       }
 
       const updateResponse = await apiClient.updateUserPhotoUrl(
-        String(user.id),
+        user.telegramId,
         uploadResponse.data.url,
       );
 

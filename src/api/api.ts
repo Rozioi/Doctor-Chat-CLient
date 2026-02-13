@@ -21,8 +21,12 @@ import type {
   PDFDocument,
 } from "./types";
 
+const BASE_URL =
+  import.meta.env.VITE_SERVER_API_BASE_URL ||
+  "doctor-chat-backend-production.up.railway.app/";
+
 export const api: AxiosInstance = axios.create({
-  baseURL: "https://doctor-chat-backend-production.up.railway.app/api/v1",
+  baseURL: `${BASE_URL.replace(/\/$/, "")}/api/v1`,
   headers: {
     "Content-Type": "application/json",
   },
@@ -319,7 +323,7 @@ class ApiClient {
 
       const uploadUrl =
         api.defaults.baseURL?.replace("/api/v1", "") ||
-        "https://famously-sumptuous-diamondback.cloudpub.ru";
+        BASE_URL.replace(/\/$/, "");
       const response = await axios.post<{
         message: string;
         path: string;
@@ -361,16 +365,16 @@ class ApiClient {
     }
   }
 
-  async updateUserPhotoUrl(
+  async updateUser(
     telegramId: string,
-    photoUrl: string,
+    data: Partial<User>,
   ): Promise<ApiResponse<User>> {
     try {
       const response = await api.put<{
         success: boolean;
         user?: User;
         error?: string;
-      }>(`/users/${telegramId}`, { photoUrl });
+      }>(`/users/${telegramId}`, data);
 
       if (response.data.success && response.data.user) {
         return {
@@ -395,6 +399,13 @@ class ApiClient {
         error: "Unknown error occurred",
       };
     }
+  }
+
+  async updateUserPhotoUrl(
+    telegramId: string,
+    photoUrl: string,
+  ): Promise<ApiResponse<User>> {
+    return this.updateUser(telegramId, { photoUrl });
   }
 
   async sendChatInvite(

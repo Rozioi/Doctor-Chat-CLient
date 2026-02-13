@@ -21,9 +21,9 @@ const PersonalAccountPage: React.FC = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const [pageLoading, setPageLoading] = useState(() => {
-    // If we have cached user and doctorProfile (if needed), we don't need a full screen loader
     const hasUser = !!localStorage.getItem("user");
-    const isDoctor = JSON.parse(localStorage.getItem("user") || "{}")?.role === "DOCTOR";
+    const isDoctor =
+      JSON.parse(localStorage.getItem("user") || "{}")?.role === "DOCTOR";
     const hasDoctorProfile = !!localStorage.getItem("doctorProfile");
 
     if (hasUser && (!isDoctor || hasDoctorProfile)) {
@@ -33,7 +33,10 @@ const PersonalAccountPage: React.FC = () => {
   });
   const [balance] = useState(0);
   const [messageApi, contextHolder] = message.useMessage();
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [patronymic, setPatronymic] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
   const [phone, setPhone] = useState("");
   const [card] = useState("Visa **** 9399");
   const [language, setLanguage] = useState<"ru" | "en">("ru");
@@ -42,6 +45,7 @@ const PersonalAccountPage: React.FC = () => {
     consultationFee: number | string;
     description: string;
     specialization: string;
+    languages?: string[];
   } | null>(() => {
     try {
       const saved = localStorage.getItem("doctorProfile");
@@ -69,14 +73,9 @@ const PersonalAccountPage: React.FC = () => {
     if (isAuthLoading) return;
 
     if (user) {
-      const fullName =
-        user.firstName && user.lastName
-          ? `${user.firstName} ${user.lastName}`
-          : user.firstName ||
-          user.lastName ||
-          user.username ||
-          t("profile.user");
-      setName(fullName);
+      setFirstName(user.firstName || "");
+      setLastName(user.lastName || "");
+      setPatronymic(user.patronymic || "");
       setPhone(user.phoneNumber || "");
 
       if (user.role === "DOCTOR" && user.id) {
@@ -87,13 +86,9 @@ const PersonalAccountPage: React.FC = () => {
     } else {
       if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
         const telegramUser = window.Telegram.WebApp.initDataUnsafe.user;
-        const fullName =
-          telegramUser.first_name && telegramUser.last_name
-            ? `${telegramUser.first_name} ${telegramUser.last_name}`
-            : telegramUser.first_name ||
-            telegramUser.username ||
-            t("profile.user");
-        setName(fullName);
+        setFirstName(telegramUser.first_name || "");
+        setLastName(telegramUser.last_name || "");
+        setPatronymic("");
       }
       setPageLoading(false);
     }
@@ -152,6 +147,35 @@ const PersonalAccountPage: React.FC = () => {
 
   const cancelLogout = () => {
     setShowLogoutModal(false);
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user?.telegramId) return;
+
+    setIsSaving(true);
+    try {
+      const response = await apiClient.updateUser(user.telegramId, {
+        firstName,
+        lastName,
+        patronymic,
+        phoneNumber: phone,
+      });
+
+      if (response.success) {
+        messageApi.success(
+          t("profile.saveSuccess", "Профиль успешно обновлен"),
+        );
+      } else {
+        messageApi.error(
+          response.error || t("profile.saveError", "Ошибка при сохранении"),
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      messageApi.error(t("profile.saveError", "Ошибка при сохранении"));
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (isAuthLoading || pageLoading) {
@@ -214,13 +238,32 @@ const PersonalAccountPage: React.FC = () => {
         </div>
 
         <div className={styles.field}>
-          <Text className={styles.label}>{t("profile.name")}</Text>
+          <Text className={styles.label}>{t("profile.lastName", "Фамилия")}</Text>
           <Input
-            value={name}
+            value={lastName}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setName(e.target.value)
+              setLastName(e.target.value)
             }
-            suffix={<Button type="link">{t("common.edit")}</Button>}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <Text className={styles.label}>{t("profile.firstName", "Имя")}</Text>
+          <Input
+            value={firstName}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setFirstName(e.target.value)
+            }
+          />
+        </div>
+
+        <div className={styles.field}>
+          <Text className={styles.label}>{t("profile.patronymic", "Отчество")}</Text>
+          <Input
+            value={patronymic}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPatronymic(e.target.value)
+            }
           />
         </div>
 
@@ -254,7 +297,13 @@ const PersonalAccountPage: React.FC = () => {
         )}
 
         <ProfileUpload />
-        <Button type="primary" block className={styles.saveBtn}>
+        <Button
+          type="primary"
+          block
+          className={styles.saveBtn}
+          onClick={handleSaveProfile}
+          loading={isSaving}
+        >
           {t("common.save")}
         </Button>
         <InfoLinks />

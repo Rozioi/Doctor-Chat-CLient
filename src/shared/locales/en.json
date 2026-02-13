@@ -101,7 +101,6 @@
     "updated": "Doctor profile updated",
     "descriptionError": "Description must be at least 10 characters long"
   },
-
   "doctor": {
     "profile": {
       "mainInfo": "Main information",
@@ -163,6 +162,9 @@
     "title": "Personal Account",
     "language": "Language",
     "name": "Name",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "patronymic": "Patronymic",
     "phone": "Phone Number",
     "card": "Payment Card",
     "bringOut": "Bring Out",
@@ -183,6 +185,8 @@
     "deleteError": "Error deleting account",
     "logoutError": "Error logging out",
     "profileUpdated": "Profile successfully updated",
+    "saveSuccess": "Profile successfully updated",
+    "saveError": "Error while saving",
     "updateError": "Error updating profile",
     "consultationFeeError": "Consultation fee cannot be negative",
     "descriptionError": "Description must contain at least 10 characters",
@@ -209,6 +213,10 @@
     "consultationFeePlaceholder": "Enter consultation fee",
     "country": "Select Country",
     "countryPlaceholder": "Select country",
+    "languages": "Consultation Languages",
+    "languagesPlaceholder": "Select languages",
+    "qualificationFile": "Qualification Proof (optional)",
+    "uploadFile": "Upload file",
     "submit": "Register",
     "submitting": "Registering...",
     "acceptTerms": "I accept",
@@ -253,7 +261,8 @@
     "title": "MED EXPERT EU",
     "description": "Independent expertise from doctors from Europe. Without visas and language barrier.",
     "searchSpecialist": "Get an Examination",
-    "analysisDecoding": "Adaptation + Local Doctor"
+    "analysisDecoding": "Adaptation + Local Doctor",
+    "contactCoordinator": "Contact Coordinator"
   },
   "adaptModal": {
     "title": "Adaptation and support",
@@ -281,21 +290,21 @@
         "title": "WHO CONDUCTS THE AUDIT?",
         "point1": "Specialized experts in Europe (*Fachärzte*).",
         "point2": "These are current certified specialist doctors from clinics in Germany and other European countries..",
-        "point3": "Prompt response - a ready-made solution in 24 hours."
+        "point3": "Prompt response - Ready conclusion within 24 hours."
       },
       "channels": {
         "title": "WHAT DO YOU RECEIVE?",
-        "point1": "Expert report (PDF): Official written document from a European specialist.",
-        "point2": "Detailed review of your situation.",
-        "point3": "Roadmap: Step-by-step recommendations on which tests to take and which can be skipped.",
-        "point4": "Adaptation of expert recommendations by a local partner doctor."
+        "point1": "Expert medical opinion (PDF): a professional document with conclusions from an EU-based specialist.",
+        "point2": "Independent expert review of the established diagnosis and current treatment strategy for compliance with international protocols.",
+        "point3": "Clear medical recommendations supported by current international standards.",
+        "point4": "Adaptation of recommendations by a partner physician for implementation in your country."
       },
       "privacy": {
-        "title": "HOW DOES THE AUDIT WORK?",
-        "point1": "You send your data, questions, MRI, and test results via a secure chat.",
-        "point2": "The expert reviews the data and may ask clarifying questions directly in chat.",
-        "point3": "The doctor identifies possible diagnostic errors, hidden risks, or outdated methods (per Guidelines).",
-        "point4": "You receive a PDF with a clear treatment strategy based on European evidence-based medicine."
+        "title": "How does the audit process work?",
+        "point1": "You upload your medical data (MRI, CT scans, lab tests) and submit your question in a secure chat.",
+        "point2": "Case analysis: the expert reviews your documents and may ask additional clarifying questions if necessary.",
+        "point3": "Guideline verification: your case is evaluated according to current international guidelines (ESMO, ESC, EAU).",
+        "point4": "Final result: a PDF file with an expert medical opinion and a personalized patient roadmap."
       },
       "alternative": {
         "title": "WHAT TO DO WITH THE EUROPEAN REPORT?",
@@ -371,7 +380,7 @@
     },
     "warning": {
       "title": "Important!",
-      "text1": "The consultation is informational and provides an expert strategy ('Second Opinion'), but is not a medical service. European experts are not responsible for self-treatment based on the data provided.",
+      "text1": "The information nature of the consultation provides an alternative strategy («Second opinion»), but is not a medical service. The European expert and service is not responsible for self-medication based on the data obtained.",
       "text2Title": "Implementation via Partners",
       "text2": "To turn the European report into official prescriptions and referrals, use the service to find a partner doctor in your region (green button). Only an in-person doctor decides on treatment tactics and bears responsibility.",
       "emergencyTitle": "NOT FOR EMERGENCIES!",
@@ -414,5 +423,13 @@
     "delivery": "RULES FOR PROVIDING AND RECEIVING SERVICES",
     "paymentProc": "RULES FOR PAYMENT AND REFUND",
     "contacts": "Feedback"
+  },
+  "coordinatorModal": {
+    "title": "Personal Coordinator",
+    "subtitle": "Have questions? We are always in touch.",
+    "point1": "Help you choose the right medical expert specialization if you are unsure.",
+    "point2": "Add the 'Adaptation' service (organization of a visit to a partner doctor) if you only have the Expert Review.",
+    "point3": "Assist with payment or document upload issues.",
+    "button": "Contact via Telegram"
   }
 }

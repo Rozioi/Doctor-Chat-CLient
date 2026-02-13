@@ -12,37 +12,57 @@ const InfoLinks: React.FC = () => {
     e.stopPropagation();
     window.open(`${URL}${fileName}`, "_blank");
   };
-  const links = [
-    {
-      label: t("infoLinks.delivery"),
-      icon: <MdArrowForwardIos />,
-      link: "pravila_uslug.pdf",
-    },
-    {
-      label: t("infoLinks.paymentProc"),
-      icon: <MdArrowForwardIos />,
-      link: "pravila_oplaty.pdf",
-    },
-    {
-      label: t("infoLinks.contacts"),
-      icon: <MdArrowForwardIos />,
-      link: "contacts.pdf",
-    },
-  ];
 
   return (
     <div className={styles.linksWrapper}>
-      {links.map((item, index) => (
-        <button
-          key={index}
-          onClick={(e) => downloadOffer(e, item.link)}
-          className={styles.linkButton}
-        >
-          <span className={styles.text}>{item.label}</span>
-          <span className={styles.iconWrapper}>{item.icon}</span>
-        </button>
-      ))}
+      <button
+        onClick={(e) => downloadOffer(e, "n_polzovatelskoe_soglashenie.txt")}
+        className={styles.linkButton}
+      >
+        <span className={styles.text}>{t("infoLinks.userAgreement")}</span>
+        <MdArrowForwardIos />
+      </button>
+
+      <button
+        onClick={(e) => downloadOffer(e, "n_politika_i_soglasie.txt")}
+        className={styles.linkButton}
+      >
+        <span className={styles.text}>{t("infoLinks.privacyPolicy")}</span>
+        <MdArrowForwardIos />
+      </button>
+
+      <button
+        onClick={(e) => downloadOffer(e, "n_pravila_predostavleniya.txt")}
+        className={styles.linkButton}
+      >
+        <span className={styles.text}>{t("infoLinks.delivery")}</span>
+        <MdArrowForwardIos />
+      </button>
+
+      <button
+        onClick={(e) => downloadOffer(e, "n_pravila_oplati.txt")}
+        className={styles.linkButton}
+      >
+        <span className={styles.text}>{t("infoLinks.paymentProc")}</span>
+        <MdArrowForwardIos />
+      </button>
+
+      {/* БЛОК КОНТАКТОВ ВМЕСТО КНОПКИ */}
+
+      <div className={styles.contactBlock}>
+        <h3 className={styles.contactTitle}>MED EXPERT EU</h3>
+        <p className={styles.contactText}>
+          Есть вопросы или предложения? Мы всегда на связи!
+        </p>
+        <p className={styles.contactText}>
+          Телефон / WhatsApp: <a href="tel:+77022940422">+7 702 294 0422</a>
+        </p>
+        <p className={styles.contactText}>
+          E-mail: <a href="mailto:doctor_chat@mail.ru">doctor_chat@mail.ru</a>
+        </p>
+      </div>
     </div>
   );
 };
+
 export default InfoLinks;

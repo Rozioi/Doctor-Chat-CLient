@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Typography, Button, Input, message } from "antd";
+import { Card, Typography, Button, Input, message, Select } from "antd";
 import { MedicineBoxOutlined, EditOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 
@@ -10,6 +10,7 @@ export interface DoctorProfile {
   consultationFee: number | string;
   description: string;
   specialization: string;
+  languages?: string[];
 }
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
   onSave: (data: {
     consultationFee: number;
     description: string;
+    languages: string[];
   }) => Promise<void>;
 }
 
@@ -25,8 +27,20 @@ const DoctorProfileSection: React.FC<Props> = ({ profile, onSave }) => {
   const [fee, setFee] = useState(Number(profile.consultationFee) || 0);
   const { t } = useTranslation();
   const [description, setDescription] = useState(profile.description || "");
+  const [languages, setLanguages] = useState<string[]>(profile.languages || []);
   const [saving, setSaving] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+
+  const LANGUAGES = [
+    { value: "Russian", label: "Русский" },
+    { value: "English", label: "English" },
+    { value: "Kazakh", label: "Қазақша" },
+    { value: "Uzbek", label: "O'zbekcha" },
+    { value: "Turkish", label: "Türkçe" },
+    { value: "German", label: "Deutsch" },
+    { value: "French", label: "Français" },
+    { value: "Spanish", label: "Español" },
+  ];
 
   const handleSave = async () => {
     if (description.trim().length < 10) {
@@ -36,7 +50,7 @@ const DoctorProfileSection: React.FC<Props> = ({ profile, onSave }) => {
 
     try {
       setSaving(true);
-      await onSave({ consultationFee: fee, description });
+      await onSave({ consultationFee: fee, description, languages });
       setEditMode(null);
       messageApi.success(t("doctorProfile.updated"));
     } finally {
@@ -158,6 +172,59 @@ const DoctorProfileSection: React.FC<Props> = ({ profile, onSave }) => {
           )}
         </div>
 
+        <div style={{ marginBottom: 24 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 6,
+            }}
+          >
+            <Text strong>{t("doctorRegistration.languages")}</Text>
+            {editMode !== "about" && ( // Reusing "about" edit mode or should I add a new one?
+              // I'll just make languages editable when in "about" or add it as a separate section.
+              // For simplicity, I'll allow editing languages when "about" is in edit mode.
+              null
+            )}
+          </div>
+
+          {editMode === "about" ? (
+            <Select
+              mode="multiple"
+              style={{ width: "100%" }}
+              placeholder={t("doctorRegistration.languagesPlaceholder")}
+              value={languages}
+              onChange={setLanguages}
+              options={LANGUAGES}
+            />
+          ) : (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
+              {languages.length > 0 ? (
+                languages.map((lang) => (
+                  <div
+                    key={lang}
+                    style={{
+                      background: "#e4eaff",
+                      color: "#4d7bfb",
+                      padding: "2px 10px",
+                      borderRadius: 12,
+                      fontSize: 12,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {LANGUAGES.find((l) => l.value === lang)?.label || lang}
+                  </div>
+                ))
+              ) : (
+                <Text type="secondary" style={{ fontSize: 13 }}>
+                  Языки не указаны
+                </Text>
+              )}
+            </div>
+          )}
+        </div>
+
         {editMode && (
           <div style={{ display: "flex", gap: 12 }}>
             <Button type="primary" onClick={handleSave} loading={saving} block>
@@ -169,6 +236,7 @@ const DoctorProfileSection: React.FC<Props> = ({ profile, onSave }) => {
                 setEditMode(null);
                 setFee(Number(profile.consultationFee) || 0);
                 setDescription(profile.description || "");
+                setLanguages(profile.languages || []);
               }}
             >
               {t("doctorProfile.cancel")}

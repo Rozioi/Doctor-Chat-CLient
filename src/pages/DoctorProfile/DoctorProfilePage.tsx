@@ -18,6 +18,8 @@ interface MappedDoctorData {
   rating: number;
   image: string;
   about: string;
+  languages?: string[];
+  approbationUrl?: string;
 }
 
 const getExperienceText = (years: number, t: (key: string) => string): string => {
@@ -84,6 +86,8 @@ export const DoctorProfilePage: React.FC = () => {
           rating: Number(doctor.rating) || 0,
           image: doctor.user?.photoUrl || "https://i.pravatar.cc/300?img=60",
           about: doctor.description || t("doctorProfilePage.defaults.noInfo"),
+          languages: doctor.languages,
+          approbationUrl: doctor.approbationUrl,
         };
 
         setDoctorData(mappedData);
@@ -148,9 +152,11 @@ export const DoctorProfilePage: React.FC = () => {
     );
   }
 
-  const handleStartChat = () => {
+  const handleStartChat = (price: number, tariffType: string) => {
     if (doctorId) {
-      goTo(`/payment?doctorId=${String(doctorId)}&serviceType=consultation`);
+      goTo(
+        `/payment?doctorId=${String(doctorId)}&serviceType=consultation&amount=${price}&tariffType=${tariffType}`,
+      );
     }
   };
 

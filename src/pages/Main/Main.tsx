@@ -5,7 +5,8 @@ import styles from "./styles/Main.module.scss";
 import { InfoBlock } from "./ui/InfoBlock";
 import { useAppNavigation } from "../../shared/hooks/useAppNavigation";
 import { useTranslation } from "react-i18next";
-import { AdaptationModal } from "../../shared/ui/AdaptationModal/AdaptationModal";
+import { CoordinatorModal } from "../../shared/ui/CoordinatorModal/CoordinatorModal";
+import { MessageOutlined } from "@ant-design/icons";
 
 const Main = memo(() => {
   const { goTo } = useAppNavigation();
@@ -16,9 +17,9 @@ const Main = memo(() => {
     goTo("/search");
   }, [goTo]);
 
-  const handleSecondStepClick = useCallback(() => {
-    setIsOpenModal((prevState) => !prevState);
-  }, [isOpenModal]);
+  const handleCoordinatorClick = useCallback(() => {
+    setIsOpenModal(true);
+  }, []);
 
   return (
     <div className={styles.page}>
@@ -41,16 +42,17 @@ const Main = memo(() => {
         </button>
         <button
           className={styles.secondaryButton}
-          onClick={handleSecondStepClick}
+          onClick={handleCoordinatorClick}
         >
-          {t("main.analysisDecoding")}
+          <MessageOutlined style={{ marginRight: 8 }} />
+          {t("main.contactCoordinator")}
         </button>
       </div>
 
       <InfoBlock />
-      <AdaptationModal
+      <CoordinatorModal
         open={isOpenModal}
-        onClose={() => setIsOpenModal(!isOpenModal)}
+        onClose={() => setIsOpenModal(false)}
       />
     </div>
   );

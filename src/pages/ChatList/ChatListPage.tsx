@@ -170,6 +170,28 @@ const ChatListPage: React.FC = () => {
     setSelectedChat(null);
   };
 
+  const handleCompleteChat = async (e: React.MouseEvent, chat: Chat) => {
+    e.stopPropagation();
+    try {
+      const response = await apiClient.completeChat(chat.id);
+      if (response.success) {
+        messageApi.success(
+          t("chats.success.completed", "Консультация успешно завершена"),
+        );
+        loadChats();
+      } else {
+        messageApi.error(
+          response.error ||
+          t("chats.errors.completeError", "Не удалось завершить консультацию"),
+        );
+      }
+    } catch (error) {
+      messageApi.error(
+        t("chats.errors.completeError", "Ошибка при завершении консультации"),
+      );
+    }
+  };
+
   if (loading) {
     return (
       <div className={styles.container}>
@@ -212,6 +234,13 @@ const ChatListPage: React.FC = () => {
                 onClick={() => {
                   if (chat.status === "ACTIVE") {
                     handleOpenChat(chat);
+                  } else if (chat.status === "COMPLETED") {
+                    messageApi.info(
+                      t(
+                        "chats.info.completedReadOnly",
+                        "Эта консультация завершена и доступна только для чтения в Telegram",
+                      ),
+                    );
                   }
                 }}
                 actions={
@@ -231,7 +260,21 @@ const ChatListPage: React.FC = () => {
                         {t("review.leaveReview", "Оставить отзыв")}
                       </Button>,
                     ]
-                    : []
+                    : chat.status === "ACTIVE" && user?.role === "DOCTOR"
+                      ? [
+                        <Button
+                          key="complete"
+                          type="primary"
+                          danger
+                          onClick={(e: React.MouseEvent) =>
+                            handleCompleteChat(e, chat)
+                          }
+                          size="small"
+                        >
+                          {t("chats.complete", "Завершить")}
+                        </Button>,
+                      ]
+                      : []
                 }
               >
                 <List.Item.Meta

@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { useState } from "react";
-import { Button, message, Select } from "antd";
+import { Button, message, Select, Modal } from "antd";
 import {
   ArrowLeftOutlined,
   HeartOutlined,
@@ -21,8 +21,10 @@ interface DoctorProfileProps {
   price: string;
   about?: string;
   image?: string;
+  languages?: string[];
+  approbationUrl?: string;
   onBack?: () => void;
-  onStartChat?: () => void;
+  onStartChat?: (tariffPrice: number, tariffType: "STANDARD" | "VIP") => void;
 }
 
 export const DoctorProfile: FC<DoctorProfileProps> = ({
@@ -34,12 +36,43 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
   price,
   about,
   image,
+  languages = [],
+  approbationUrl,
   onBack,
   onStartChat,
 }) => {
   const { t, i18n } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+  const [selectedTariff, setSelectedTariff] = useState<"STANDARD" | "VIP">(
+    "STANDARD",
+  );
+  const [isApprobationVisible, setIsApprobationVisible] = useState(false);
   const [, contextHolder] = message.useMessage();
+
+  const tariffs = [
+    {
+      id: "STANDARD",
+      name: t("doctor.profile.tariffs.standard.name", "СТАНДАРТ"),
+      price: 50000,
+      features: [
+        t("doctor.profile.tariffs.standard.f1", "Письменное заключение Европейского Эксперта"),
+        t("doctor.profile.tariffs.standard.f2", "Разбор вашей истории болезни и анализов"),
+        t("doctor.profile.tariffs.standard.f3", "Чат с врачом (Экспертная сессия на русском языке)"),
+      ],
+    },
+    {
+      id: "VIP",
+      name: t("doctor.profile.tariffs.vip.name", "VIP (ПОД КЛЮЧ)"),
+      price: 70000,
+      isRecommended: true,
+      features: [
+        t("doctor.profile.tariffs.vip.f1", "Всё, что входит в тариф Стандарт"),
+        t("doctor.profile.tariffs.vip.f2", "+ Услуга «Адаптация»: Организация визита к врачу-партнеру MED EXPERT в вашем городе"),
+        t("doctor.profile.tariffs.vip.f3", "+ Оплата 1-го визита включена: Вам не нужно платить в кассе клиники за первичный прием"),
+        t("doctor.profile.tariffs.vip.f4", "+ «Зеленый коридор»: Приоритетная запись к специалисту через координатора"),
+      ],
+    },
+  ];
 
   const handleLanguageChange = (value: string) => {
     i18n.changeLanguage(value);
@@ -72,9 +105,14 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
 
   const handleStartChat = () => {
     if (onStartChat) {
-      onStartChat();
+      const tariff = tariffs.find((t) => t.id === selectedTariff);
+      if (tariff) {
+        onStartChat(tariff.price, selectedTariff);
+      }
     }
   };
+
+  const currentPrice = tariffs.find(t => t.id === selectedTariff)?.price || 50000;
 
   return (
     <div className={styles.container}>
@@ -130,20 +168,22 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
       </div>
 
       <div className={styles.card}>
-        <div className={styles.infoRow}>
-          <div className={styles.infoBox}>
-            <div className={styles.value}>{experience}</div>
-            <div className={styles.label}>
-              {t("doctor.profile.experience", "Опыт")}
-            </div>
+        <div className={styles.languagesSection}>
+          <div className={styles.languagesLabel}>
+            {t("doctor.profile.consultationLanguages", "Языки консультаций")}:
           </div>
-          <div className={styles.infoBox}>
-            <div className={styles.value}>{price}</div>
-            <div className={styles.label}>
-              {t("doctor.profile.price", "Стоимость")}
-            </div>
+          <div className={styles.languagesList}>
+            {languages.length > 0
+              ? languages.join(", ")
+              : t("doctor.profile.defaultLanguage", "Русский")}
           </div>
         </div>
+
+        {approbationUrl && (
+          <div className={styles.approbationLink} onClick={() => setIsApprobationVisible(true)}>
+            {t("doctor.profile.viewApprobation", "Посмотреть подтверждающий документ (Approbation)")}
+          </div>
+        )}
 
         <div className={styles.aboutSection}>
           <div className={styles.aboutTitle}>
@@ -154,14 +194,69 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
           </div>
         </div>
 
+        <div className={styles.experienceBlock}>
+          <div className={styles.experienceValue}>{experience}</div>
+          <div className={styles.experienceLabel}>
+            {t("doctor.profile.experience", "Опыт")}
+          </div>
+        </div>
+
+        <div className={styles.tariffsSection}>
+          <div className={styles.aboutTitle}>
+            {t("doctor.profile.tariffs.title", "Выберите тариф")}
+          </div>
+          <div className={styles.tariffsList}>
+            {tariffs.map((tariff) => (
+              <div
+                key={tariff.id}
+                className={`${styles.tariffItem} ${selectedTariff === tariff.id ? styles.selected : ""} ${tariff.isRecommended ? styles.recommended : ""}`}
+                onClick={() => setSelectedTariff(tariff.id as "STANDARD" | "VIP")}
+              >
+                {tariff.isRecommended && (
+                  <div className={styles.recommendedBadge}>
+                    {t("doctor.profile.tariffs.recommended", "Рекомендуем")}
+                  </div>
+                )}
+                <div className={styles.tariffHeader}>
+                  <div className={styles.tariffName}>{tariff.name}</div>
+                  <div className={styles.tariffPrice}>
+                    {tariff.price.toLocaleString("ru-RU")} ₸
+                  </div>
+                </div>
+                <ul className={styles.featuresList}>
+                  {tariff.features.map((feature, index) => (
+                    <li key={index} className={styles.featureItem}>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <Button
           type="primary"
           className={styles.chatButton}
           onClick={handleStartChat}
         >
-          {t("doctor.profile.startChat", "Начать чат")}
+          {t("doctor.profile.startChatWithPrice", "Начать чат за {{price}} ₸", { price: currentPrice.toLocaleString("ru-RU") })}
         </Button>
       </div>
+
+      <Modal
+        title={t("doctor.profile.approbationTitle", "Подтверждающий документ")}
+        open={isApprobationVisible}
+        onCancel={() => setIsApprobationVisible(false)}
+        footer={null}
+        width="90%"
+        centered
+        className={styles.approbationModal}
+      >
+        <div className={styles.approbationImageWrapper}>
+          <img src={approbationUrl} alt="Approbation" className={styles.approbationImage} />
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -26,6 +26,8 @@ const PaymentPage: React.FC = () => {
   const { user } = useAuth();
   const doctorIdParam = searchParams.get("doctorId");
   const serviceType = searchParams.get("serviceType") || "consultation";
+  const amountParam = searchParams.get("amount");
+  const tariffTypeParam = searchParams.get("tariffType") || "STANDARD";
 
   const [paymentMethod, setPaymentMethod] = useState<"robokassa">("robokassa");
   const [messageApi, contextHolder] = message.useMessage();
@@ -49,16 +51,18 @@ const PaymentPage: React.FC = () => {
         const doctor = response.data;
         const name = doctor.user
           ? `${doctor.user.firstName || ""} ${doctor.user.lastName || ""}`.trim() ||
-            doctor.user.username ||
-            "Врач"
+          doctor.user.username ||
+          "Врач"
           : "Врач";
-        const price = Number(doctor.consultationFee || 0);
+
+        // Use price from URL if present, otherwise fallback to doctor's default fee
+        const price = amountParam ? Number(amountParam) : Number(doctor.consultationFee || 0);
         setDoctorData({ name, price });
       }
     } catch (err) {
       console.error("Ошибка загрузки данных врача:", err);
     }
-  }, [doctorIdParam]);
+  }, [doctorIdParam, amountParam]);
 
   useEffect(() => {
     if (doctorIdParam) loadDoctorData();
@@ -78,7 +82,7 @@ const PaymentPage: React.FC = () => {
               chat.status === "ACTIVE" &&
               chat.doctorId === doctorId &&
               chat.serviceType ===
-                (serviceType === "analysis" ? "analysis" : "consultation"),
+              (serviceType === "analysis" ? "analysis" : "consultation"),
           );
           return !!activeChat;
         }
@@ -95,7 +99,7 @@ const PaymentPage: React.FC = () => {
   const downloadOffer = (e: React.MouseEvent, fileName: string) => {
     e.preventDefault();
     e.stopPropagation();
-    window.open(`${URL}/${fileName}`, "_blank");
+    window.open(`${URL}${fileName}`, "_blank");
   };
 
   const handlePayment = async () => {
@@ -137,6 +141,7 @@ const PaymentPage: React.FC = () => {
         amount,
         serviceType: serviceType === "analysis" ? "analysis" : "consultation",
         telegramId,
+        description: tariffTypeParam === "VIP" ? "VIP Tariff Consultation" : "Standard Tariff Consultation"
       });
 
       if (response.success && response.data?.paymentUrl) {
@@ -144,7 +149,7 @@ const PaymentPage: React.FC = () => {
       } else {
         messageApi.error(
           response.error ||
-            t("payment.errors.initError", "Ошибка при инициализации платежа"),
+          t("payment.errors.initError", "Ошибка при инициализации платежа"),
         );
       }
     } catch (err) {
@@ -157,10 +162,16 @@ const PaymentPage: React.FC = () => {
     }
   };
 
-  const getServiceName = () =>
-    serviceType === "analysis"
+  const getServiceName = () => {
+    const baseName = serviceType === "analysis"
       ? t("chats.analysis", "Расшифровка анализов")
       : t("chats.consultation", "Консультация");
+
+    if (tariffTypeParam === "VIP") {
+      return `${baseName} (VIP)`;
+    }
+    return baseName;
+  };
 
   return (
     <div className={styles.container}>
@@ -253,9 +264,8 @@ const PaymentPage: React.FC = () => {
               {t("payment.offerTextPrefix", "Я принимаю условия")}{" "}
               <a
                 style={{ color: "#3b82f6" }}
-                download
                 onClick={(e) => {
-                  downloadOffer(e, "terms1.pdf");
+                  downloadOffer(e, "n_polzovatelskoe_soglashenie.txt");
                 }}
               >
                 {t("payment.offerLink", "Оферты")}
@@ -268,9 +278,8 @@ const PaymentPage: React.FC = () => {
               <a
                 rel="noopener noreferrer"
                 style={{ color: "#3b82f6" }}
-                download
                 onClick={(e) => {
-                  downloadOffer(e, "privacy1.pdf");
+                  downloadOffer(e, "n_politika_i_soglasie.txt");
                 }}
               >
                 {t("payment.privacyLink", "Политике конфиденциальности")}

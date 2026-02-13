@@ -107,11 +107,21 @@ const RegisterPage = () => {
               />
               <p className={styles.privacyText}>
                 {t("auth.acceptPreffix", "Я принимаю")}{" "}
-                <a href="#" className={styles.link}>
+                <a
+                  href={`${import.meta.env.VITE_REACT_APP_PDF_BASE_URL}n_politika_i_soglasie.txt`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.link}
+                >
                   {t("auth.privacyLink", "политику конфиденциальности")}
                 </a>{" "}
                 {t("auth.and", "и")}{" "}
-                <a href="#" className={styles.link}>
+                <a
+                  href={`${import.meta.env.VITE_REACT_APP_PDF_BASE_URL}n_polzovatelskoe_soglashenie.txt`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.link}
+                >
                   {t("auth.rulesLink", "правила пользования")}
                 </a>{" "}
                 {t("auth.appSuffix", "приложением")}
