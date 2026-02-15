@@ -112,7 +112,9 @@ const LoginPage = () => {
 
             <div className={styles.legalLinks}>
               <a
-                onClick={(e) => downloadOffer(e, "terms1.pdf")}
+                onClick={(e) =>
+                  downloadOffer(e, "user-agreement-public-offer-med-expert-eu.pdf")
+                }
                 rel="noopener noreferrer"
                 className={styles.legalLink}
               >
@@ -122,7 +124,12 @@ const LoginPage = () => {
               <span className={styles.dot}>•</span>
 
               <a
-                onClick={(e) => downloadOffer(e, "privacy1.pdf")}
+                onClick={(e) =>
+                  downloadOffer(
+                    e,
+                    "privacy-policy-and-consent-to-data-processing.pdf",
+                  )
+                }
                 rel="noopener noreferrer"
                 className={styles.legalLink}
               >

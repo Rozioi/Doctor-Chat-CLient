@@ -156,7 +156,10 @@ export const router = createBrowserRouter([
     path: "/info",
     element: (
       <Suspense fallback={<LoadingFallback />}>
-        <PdfViewer fileUrl="a.pdf" title="Информация" />
+        <PdfViewer
+          fileUrl={`${import.meta.env.VITE_REACT_APP_PDF_BASE_URL}information-services-terms-med-expert-eu.pdf`}
+          title="Информация"
+        />
       </Suspense>
     ),
   },

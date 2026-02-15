@@ -404,11 +404,21 @@ const DoctorRegisterPage = () => {
             />
             <p className={styles.privacyText}>
               {t("doctorRegistration.acceptTerms")}{" "}
-              <a href="#" className={styles.link}>
+              <a
+                href={`${import.meta.env.VITE_REACT_APP_PDF_BASE_URL}privacy-policy-and-consent-to-data-processing.pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.link}
+              >
                 {t("doctorRegistration.privacyPolicy")}
               </a>{" "}
               {t("doctorRegistration.and")}{" "}
-              <a href="#" className={styles.link}>
+              <a
+                href={`${import.meta.env.VITE_REACT_APP_PDF_BASE_URL}user-agreement-public-offer-med-expert-eu.pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.link}
+              >
                 {t("doctorRegistration.termsOfUse")}
               </a>{" "}
               {t("doctorRegistration.app")}

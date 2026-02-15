@@ -16,7 +16,9 @@ const InfoLinks: React.FC = () => {
   return (
     <div className={styles.linksWrapper}>
       <button
-        onClick={(e) => downloadOffer(e, "n_polzovatelskoe_soglashenie.txt")}
+        onClick={(e) =>
+          downloadOffer(e, "user-agreement-public-offer-med-expert-eu.pdf")
+        }
         className={styles.linkButton}
       >
         <span className={styles.text}>{t("infoLinks.userAgreement")}</span>
@@ -24,7 +26,9 @@ const InfoLinks: React.FC = () => {
       </button>
 
       <button
-        onClick={(e) => downloadOffer(e, "n_politika_i_soglasie.txt")}
+        onClick={(e) =>
+          downloadOffer(e, "privacy-policy-and-consent-to-data-processing.pdf")
+        }
         className={styles.linkButton}
       >
         <span className={styles.text}>{t("infoLinks.privacyPolicy")}</span>
@@ -32,7 +36,9 @@ const InfoLinks: React.FC = () => {
       </button>
 
       <button
-        onClick={(e) => downloadOffer(e, "n_pravila_predostavleniya.txt")}
+        onClick={(e) =>
+          downloadOffer(e, "information-services-terms-med-expert-eu.pdf")
+        }
         className={styles.linkButton}
       >
         <span className={styles.text}>{t("infoLinks.delivery")}</span>
@@ -40,25 +46,23 @@ const InfoLinks: React.FC = () => {
       </button>
 
       <button
-        onClick={(e) => downloadOffer(e, "n_pravila_oplati.txt")}
+        onClick={(e) =>
+          downloadOffer(e, "payment-and-refund-policy-med-expert-eu.pdf")
+        }
         className={styles.linkButton}
       >
         <span className={styles.text}>{t("infoLinks.paymentProc")}</span>
         <MdArrowForwardIos />
       </button>
 
-      {/* БЛОК КОНТАКТОВ ВМЕСТО КНОПКИ */}
-
       <div className={styles.contactBlock}>
-        <h3 className={styles.contactTitle}>MED EXPERT EU</h3>
+        <h3 className={styles.contactTitle}>{t("contact.title")}</h3>
+        <p className={styles.contactText}>{t("contact.text1")}</p>
         <p className={styles.contactText}>
-          Есть вопросы или предложения? Мы всегда на связи!
+          {t("contact.phone", { phone: "+7 702 294 0422" })}
         </p>
         <p className={styles.contactText}>
-          Телефон / WhatsApp: <a href="tel:+77022940422">+7 702 294 0422</a>
-        </p>
-        <p className={styles.contactText}>
-          E-mail: <a href="mailto:doctor_chat@mail.ru">doctor_chat@mail.ru</a>
+          {t("contact.email", { email: "doctor_chat@mail.ru" })}
         </p>
       </div>
     </div>

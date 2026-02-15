@@ -1,7 +1,7 @@
 {
   "onboarding": {
-    "title": "Your doctor is online",
-    "description": "Fast and convenient communication with doctors from <bold>Europe</bold> at any time.",
+    "title": "Expert opinion from Europe",
+    "description": "Get <bold>an independent opinion</bold> on your diagnosis from leading EU doctors.",
     "login": "Log in",
     "register": "Sign up",
     "iAmDoctor": "I am a doctor"
@@ -111,7 +111,30 @@
       "startChat": "Start chat",
       "activeChatExists": "You already have an active chat with this doctor",
       "specialty": "Specialty",
-      "rating": "Rating"
+      "rating": "Rating",
+      "consultationLanguages": "Consultation Languages",
+      "defaultLanguage": "Russian",
+      "viewApprobation": "View confirmation document (Approbation)",
+      "noAbout": "Information not available",
+      "tariffs": {
+        "title": "Choose a tariff",
+        "recommended": "Recommended",
+        "standard": {
+          "name": "Consultation ‹Standard›",
+          "f1": "Written conclusion by European Expert",
+          "f2": "Review of your medical history and tests",
+          "f3": "Chat with the doctor (Expert session in Russian)"
+        },
+        "vip": {
+          "name": "Consultation ‹VIP›",
+          "f1": "Everything included in Standard tariff",
+          "f2": "Adaptation service: Organizing a visit to a MED EXPERT partner doctor in your city",
+          "f3": "Payment for the first visit included: no need to pay at the clinic for the initial consultation",
+          "f4": "‘Green corridor’: Priority appointment with the specialist via coordinator"
+        }
+      },
+      "startChatWithPrice": "Start chat for {{price}} ₸",
+      "approbationTitle": "Confirmation Document"
     },
     "search": {
       "title": "Find a doctor",
@@ -351,7 +374,7 @@
         "title": "TREATMENT NOT WORKING?",
         "point1": "Therapy has been ongoing for months without results?",
         "point2": "The protocol may be outdated.",
-        "point3": "We select a modern treatment plan based on international standards."
+        "point3": "Experts will propose a treatment strategy."
       },
       "surgery": {
         "title": "WAS SURGERY RECOMMENDED?",
@@ -362,14 +385,13 @@
       "check": {
         "title": "WANT TO VERIFY PRESCRIPTIONS?",
         "point1": "Taking a pile of pills?",
-        "point2": "We check each prescription against Evidence-Based Medicine principles.",
-        "point3": "Remove unnecessary ones, keep only what truly works."
+        "point2": "We check each prescription against Evidence-Based Medicine principles."
       },
       "secondOpinion": {
         "title": "THE 'SECOND OPINION' ISSUE:",
         "point1": "Patients visit 3–4 doctors and get different diagnoses.",
         "point2": "You need an authoritative figure to make a final decision.",
-        "point3": "A European doctor acts as an independent highest authority (arbiter)."
+        "point3": "A doctor from Europe acts as an independent expert of international level."
       },
       "trust": {
         "title": "CRISIS OF TRUST:",
@@ -380,11 +402,11 @@
     },
     "warning": {
       "title": "Important!",
-      "text1": "The information nature of the consultation provides an alternative strategy («Second opinion»), but is not a medical service. The European expert and service is not responsible for self-medication based on the data obtained.",
+      "text1": "This report is for informational purposes only and provides an expert strategy (“Second Opinion”), but does not constitute a medical service. The European expert and the service are not responsible for self-treatment based on the provided information.",
       "text2Title": "Implementation via Partners",
-      "text2": "To turn the European report into official prescriptions and referrals, use the service to find a partner doctor in your region (green button). Only an in-person doctor decides on treatment tactics and bears responsibility.",
+      "text2": "To turn the European conclusion into official prescriptions and referrals, please use our partner doctor matching service in your region (green button). Only an in-person physician makes decisions regarding the treatment plan and assumes responsibility for it.",
       "emergencyTitle": "NOT FOR EMERGENCIES!",
-      "emergency": "In case of life-threatening situations, call 112."
+      "emergency": "In case of a life-threatening situation, call 112 immediately."
     }
   },
   "profileUpload": {
@@ -422,6 +444,8 @@
   "infoLinks": {
     "delivery": "RULES FOR PROVIDING AND RECEIVING SERVICES",
     "paymentProc": "RULES FOR PAYMENT AND REFUND",
+    "userAgreement": "User Agreement",
+    "privacyPolicy": "Privacy Policy",
     "contacts": "Feedback"
   },
   "coordinatorModal": {
@@ -431,5 +455,15 @@
     "point2": "Add the 'Adaptation' service (organization of a visit to a partner doctor) if you only have the Expert Review.",
     "point3": "Assist with payment or document upload issues.",
     "button": "Contact via Telegram"
+  },
+  "tariff": {
+    "vip": "«VIP» Package",
+    "standard": "«Standard» Package"
+  },
+  "contact": {
+    "title": "MED EXPERT EU",
+    "text1": "Have questions or suggestions? We are always in touch!",
+    "phone": "Phone / WhatsApp: {{phone}}",
+    "email": "E-mail: {{email}}"
   }
 }

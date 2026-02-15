@@ -55,9 +55,18 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
       name: t("doctor.profile.tariffs.standard.name", "СТАНДАРТ"),
       price: 50000,
       features: [
-        t("doctor.profile.tariffs.standard.f1", "Письменное заключение Европейского Эксперта"),
-        t("doctor.profile.tariffs.standard.f2", "Разбор вашей истории болезни и анализов"),
-        t("doctor.profile.tariffs.standard.f3", "Чат с врачом (Экспертная сессия на русском языке)"),
+        t(
+          "doctor.profile.tariffs.standard.f1",
+          "Письменное заключение Европейского Эксперта",
+        ),
+        t(
+          "doctor.profile.tariffs.standard.f2",
+          "Разбор вашей истории болезни и анализов",
+        ),
+        t(
+          "doctor.profile.tariffs.standard.f3",
+          "Чат с врачом (Экспертная сессия на русском языке)",
+        ),
       ],
     },
     {
@@ -67,9 +76,18 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
       isRecommended: true,
       features: [
         t("doctor.profile.tariffs.vip.f1", "Всё, что входит в тариф Стандарт"),
-        t("doctor.profile.tariffs.vip.f2", "+ Услуга «Адаптация»: Организация визита к врачу-партнеру MED EXPERT в вашем городе"),
-        t("doctor.profile.tariffs.vip.f3", "+ Оплата 1-го визита включена: Вам не нужно платить в кассе клиники за первичный прием"),
-        t("doctor.profile.tariffs.vip.f4", "+ «Зеленый коридор»: Приоритетная запись к специалисту через координатора"),
+        t(
+          "doctor.profile.tariffs.vip.f2",
+          "+ Услуга «Адаптация»: Организация визита к врачу-партнеру MED EXPERT в вашем городе",
+        ),
+        t(
+          "doctor.profile.tariffs.vip.f3",
+          "+ Оплата 1-го визита включена: Вам не нужно платить в кассе клиники за первичный прием",
+        ),
+        t(
+          "doctor.profile.tariffs.vip.f4",
+          "+ «Зеленый коридор»: Приоритетная запись к специалисту через координатора",
+        ),
       ],
     },
   ];
@@ -112,7 +130,8 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
     }
   };
 
-  const currentPrice = tariffs.find(t => t.id === selectedTariff)?.price || 50000;
+  const currentPrice =
+    tariffs.find((t) => t.id === selectedTariff)?.price || 50000;
 
   return (
     <div className={styles.container}>
@@ -180,8 +199,14 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
         </div>
 
         {approbationUrl && (
-          <div className={styles.approbationLink} onClick={() => setIsApprobationVisible(true)}>
-            {t("doctor.profile.viewApprobation", "Посмотреть подтверждающий документ (Approbation)")}
+          <div
+            className={styles.approbationLink}
+            onClick={() => setIsApprobationVisible(true)}
+          >
+            {t(
+              "doctor.profile.viewApprobation",
+              "Посмотреть подтверждающий документ (Approbation)",
+            )}
           </div>
         )}
 
@@ -210,7 +235,9 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
               <div
                 key={tariff.id}
                 className={`${styles.tariffItem} ${selectedTariff === tariff.id ? styles.selected : ""} ${tariff.isRecommended ? styles.recommended : ""}`}
-                onClick={() => setSelectedTariff(tariff.id as "STANDARD" | "VIP")}
+                onClick={() =>
+                  setSelectedTariff(tariff.id as "STANDARD" | "VIP")
+                }
               >
                 {tariff.isRecommended && (
                   <div className={styles.recommendedBadge}>
@@ -240,7 +267,9 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
           className={styles.chatButton}
           onClick={handleStartChat}
         >
-          {t("doctor.profile.startChatWithPrice", "Начать чат за {{price}} ₸", { price: currentPrice.toLocaleString("ru-RU") })}
+          {t("doctor.profile.startChatWithPrice", "Начать чат за {{price}} ₸", {
+            price: currentPrice.toLocaleString("ru-RU"),
+          })}
         </Button>
       </div>
 
@@ -254,7 +283,11 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
         className={styles.approbationModal}
       >
         <div className={styles.approbationImageWrapper}>
-          <img src={approbationUrl} alt="Approbation" className={styles.approbationImage} />
+          <img
+            src={approbationUrl}
+            alt="Approbation"
+            className={styles.approbationImage}
+          />
         </div>
       </Modal>
     </div>

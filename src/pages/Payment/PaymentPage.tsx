@@ -51,12 +51,14 @@ const PaymentPage: React.FC = () => {
         const doctor = response.data;
         const name = doctor.user
           ? `${doctor.user.firstName || ""} ${doctor.user.lastName || ""}`.trim() ||
-          doctor.user.username ||
-          "Врач"
+            doctor.user.username ||
+            "Врач"
           : "Врач";
 
         // Use price from URL if present, otherwise fallback to doctor's default fee
-        const price = amountParam ? Number(amountParam) : Number(doctor.consultationFee || 0);
+        const price = amountParam
+          ? Number(amountParam)
+          : Number(doctor.consultationFee || 0);
         setDoctorData({ name, price });
       }
     } catch (err) {
@@ -82,7 +84,7 @@ const PaymentPage: React.FC = () => {
               chat.status === "ACTIVE" &&
               chat.doctorId === doctorId &&
               chat.serviceType ===
-              (serviceType === "analysis" ? "analysis" : "consultation"),
+                (serviceType === "analysis" ? "analysis" : "consultation"),
           );
           return !!activeChat;
         }
@@ -141,7 +143,10 @@ const PaymentPage: React.FC = () => {
         amount,
         serviceType: serviceType === "analysis" ? "analysis" : "consultation",
         telegramId,
-        description: tariffTypeParam === "VIP" ? "VIP Tariff Consultation" : "Standard Tariff Consultation"
+        description:
+          tariffTypeParam === "VIP"
+            ? "VIP Tariff Consultation"
+            : "Standard Tariff Consultation",
       });
 
       if (response.success && response.data?.paymentUrl) {
@@ -149,7 +154,7 @@ const PaymentPage: React.FC = () => {
       } else {
         messageApi.error(
           response.error ||
-          t("payment.errors.initError", "Ошибка при инициализации платежа"),
+            t("payment.errors.initError", "Ошибка при инициализации платежа"),
         );
       }
     } catch (err) {
@@ -163,14 +168,11 @@ const PaymentPage: React.FC = () => {
   };
 
   const getServiceName = () => {
-    const baseName = serviceType === "analysis"
-      ? t("chats.analysis", "Расшифровка анализов")
-      : t("chats.consultation", "Консультация");
-
     if (tariffTypeParam === "VIP") {
-      return `${baseName} (VIP)`;
+      return `${t("tariff.vip", "Пакет «ВИП»")}`;
     }
-    return baseName;
+
+    return `${t("tariff.standard", "Пакет «Стандарт»")}`;
   };
 
   return (
@@ -265,7 +267,10 @@ const PaymentPage: React.FC = () => {
               <a
                 style={{ color: "#3b82f6" }}
                 onClick={(e) => {
-                  downloadOffer(e, "n_polzovatelskoe_soglashenie.txt");
+                  downloadOffer(
+                    e,
+                    "user-agreement-public-offer-med-expert-eu.pdf",
+                  );
                 }}
               >
                 {t("payment.offerLink", "Оферты")}
@@ -279,7 +284,10 @@ const PaymentPage: React.FC = () => {
                 rel="noopener noreferrer"
                 style={{ color: "#3b82f6" }}
                 onClick={(e) => {
-                  downloadOffer(e, "n_politika_i_soglasie.txt");
+                  downloadOffer(
+                    e,
+                    "privacy-policy-and-consent-to-data-processing.pdf",
+                  );
                 }}
               >
                 {t("payment.privacyLink", "Политике конфиденциальности")}

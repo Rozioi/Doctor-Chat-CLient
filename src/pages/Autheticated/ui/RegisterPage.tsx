@@ -108,7 +108,7 @@ const RegisterPage = () => {
               <p className={styles.privacyText}>
                 {t("auth.acceptPreffix", "Я принимаю")}{" "}
                 <a
-                  href={`${import.meta.env.VITE_REACT_APP_PDF_BASE_URL}n_politika_i_soglasie.txt`}
+                  href={`${import.meta.env.VITE_REACT_APP_PDF_BASE_URL}privacy-policy-and-consent-to-data-processing.pdf`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.link}
@@ -117,7 +117,7 @@ const RegisterPage = () => {
                 </a>{" "}
                 {t("auth.and", "и")}{" "}
                 <a
-                  href={`${import.meta.env.VITE_REACT_APP_PDF_BASE_URL}n_polzovatelskoe_soglashenie.txt`}
+                  href={`${import.meta.env.VITE_REACT_APP_PDF_BASE_URL}user-agreement-public-offer-med-expert-eu.pdf`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.link}
