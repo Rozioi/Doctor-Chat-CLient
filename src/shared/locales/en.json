@@ -120,13 +120,13 @@
         "title": "Choose a tariff",
         "recommended": "Recommended",
         "standard": {
-          "name": "Consultation ‹Standard›",
+          "name": "Tariff ‹Standard›",
           "f1": "Written conclusion by European Expert",
           "f2": "Review of your medical history and tests",
           "f3": "Chat with the doctor (Expert session in Russian)"
         },
         "vip": {
-          "name": "Consultation ‹VIP›",
+          "name": "Tariff ‹VIP›",
           "f1": "Everything included in Standard tariff",
           "f2": "Adaptation service: Organizing a visit to a MED EXPERT partner doctor in your city",
           "f3": "Payment for the first visit included: no need to pay at the clinic for the initial consultation",
