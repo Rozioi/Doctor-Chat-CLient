@@ -131,7 +131,6 @@ export const InfoBlock = () => {
           points: [
             t("info.problems.check.point1"),
             t("info.problems.check.point2"),
-            t("info.problems.check.point3"),
           ],
           image: "/images/problems/4.png",
         },
