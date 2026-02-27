@@ -87,10 +87,39 @@
   border: 2px solid #f0f0f0;
 }
 
-.chatTitle {
+// Новый более «карточный» вид чата
+.chatItemInner {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.chatContent {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.chatHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chatTitleText {
+  font-size: 15px;
+  color: #222;
+}
+
+.statusPill {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f3f4ff;
+  color: #4b5cff;
+  white-space: nowrap;
 }
 
 .serviceType {
@@ -98,11 +127,11 @@
   color: #999;
 }
 
-.chatDescription {
+.chatFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .amount {
@@ -111,11 +140,8 @@
   color: #5680ff;
 }
 
-.status {
-  font-size: 12px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: #f0f0f0;
-  color: #666;
+.date {
+  font-size: 11px;
+  color: #bbb;
 }
 

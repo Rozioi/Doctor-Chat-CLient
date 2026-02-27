@@ -138,17 +138,24 @@ export interface Balance {
   userId: number;
 }
 
-export type PaymentMethod = "BALANCE" | "CARD" | "BANK_TRANSFER" | "ROBOKASSA";
+export type PaymentMethod =
+  | "BALANCE"
+  | "CARD"
+  | "BANK_TRANSFER"
+  | "ROBOKASSA"
+  | "FREEDOMPAY";
 export type PaymentStatus = "PENDING" | "COMPLETED" | "FAILED" | "CANCELLED" | "REFUNDED";
 
 export interface Payment {
   id: number;
   userId: number;
   chatId?: number;
+  doctorId?: number;
   amount: number;
   paymentMethod: PaymentMethod;
   status: PaymentStatus;
   description?: string;
+  serviceType?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -159,6 +166,20 @@ export interface CreatePaymentRequest {
   chatId?: number;
   description?: string;
   telegramId?: string;
+}
+
+export interface InitFreedomPayRequest {
+  doctorId: number;
+  amount: number;
+  serviceType: string;
+  tariffType?: string;
+  telegramId?: string;
+}
+
+export interface FreedomPayInitResponse {
+  paymentId: number;
+  redirectUrl: string;
+  provider: string;
 }
 
 export type PDFDocumentType =

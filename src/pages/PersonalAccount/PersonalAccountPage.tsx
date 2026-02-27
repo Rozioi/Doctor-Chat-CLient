@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Input, Button, Card, Typography, Divider, message, Modal } from "antd";
+import {
+  Input,
+  Button,
+  Card,
+  Typography,
+  Divider,
+  message,
+  Modal,
+  List,
+  Tag,
+} from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -13,6 +23,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useAppNavigation } from "../../shared/hooks/useAppNavigation";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { apiClient } from "../../api/api";
+import type { Payment } from "../../api/types";
 import { Loader } from "../../shared/ui/Loader/Loader";
 const { Title, Text } = Typography;
 
@@ -31,7 +42,8 @@ const PersonalAccountPage: React.FC = () => {
     }
     return true;
   });
-  const [balance] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -72,17 +84,42 @@ const PersonalAccountPage: React.FC = () => {
   useEffect(() => {
     if (isAuthLoading) return;
 
-    if (user) {
+      if (user) {
       setFirstName(user.firstName || "");
       setLastName(user.lastName || "");
       setPatronymic(user.patronymic || "");
       setPhone(user.phoneNumber || "");
 
-      if (user.role === "DOCTOR" && user.id) {
-        loadDoctorProfile(user.id).finally(() => setPageLoading(false));
-      } else {
-        setPageLoading(false);
-      }
+      const init = async () => {
+        try {
+          if (user.role === "DOCTOR" && user.id) {
+            await loadDoctorProfile(user.id);
+          }
+
+          // загрузка баланса и платежей
+          const telegramId =
+            user.telegramId ||
+            window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString();
+          if (telegramId) {
+            const [balanceResp, paymentsResp] = await Promise.all([
+              apiClient.getBalance(telegramId),
+              apiClient.getPayments(telegramId),
+            ]);
+
+            if (balanceResp.success && balanceResp.data) {
+              setBalance(Number(balanceResp.data.amount || 0));
+            }
+
+            if (paymentsResp.success && paymentsResp.data) {
+              setPayments(paymentsResp.data);
+            }
+          }
+        } finally {
+          setPageLoading(false);
+        }
+      };
+
+      init();
     } else {
       if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
         const telegramUser = window.Telegram.WebApp.initDataUnsafe.user;
@@ -196,7 +233,7 @@ const PersonalAccountPage: React.FC = () => {
         <div className={styles.balanceBox}>
           <div className={styles.balanceText}>
             <Text className={styles.balanceAmount}>
-              {balance.toLocaleString()} ₸
+              {balance.toLocaleString("ru-RU")} ₸
             </Text>
             {user?.role === "DOCTOR" ? (
               <Button type="link" className={styles.bringOut}>
@@ -205,6 +242,55 @@ const PersonalAccountPage: React.FC = () => {
             ) : null}
           </div>
         </div>
+
+        {payments.length > 0 && (
+          <div className={styles.field}>
+            <Text className={styles.label}>
+              {t("profile.payments", "Мои платежи")}
+            </Text>
+            <List
+              dataSource={payments.slice(0, 5)}
+              renderItem={(p) => (
+                <List.Item>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: 8,
+                      }}
+                    >
+                      <Text strong>
+                        {Number(p.amount).toLocaleString("ru-RU")} ₸
+                      </Text>
+                      <Tag
+                        color={
+                          p.status === "COMPLETED"
+                            ? "green"
+                            : p.status === "PENDING"
+                              ? "gold"
+                              : "red"
+                        }
+                      >
+                        {p.status}
+                      </Tag>
+                    </div>
+                    {p.description && (
+                      <Text type="secondary" style={{ fontSize: 12 }}>
+                        {p.description}
+                      </Text>
+                    )}
+                    <Text type="secondary" style={{ fontSize: 11 }}>
+                      {new Date(p.createdAt).toLocaleString("ru-RU")}
+                    </Text>
+                  </div>
+                </List.Item>
+              )}
+              bordered
+              size="small"
+            />
+          </div>
+        )}
 
         <div className={styles.field}>
           <Text className={styles.label}>{t("profile.language")}</Text>

@@ -1,86 +1,82 @@
-import React, { useEffect, useState } from "react";
-import { Result, Button, Card, Typography, Spin } from "antd";
+import React, { useEffect } from "react";
+import { Result, Button, Card, Typography, message } from "antd";
 import { useNavigate, useSearchParams } from "react-router";
 import { CheckCircleFilled } from "@ant-design/icons";
 import styles from "./PaymentResult.module.scss";
+import { apiClient } from "../../api/api";
 
 const { Text, Title } = Typography;
 
 const PaymentSuccessPage: React.FC = () => {
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const [loading, setLoading] = useState(true);
-    const [paymentData, setPaymentData] = useState<{
-        orderId: string;
-        amount: string | null;
-    } | null>(null);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [messageApi, contextHolder] = message.useMessage();
 
-    const invId = searchParams.get("InvId");
+  useEffect(() => {
+    const orderIdStr = searchParams.get("pg_order_id");
+    if (!orderIdStr) return;
 
-    useEffect(() => {
-        // In a real scenario, we might want to poll the backend for final status
-        // For now, we'll assume it's successful if Robokassa redirected here
-        if (invId) {
-            // Simulate API call to verify status
-            setTimeout(() => {
-                setLoading(false);
-                setPaymentData({
-                    orderId: invId,
-                    amount: searchParams.get("OutSum"),
-                });
-            }, 1500);
-        } else {
-            setLoading(false);
+    const paymentId = Number(orderIdStr);
+    if (!paymentId || Number.isNaN(paymentId)) return;
+
+    const paymentStatus = searchParams.get("pg_payment_status") || "success";
+
+    apiClient
+      .finalizeFreedomPayPayment(paymentId, paymentStatus)
+      .then((res) => {
+        if (!res.success) {
+          messageApi.warning(
+            res.error || "Не удалось обновить статус оплаты",
+          );
         }
-    }, [invId, searchParams]);
+      })
+      .catch(() => {
+        // тихий фейл
+      });
+  }, [searchParams, messageApi]);
 
-    if (loading) {
-        return (
-            <div className={styles.loaderContainer}>
-                <Spin size="large" tip="Проверка платежа..." />
+  return (
+    <div className={styles.container}>
+      {contextHolder}
+      <Card className={styles.resultCard}>
+        <Result
+          status="success"
+          icon={<CheckCircleFilled style={{ color: "#34D399" }} />}
+          title={<Title level={3}>Оплата прошла успешно!</Title>}
+          subTitle={
+            <div className={styles.subTitle}>
+              <Text type="secondary">
+                Платёж принят. В течение пары секунд мы создадим чат с врачом.
+              </Text>
+              <br />
+              <Text type="secondary">
+                Чат появится в разделе &laquo;Мои врачи&raquo;.
+              </Text>
             </div>
-        );
-    }
-
-    return (
-        <div className={styles.container}>
-            <Card className={styles.resultCard}>
-                <Result
-                    status="success"
-                    icon={<CheckCircleFilled style={{ color: "#34D399" }} />}
-                    title={<Title level={3}>Оплата прошла успешно!</Title>}
-                    subTitle={
-                        <div className={styles.subTitle}>
-                            <Text type="secondary">
-                                Ваш платеж №{invId || "N/A"} принят в обработку.
-                            </Text>
-                            <br />
-                            <Text strong>Сумма: {paymentData?.amount || "0"} ₸</Text>
-                        </div>
-                    }
-                    extra={[
-                        <Button
-                            type="primary"
-                            key="home"
-                            size="large"
-                            className={styles.primaryButton}
-                            onClick={() => navigate("/home")}
-                        >
-                            Вернуться на главную
-                        </Button>,
-                        <Button
-                            key="chats"
-                            size="large"
-                            className={styles.secondaryButton}
-                            onClick={() => navigate("/chat")}
-                        >
-                            Перейти к консультациям
-                        </Button>,
-                    ]}
-                />
-            </Card>
-        </div>
-    );
+          }
+          extra={[
+            <Button
+              type="primary"
+              key="chats"
+              size="large"
+              className={styles.primaryButton}
+              onClick={() => navigate("/chat")}
+            >
+              Перейти к консультациям
+            </Button>,
+            <Button
+              key="home"
+              size="large"
+              className={styles.secondaryButton}
+              onClick={() => navigate("/home")}
+            >
+              На главную
+            </Button>,
+          ]}
+        />
+      </Card>
+    </div>
+  );
 };
 
 export default PaymentSuccessPage;

@@ -25,6 +25,7 @@ interface DoctorProfileProps {
   approbationUrl?: string;
   onBack?: () => void;
   onStartChat?: (tariffPrice: number, tariffType: "STANDARD" | "VIP") => void;
+  onOpenReviews?: () => void;
 }
 
 export const DoctorProfile: FC<DoctorProfileProps> = ({
@@ -40,6 +41,7 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
   approbationUrl,
   onBack,
   onStartChat,
+  onOpenReviews,
 }) => {
   const { t, i18n } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
@@ -151,7 +153,7 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
                   value={selectedLanguage}
                   onChange={handleLanguageChange}
                   size="small"
-                  bordered={false}
+                  variant="borderless"
                   options={[
                     { value: "ru", label: "RU" },
                     { value: "en", label: "EN" },
@@ -181,6 +183,15 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
               <span className={styles.reviewsCount}>
                 ({reviewsCount} {t("doctor.profile.reviews", "отзывов")})
               </span>
+            {onOpenReviews && reviewsCount >= 0 && (
+              <button
+                type="button"
+                className={styles.reviewsLink}
+                onClick={onOpenReviews}
+              >
+                {t("review.viewAll", "Смотреть все")}
+              </button>
+            )}
             </div>
           </div>
         </div>

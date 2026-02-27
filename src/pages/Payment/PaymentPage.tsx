@@ -29,7 +29,8 @@ const PaymentPage: React.FC = () => {
   const amountParam = searchParams.get("amount");
   const tariffTypeParam = searchParams.get("tariffType") || "STANDARD";
 
-  const [paymentMethod, setPaymentMethod] = useState<"robokassa">("robokassa");
+  const [paymentMethod, setPaymentMethod] =
+    useState<"freedompay">("freedompay");
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
 
@@ -73,10 +74,9 @@ const PaymentPage: React.FC = () => {
   const checkActiveChat = useCallback(
     async (doctorId: number): Promise<boolean> => {
       try {
-        const telegramId =
-          user?.id?.toString() || tg.initDataUnsafe?.user?.id?.toString();
+        const telegramId = tg.initDataUnsafe?.user?.id?.toString();
         if (!telegramId) return false;
-
+        console.log(telegramId);
         const response = await apiClient.getChats(telegramId);
         if (response.success && response.data) {
           const activeChat = response.data.find(
@@ -128,8 +128,7 @@ const PaymentPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const telegramId =
-        user?.id?.toString() || tg.initDataUnsafe?.user?.id?.toString();
+      const telegramId = tg.initDataUnsafe?.user?.id?.toString();
 
       if (!telegramId) {
         messageApi.error(
@@ -138,19 +137,16 @@ const PaymentPage: React.FC = () => {
         return;
       }
 
-      const response = await apiClient.initRobokassaPayment({
+      const response = await apiClient.initFreedomPayPayment({
         doctorId: doctorIdNum,
         amount,
         serviceType: serviceType === "analysis" ? "analysis" : "consultation",
         telegramId,
-        description:
-          tariffTypeParam === "VIP"
-            ? "VIP Tariff Consultation"
-            : "Standard Tariff Consultation",
+        tariffType: tariffTypeParam,
       });
 
-      if (response.success && response.data?.paymentUrl) {
-        window.location.href = response.data.paymentUrl;
+      if (response.success && response.data?.redirectUrl) {
+        window.location.href = response.data.redirectUrl;
       } else {
         messageApi.error(
           response.error ||
@@ -213,8 +209,8 @@ const PaymentPage: React.FC = () => {
               onChange={(e) => setPaymentMethod(e.target.value)}
               className={styles.paymentMethodGroup}
             >
-              <Radio value="robokassa" className={styles.paymentRadio}>
-                <CreditCardOutlined /> Robokassa (Карты Казахстана и СНГ)
+              <Radio value="freedompay" className={styles.paymentRadio}>
+                <CreditCardOutlined /> FreedomPay (карты Казахстана и СНГ)
               </Radio>
             </Radio.Group>
           </div>

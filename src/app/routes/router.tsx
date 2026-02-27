@@ -49,6 +49,9 @@ const PaymentFailPage = lazy(
   () => import("../../pages/Payment/PaymentFailPage"),
 );
 const ChatListPage = lazy(() => import("../../pages/ChatList/ChatListPage"));
+const DoctorReviewsPage = lazy(
+  () => import("../../pages/DoctorReviews/DoctorReviewsPage"),
+);
 
 if (typeof window !== "undefined") {
   if ("requestIdleCallback" in window) {
@@ -87,8 +90,6 @@ export const router = createBrowserRouter([
       { path: "payment", element: <PaymentPage /> },
       { path: "chat", element: <ChatListPage /> },
       { path: "profile", element: <PersonalAccountPage /> },
-      { path: "payment/success", element: <PaymentSuccessPage /> },
-      { path: "payment/fail", element: <PaymentFailPage /> },
 
       {
         path: "search/doctor/:id",
@@ -105,6 +106,22 @@ export const router = createBrowserRouter([
     ],
   },
   {
+    path: "/payment/success",
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <PaymentSuccessPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/payment/fail",
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <PaymentFailPage />
+      </Suspense>
+    ),
+  },
+  {
     path: "/doctor",
     element: (
       <Suspense fallback={<LoadingFallback />}>
@@ -117,6 +134,14 @@ export const router = createBrowserRouter([
       {
         path: ":slug",
         element: <DoctorProfilePage />,
+      },
+      {
+        path: ":slug/reviews",
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <DoctorReviewsPage />
+          </Suspense>
+        ),
       },
     ],
   },

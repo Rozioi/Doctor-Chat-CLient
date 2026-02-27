@@ -1,0 +1,115 @@
+.container {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  padding: 16px 16px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.iconButton {
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.doctorName {
+  margin: 0;
+  font-size: 18px !important;
+}
+
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ratingValue {
+  font-weight: 600;
+}
+
+.reviewsCount {
+  font-size: 13px;
+}
+
+.content {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reviewCard {
+  border-radius: 16px !important;
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.patientInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e5edff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #1d4ed8;
+}
+
+.patientName {
+  font-weight: 600;
+}
+
+.reviewDate {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.reviewComment {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.errorWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+

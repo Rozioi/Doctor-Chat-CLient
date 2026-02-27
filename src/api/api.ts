@@ -19,6 +19,8 @@ import type {
   GeneratePDFRequest,
   UploadPDFRequest,
   PDFDocument,
+  InitFreedomPayRequest,
+  FreedomPayInitResponse,
 } from "./types";
 
 const BASE_URL =
@@ -112,12 +114,35 @@ class ApiClient {
     }
   }
 
-  async completeChat(id: number): Promise<ApiResponse<User>> {
+  async completeChat(
+    id: number,
+    telegramId: string,
+  ): Promise<ApiResponse<User>> {
     try {
-      console.log(id);
+      const response = await api.post<{
+        success: boolean;
+        data?: User;
+        error?: string;
+      }>(
+        `/chats/${id}/complete`,
+        {}, // body (если не нужен — передаём пустой объект)
+        {
+          headers: {
+            "x-telegram-user-id": telegramId,
+          },
+        },
+      );
+
+      if (response.data.success) {
+        return {
+          success: true,
+          data: response.data.data as User,
+        };
+      }
+
       return {
         success: false,
-        error: "Unknown error occurred",
+        error: response.data.error || "Failed to complete chat",
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -816,6 +841,41 @@ class ApiClient {
     }
   }
 
+  async getReviewsByDoctor(
+    doctorProfileId: number,
+  ): Promise<ApiResponse<Review[]>> {
+    try {
+      const response = await api.get<{
+        success: boolean;
+        data?: Review[];
+        error?: string;
+      }>(`/reviews/doctor/${doctorProfileId}`);
+
+      if (response.data.success && response.data.data) {
+        return {
+          success: true,
+          data: response.data.data,
+        };
+      }
+
+      return {
+        success: false,
+        error: response.data.error || "Failed to get doctor reviews",
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          error: error.response?.data?.error || "Failed to get doctor reviews",
+        };
+      }
+      return {
+        success: false,
+        error: "Unknown error occurred",
+      };
+    }
+  }
+
   async createReview(data: CreateReviewRequest): Promise<ApiResponse<Review>> {
     try {
       const response = await api.post<{
@@ -873,6 +933,57 @@ class ApiClient {
           error:
             error.response?.data?.error ||
             "Failed to initialize Robokassa payment",
+        };
+      }
+      return {
+        success: false,
+        error: "Unknown error occurred",
+      };
+    }
+  }
+
+  async initFreedomPayPayment(
+    data: InitFreedomPayRequest,
+  ): Promise<ApiResponse<FreedomPayInitResponse>> {
+    try {
+      const response = await api.post<FreedomPayInitResponse>(
+        "/payment/create",
+        data,
+      );
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          error:
+            error.response?.data?.error ||
+            "Failed to initialize FreedomPay payment",
+        };
+      }
+      return {
+        success: false,
+        error: "Unknown error occurred",
+      };
+    }
+  }
+
+  async finalizeFreedomPayPayment(
+    paymentId: number,
+    status?: string,
+  ): Promise<ApiResponse<void>> {
+    try {
+      await api.post("/payment/finalize", { paymentId, status });
+      return { success: true };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          error:
+            error.response?.data?.error ||
+            "Failed to finalize FreedomPay payment",
         };
       }
       return {

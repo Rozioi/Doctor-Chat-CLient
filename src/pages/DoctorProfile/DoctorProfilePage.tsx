@@ -13,7 +13,7 @@ interface MappedDoctorData {
   name: string;
   specialty: string;
   experience: string;
-  reviews: string;
+  reviewsCount: number;
   price: string;
   rating: number;
   image: string;
@@ -65,24 +65,38 @@ export const DoctorProfilePage: React.FC = () => {
 
       if (response.success && response.data) {
         const doctor = response.data as DoctorProfileType;
+
+        // Подгружаем отзывы для подсчёта
+        let reviewsCount = 0;
+        try {
+          const reviewsResp = await apiClient.getReviewsByDoctor(doctor.id);
+          if (reviewsResp.success && reviewsResp.data) {
+            reviewsCount = reviewsResp.data.length;
+          }
+        } catch {
+          // тихо игнорируем, рейтинг всё равно есть
+        }
+
         const mappedData: MappedDoctorData = {
           name: doctor.user
             ? `${doctor.user.firstName || ""} ${doctor.user.lastName || ""}`.trim() ||
-            doctor.user.username ||
-            t("doctorProfilePage.defaults.doctor")
+              doctor.user.username ||
+              t("doctorProfilePage.defaults.doctor")
             : t("doctorProfilePage.defaults.doctor"),
           specialty:
             typeof doctor.specialization === "object"
               ? (doctor.specialization as { name: string })?.name ||
-              t("doctorProfilePage.defaults.specialist")
+                t("doctorProfilePage.defaults.specialist")
               : (doctor.specialization as string) ||
-              t("doctorProfilePage.defaults.specialist"),
+                t("doctorProfilePage.defaults.specialist"),
           experience: `${Number(doctor.experience || 0)} ${getExperienceText(
             Number(doctor.experience || 0),
             t,
           )}`,
-          reviews: "0",
-          price: `${Number(doctor.consultationFee || 0).toLocaleString("ru-RU")} ₸`,
+          reviewsCount,
+          price: `${Number(doctor.consultationFee || 0).toLocaleString(
+            "ru-RU",
+          )} ₸`,
           rating: Number(doctor.rating) || 0,
           image: doctor.user?.photoUrl || "https://i.pravatar.cc/300?img=60",
           about: doctor.description || t("doctorProfilePage.defaults.noInfo"),
@@ -152,6 +166,14 @@ export const DoctorProfilePage: React.FC = () => {
     );
   }
 
+  const handleOpenReviews = () => {
+    if (slug) {
+      goTo(`/doctor/${slug}/reviews`);
+    } else if (doctorId) {
+      goTo(`/doctor/${String(doctorId)}/reviews`);
+    }
+  };
+
   const handleStartChat = (price: number, tariffType: string) => {
     if (doctorId) {
       goTo(
@@ -164,6 +186,8 @@ export const DoctorProfilePage: React.FC = () => {
     <DoctorProfile
       id={doctorId!}
       {...doctorData}
+      onOpenReviews={handleOpenReviews}
+      reviewsCount={doctorData.reviewsCount}
       onBack={goBack}
       onStartChat={handleStartChat}
     />

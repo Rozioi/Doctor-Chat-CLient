@@ -63,7 +63,7 @@ const ChatListPage: React.FC = () => {
       } else {
         messageApi.error(
           response.error ||
-          t("chats.errors.loadError", "Не удалось загрузить чаты"),
+            t("chats.errors.loadError", "Не удалось загрузить чаты"),
         );
       }
     } catch {
@@ -77,15 +77,40 @@ const ChatListPage: React.FC = () => {
 
   const handleOpenChat = (chat: Chat) => {
     try {
-      const botUsername = "LumoMarket_bot";
+      const targetUser =
+        user?.role === "DOCTOR" ? chat.patient : chat.doctor || undefined;
 
-      if (chat.telegramChatId) {
-        const chatUrl = `https://t.me/${botUsername}?start=${chat.telegramChatId}`;
-        openTelegramLink(chatUrl);
-      } else {
-        const chatUrl = `https://t.me/${botUsername}?start=chat_${chat.id}`;
-        openTelegramLink(chatUrl);
+      if (!targetUser) {
+        messageApi.error(
+          t(
+            "chats.errors.openError",
+            "Не удалось открыть чат в Telegram (нет данных пользователя)",
+          ),
+        );
+        return;
       }
+
+      let url: string | null = null;
+
+      // Предпочитаем username, так как https://t.me/username
+      // поддерживается Telegram WebApp SDK
+      if (targetUser.username) {
+        url = `https://t.me/${targetUser.username}`;
+      } else if (targetUser.telegramId) {
+        url = `tg://user?id=${targetUser.telegramId}`;
+      }
+
+      if (!url) {
+        messageApi.error(
+          t(
+            "chats.errors.openError",
+            "Не удалось открыть чат в Telegram (нет Telegram ID)",
+          ),
+        );
+        return;
+      }
+
+      openTelegramLink(url);
     } catch (error) {
       console.error("Ошибка при открытии чата:", error);
       messageApi.error(
@@ -95,8 +120,12 @@ const ChatListPage: React.FC = () => {
   };
 
   const openTelegramLink = (url: string) => {
+    // Внутри Telegram WebApp sdk поддерживает только https://t.me/*
+    // Для tg://* ссылок используем прямое window.open, чтобы не падать с ошибкой протокола.
+    const isTgProtocol = url.startsWith("tg://");
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((tg as any).openLink) {
+    if (!isTgProtocol && (tg as any).openLink) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (tg as any).openLink(url);
     } else {
@@ -112,14 +141,14 @@ const ChatListPage: React.FC = () => {
     if (user?.role === "DOCTOR") {
       return chat.patient
         ? `${chat.patient.firstName || ""} ${chat.patient.lastName || ""}`.trim() ||
-        chat.patient.username ||
-        t("chats.patient", "Пациент")
+            chat.patient.username ||
+            t("chats.patient", "Пациент")
         : t("chats.patient", "Пациент");
     } else {
       return chat.doctor
         ? `${chat.doctor.firstName || ""} ${chat.doctor.lastName || ""}`.trim() ||
-        chat.doctor.username ||
-        t("chats.doctor", "Врач")
+            chat.doctor.username ||
+            t("chats.doctor", "Врач")
         : t("chats.doctor", "Врач");
     }
   };
@@ -173,7 +202,10 @@ const ChatListPage: React.FC = () => {
   const handleCompleteChat = async (e: React.MouseEvent, chat: Chat) => {
     e.stopPropagation();
     try {
-      const response = await apiClient.completeChat(chat.id);
+      const response = await apiClient.completeChat(
+        chat.id,
+        user?.telegramId || "",
+      );
       if (response.success) {
         messageApi.success(
           t("chats.success.completed", "Консультация успешно завершена"),
@@ -182,7 +214,10 @@ const ChatListPage: React.FC = () => {
       } else {
         messageApi.error(
           response.error ||
-          t("chats.errors.completeError", "Не удалось завершить консультацию"),
+            t(
+              "chats.errors.completeError",
+              "Не удалось завершить консультацию",
+            ),
         );
       }
     } catch (error) {
@@ -234,7 +269,26 @@ const ChatListPage: React.FC = () => {
                 onClick={() => {
                   if (chat.status === "ACTIVE") {
                     handleOpenChat(chat);
+                  } else if (
+                    chat.status === "COMPLETED" &&
+                    user?.role === "PATIENT" &&
+                    !reviews[chat.id]
+                  ) {
+                    // Для пациента: сразу открываем модалку отзыва
+                    const doctorProfileId = getDoctorProfileId(chat);
+                    if (!doctorProfileId) {
+                      messageApi.error(
+                        t(
+                          "review.errors.doctorNotFound",
+                          "Не удалось найти профиль врача",
+                        ),
+                      );
+                      return;
+                    }
+                    setSelectedChat(chat);
+                    setReviewModalOpen(true);
                   } else if (chat.status === "COMPLETED") {
+                    // Для врача или при уже оставленном отзыве — просто подсказка
                     messageApi.info(
                       t(
                         "chats.info.completedReadOnly",
@@ -245,69 +299,74 @@ const ChatListPage: React.FC = () => {
                 }}
                 actions={
                   chat.status === "COMPLETED" &&
-                    !reviews[chat.id] &&
-                    user?.role === "PATIENT"
+                  !reviews[chat.id] &&
+                  user?.role === "PATIENT"
                     ? [
-                      <Button
-                        key="review"
-                        type="link"
-                        icon={<StarOutlined />}
-                        onClick={(e: React.MouseEvent) =>
-                          handleReviewClick(e, chat)
-                        }
-                        size="small"
-                      >
-                        {t("review.leaveReview", "Оставить отзыв")}
-                      </Button>,
-                    ]
-                    : chat.status === "ACTIVE" && user?.role === "DOCTOR"
-                      ? [
                         <Button
-                          key="complete"
-                          type="primary"
-                          danger
+                          key="review"
+                          type="link"
+                          icon={<StarOutlined />}
                           onClick={(e: React.MouseEvent) =>
-                            handleCompleteChat(e, chat)
+                            handleReviewClick(e, chat)
                           }
                           size="small"
                         >
-                          {t("chats.complete", "Завершить")}
+                          {t("review.leaveReview", "Оставить отзыв")}
                         </Button>,
                       ]
+                    : chat.status === "ACTIVE" && user?.role === "DOCTOR"
+                      ? [
+                          <Button
+                            key="complete"
+                            type="primary"
+                            danger
+                            onClick={(e: React.MouseEvent) =>
+                              handleCompleteChat(e, chat)
+                            }
+                            size="small"
+                          >
+                            {t("chats.complete", "Завершить")}
+                          </Button>,
+                        ]
                       : []
                 }
               >
-                <List.Item.Meta
-                  avatar={
-                    <Avatar
-                      src={getChatAvatar(chat)}
-                      size={50}
-                      className={styles.avatar}
-                    />
-                  }
-                  title={
-                    <div className={styles.chatTitle}>
-                      <Text strong>{getChatTitle(chat)}</Text>
-                      <Text className={styles.serviceType}>
-                        {getServiceTypeText(chat.serviceType)}
+                <div className={styles.chatItemInner}>
+                  <Avatar
+                    src={getChatAvatar(chat)}
+                    size={50}
+                    className={styles.avatar}
+                  />
+                  <div className={styles.chatContent}>
+                    <div className={styles.chatHeader}>
+                      <Text strong className={styles.chatTitleText}>
+                        {getChatTitle(chat)}
                       </Text>
-                    </div>
-                  }
-                  description={
-                    <div className={styles.chatDescription}>
-                      <Text className={styles.amount}>
-                        {Number(chat.amount).toLocaleString("ru-RU")} ₸
-                      </Text>
-                      <Text className={styles.status}>
+                      <span className={styles.statusPill}>
                         {chat.status === "ACTIVE"
                           ? t("chats.active", "Активен")
                           : chat.status === "COMPLETED"
                             ? t("chats.completed", "Завершен")
                             : t("chats.cancelled", "Отменен")}
+                      </span>
+                    </div>
+                    <Text className={styles.serviceType}>
+                      {getServiceTypeText(chat.serviceType)}
+                    </Text>
+                    <div className={styles.chatFooter}>
+                      <Text className={styles.amount}>
+                        {Number(chat.amount).toLocaleString("ru-RU")} ₸
+                      </Text>
+                      <Text className={styles.date}>
+                        {new Date(chat.createdAt).toLocaleDateString("ru-RU", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "2-digit",
+                        })}
                       </Text>
                     </div>
-                  }
-                />
+                  </div>
+                </div>
               </List.Item>
             )}
           />
