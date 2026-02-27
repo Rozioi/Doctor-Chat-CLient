@@ -238,7 +238,9 @@ const PersonalAccountPage: React.FC = () => {
         </div>
 
         <div className={styles.field}>
-          <Text className={styles.label}>{t("profile.lastName", "Фамилия")}</Text>
+          <Text className={styles.label}>
+            {t("profile.lastName", "Фамилия")}
+          </Text>
           <Input
             value={lastName}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -258,7 +260,9 @@ const PersonalAccountPage: React.FC = () => {
         </div>
 
         <div className={styles.field}>
-          <Text className={styles.label}>{t("profile.patronymic", "Отчество")}</Text>
+          <Text className={styles.label}>
+            {t("profile.patronymic", "Отчество")}
+          </Text>
           <Input
             value={patronymic}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

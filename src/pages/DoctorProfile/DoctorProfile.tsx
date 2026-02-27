@@ -53,7 +53,7 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
     {
       id: "STANDARD",
       name: t("doctor.profile.tariffs.standard.name", "СТАНДАРТ"),
-      price: 50000,
+      price: 65000,
       features: [
         t(
           "doctor.profile.tariffs.standard.f1",
@@ -72,7 +72,7 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
     {
       id: "VIP",
       name: t("doctor.profile.tariffs.vip.name", "VIP (ПОД КЛЮЧ)"),
-      price: 70000,
+      price: 85000,
       isRecommended: true,
       features: [
         t("doctor.profile.tariffs.vip.f1", "Всё, что входит в тариф Стандарт"),

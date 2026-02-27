@@ -11,6 +11,7 @@ export default defineConfig({
       "rampantly-reasonable-millipede.cloudpub.ru",
       "doctor-chat-backend.vercel.app",
       "doctor-chat-c-lient.vercel.app",
+      "ruggedly-primal-mallard.cloudpub.ru",
       "soundly-primary-protozoa.cloudpub.ru",
     ],
   },
