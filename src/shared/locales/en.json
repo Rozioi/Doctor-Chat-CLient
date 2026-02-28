@@ -45,7 +45,7 @@
     "offerOk": "Continue",
     "offerCancel": "Cancel",
     "andPay": "and",
-    "robo": "Payments are protected by the Robokassa system",
+    "robo": "Payments go through a secure payment gateway",
     "cardNumber": "Card number",
     "cardExpiry": "Expiry date",
     "cardCVC": "CVC",
