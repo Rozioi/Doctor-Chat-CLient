@@ -10,6 +10,7 @@ import {
 import styles from "./styles/DoctorProfile.module.scss";
 import { useTranslation } from "react-i18next";
 import { tg } from "../../shared/lib/telegram";
+import { useNavigate } from "react-router";
 
 interface DoctorProfileProps {
   id: string | number;
@@ -93,7 +94,7 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
       ],
     },
   ];
-
+  const navigate = useNavigate();
   const handleLanguageChange = (value: string) => {
     i18n.changeLanguage(value);
     setSelectedLanguage(value);
@@ -176,22 +177,30 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
                 `${specialty}`,
               )}
             </div>
-            <div className={styles.name}>{name}</div>
+            <div
+              className={styles.name}
+              onClick={() => {
+                navigate("/order/20/questionnaire");
+                console.log("fsfd");
+              }}
+            >
+              {name}
+            </div>
             <div className={styles.rating}>
               <StarOutlined className={styles.star} />
               {rating.toFixed(1)}
               <span className={styles.reviewsCount}>
                 ({reviewsCount} {t("doctor.profile.reviews", "отзывов")})
               </span>
-            {onOpenReviews && reviewsCount >= 0 && (
-              <button
-                type="button"
-                className={styles.reviewsLink}
-                onClick={onOpenReviews}
-              >
-                {t("review.viewAll", "Смотреть все")}
-              </button>
-            )}
+              {onOpenReviews && reviewsCount >= 0 && (
+                <button
+                  type="button"
+                  className={styles.reviewsLink}
+                  onClick={onOpenReviews}
+                >
+                  {t("review.viewAll", "Смотреть все")}
+                </button>
+              )}
             </div>
           </div>
         </div>

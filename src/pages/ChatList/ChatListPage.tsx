@@ -90,25 +90,8 @@ const ChatListPage: React.FC = () => {
         return;
       }
 
-      let url: string | null = null;
-
-      // Предпочитаем username, так как https://t.me/username
-      // поддерживается Telegram WebApp SDK
-      if (targetUser.username) {
-        url = `https://t.me/${targetUser.username}`;
-      } else if (targetUser.telegramId) {
-        url = `tg://user?id=${targetUser.telegramId}`;
-      }
-
-      if (!url) {
-        messageApi.error(
-          t(
-            "chats.errors.openError",
-            "Не удалось открыть чат в Telegram (нет Telegram ID)",
-          ),
-        );
-        return;
-      }
+      const botUsername = import.meta.env.VITE_BOT_USERNAME || "LumoMarket_bot";
+      const url = `https://t.me/${botUsername}?start=chat_${chat.id}`;
 
       openTelegramLink(url);
     } catch (error) {
@@ -120,8 +103,6 @@ const ChatListPage: React.FC = () => {
   };
 
   const openTelegramLink = (url: string) => {
-    // Внутри Telegram WebApp sdk поддерживает только https://t.me/*
-    // Для tg://* ссылок используем прямое window.open, чтобы не падать с ошибкой протокола.
     const isTgProtocol = url.startsWith("tg://");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

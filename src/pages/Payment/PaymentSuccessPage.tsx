@@ -11,6 +11,7 @@ const PaymentSuccessPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
+  const paymentId = Number(searchParams.get("pg_order_id") || 0);
 
   useEffect(() => {
     const orderIdStr = searchParams.get("pg_order_id");
@@ -25,14 +26,10 @@ const PaymentSuccessPage: React.FC = () => {
       .finalizeFreedomPayPayment(paymentId, paymentStatus)
       .then((res) => {
         if (!res.success) {
-          messageApi.warning(
-            res.error || "Не удалось обновить статус оплаты",
-          );
+          messageApi.warning(res.error || "Не удалось обновить статус оплаты");
         }
       })
-      .catch(() => {
-        // тихий фейл
-      });
+      .catch(() => {});
   }, [searchParams, messageApi]);
 
   return (
@@ -60,7 +57,7 @@ const PaymentSuccessPage: React.FC = () => {
               key="chats"
               size="large"
               className={styles.primaryButton}
-              onClick={() => navigate("/chat")}
+              onClick={() => navigate(`/order/${paymentId}/questionnaire`)}
             >
               Перейти к консультациям
             </Button>,

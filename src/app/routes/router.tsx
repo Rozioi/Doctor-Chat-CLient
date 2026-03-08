@@ -6,6 +6,7 @@ import { Loader } from "../../shared/ui/Loader/Loader";
 import { LoadingFallback } from "../../shared/ui/Loader/LoadingFallback";
 import { ServerGuard } from "../ui/ServerGuard";
 import { PublicLayout } from "../../layouts/PublicLayout";
+import QuestionnairePage from "../../pages/QuestionnairePage/QuestionnairePage";
 const PersonalAccountPage = lazy(
   () => import("../../pages/PersonalAccount/PersonalAccountPage"),
 );
@@ -90,6 +91,7 @@ export const router = createBrowserRouter([
       { path: "payment", element: <PaymentPage /> },
       { path: "chat", element: <ChatListPage /> },
       { path: "profile", element: <PersonalAccountPage /> },
+      { path: "order/:orderId/questionnaire", element: <QuestionnairePage /> },
 
       {
         path: "search/doctor/:id",

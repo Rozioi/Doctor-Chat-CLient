@@ -55,6 +55,16 @@ api.interceptors.request.use(
     return Promise.reject(error);
   },
 );
+export interface QuestionnairePayload {
+  fullName: string;
+  birthDate: string | null;
+  location: string;
+  mainRequest: string;
+  history: string;
+  currentTherapy: string;
+  allergies: string;
+  fileUrls?: string[];
+}
 
 class ApiClient {
   async checkedServer(): Promise<ApiResponse<unknown>> {
@@ -407,6 +417,80 @@ class ApiClient {
       return {
         success: false,
         error: "Unknown error occurred",
+      };
+    }
+  }
+
+  async uploadFile(
+    file: File,
+  ): Promise<ApiResponse<{ path: string; url: string }>> {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const uploadUrl =
+        api.defaults.baseURL?.replace("/api/v1", "") ||
+        BASE_URL.replace(/\/$/, "");
+      const response = await axios.post<{
+        message: string;
+        path: string;
+        originalSize: number;
+        compressedSize: number;
+      }>(`${uploadUrl}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data.path) {
+        const fileName = response.data.path.replace(/^uploads\//, "");
+        const fileUrl = `${uploadUrl}/uploads/${fileName}`;
+        return {
+          success: true,
+          data: {
+            path: response.data.path,
+            url: fileUrl,
+          },
+        };
+      }
+      throw new Error("Invalid response format");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          error: error.response?.data?.error || "Failed to upload file",
+        };
+      }
+      return {
+        success: false,
+        error: "Unknown error occurred",
+      };
+    }
+  }
+
+  async uploadQuestionnaireFiles(
+    _orderId: number,
+    formData: FormData,
+  ): Promise<ApiResponse<string[]>> {
+    try {
+      const files = formData.getAll("files") as File[];
+      const urls: string[] = [];
+
+      for (const file of files) {
+        const res = await this.uploadFile(file);
+        if (res.success && res.data?.url) {
+          urls.push(res.data.url);
+        }
+      }
+
+      return {
+        success: true,
+        data: urls,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: "Failed to upload files",
       };
     }
   }
@@ -969,7 +1053,48 @@ class ApiClient {
       };
     }
   }
+  async createQuestionnaire({
+    orderId,
+    payload,
+    telegramId,
+  }: {
+    orderId: number;
+    payload: QuestionnairePayload;
+    telegramId: string;
+  }): Promise<ApiResponse<unknown>> {
+    try {
+      const response = await api.post(
+        "/questionnaires",
+        {
+          orderId,
+          ...payload,
+        },
+        {
+          headers: {
+            "x-telegram-user-id": telegramId,
+          },
+        },
+      );
 
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          error:
+            error.response?.data?.error || "Failed to create questionnaire",
+        };
+      }
+
+      return {
+        success: false,
+        error: "Unknown error occurred",
+      };
+    }
+  }
   async finalizeFreedomPayPayment(
     paymentId: number,
     status?: string,
