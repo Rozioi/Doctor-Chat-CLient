@@ -90,7 +90,8 @@ const ChatListPage: React.FC = () => {
         return;
       }
 
-      const botUsername = import.meta.env.VITE_BOT_USERNAME || "LumoMarket_bot";
+      const botUsername =
+        import.meta.env.VITE_BOT_USERNAME || "medexperteu_bot";
       const url = `https://t.me/${botUsername}?start=chat_${chat.id}`;
 
       openTelegramLink(url);
