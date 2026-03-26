@@ -25,6 +25,7 @@ const doctorCategories = [
   "surgeon",
   "cardiologist",
   "dermatologist",
+  "oncologist",
 ];
 
 const getCountryFlag = (country: string): string => {

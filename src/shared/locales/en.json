@@ -247,8 +247,19 @@
     "termsOfUse": "terms of use",
     "and": "and",
     "app": "application",
+    "currentPosition": "Current Position",
+    "consultationTopics": "Consultation Topics",
+    "careerHistory": "Full Career History (for Expandable Block)",
+    "topics": {
+      "complex": "Comprehensive treatment plan",
+      "radioChemo": "Radiochemotherapy coordination",
+      "secondOpinion": "Second opinion on complex cases"
+    },
+
     "errors": {
       "acceptTerms": "Please accept the terms of use",
+      "positionRequired": "Current position is required",
+      "topicsRequired": "Please select at least one consultation topic",
       "phoneRequired": "Please enter phone number",
       "qualificationRequired": "Please select doctor category",
       "countryRequired": "Please select country",
@@ -270,7 +281,8 @@
       "neurologist": "Neurologist",
       "ophthalmologist": "Ophthalmologist",
       "psychiatrist": "Psychiatrist",
-      "dermatologist": "Dermatologist"
+      "dermatologist": "Dermatologist",
+      "oncologist": "Oncologist"
     },
     "qualifications": {
       "first": "First Category Doctor",

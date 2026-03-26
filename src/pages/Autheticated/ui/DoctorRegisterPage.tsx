@@ -39,6 +39,7 @@ const DoctorRegisterPage = () => {
     ophthalmologist: t("doctorRegistration.ophthalmologist"),
     psychiatrist: t("doctorRegistration.psychiatrist"),
     dermatologist: t("doctorRegistration.dermatologist"),
+    oncologist: t("doctorRegistration.oncologist"),
   };
 
   const LANGUAGES = [
@@ -68,9 +69,12 @@ const DoctorRegisterPage = () => {
 
   const { createDoctor } = useAuthReq();
 
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
 
-  const handleChange = (field: keyof DoctorInput, value: string | number | string[]) => {
+  const handleChange = (
+    field: keyof DoctorInput,
+    value: string | number | string[],
+  ) => {
     setDoctorData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -117,7 +121,9 @@ const DoctorRegisterPage = () => {
 
       if (fileList.length > 0 && fileList[0].originFileObj) {
         const { apiClient } = await import("../../../api/api");
-        const uploadRes = await apiClient.uploadAvatar(fileList[0].originFileObj);
+        const uploadRes = await apiClient.uploadAvatar(
+          fileList[0].originFileObj,
+        );
         if (uploadRes.success && uploadRes.data) {
           finalApprobationUrl = uploadRes.data.url;
         } else {
@@ -356,7 +362,9 @@ const DoctorRegisterPage = () => {
                 }),
               }}
               value={
-                options.find((opt: { value: string }) => opt.value === doctorData.country) || null
+                options.find(
+                  (opt: { value: string }) => opt.value === doctorData.country,
+                ) || null
               }
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               onChange={(opt: any) => handleChange("country", opt?.value || "")}
@@ -390,7 +398,10 @@ const DoctorRegisterPage = () => {
               maxCount={1}
               disabled={isSubmitting}
             >
-              <Button icon={<IoIosCloudUpload size={20} />} className={styles.uploadButton}>
+              <Button
+                icon={<IoIosCloudUpload size={20} />}
+                className={styles.uploadButton}
+              >
                 {t("doctorRegistration.uploadFile")}
               </Button>
             </Upload>
