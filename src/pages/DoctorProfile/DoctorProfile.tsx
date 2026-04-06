@@ -25,7 +25,6 @@ interface DoctorProfileProps {
   languages?: string[];
   approbationUrl?: string;
   onBack?: () => void;
-  onStartChat?: (tariffPrice: number, tariffType: "STANDARD" | "VIP") => void;
   onOpenReviews?: () => void;
 }
 
@@ -41,59 +40,14 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
   languages = [],
   approbationUrl,
   onBack,
-  onStartChat,
   onOpenReviews,
 }) => {
   const { t, i18n } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
-  const [selectedTariff, setSelectedTariff] = useState<"STANDARD" | "VIP">(
-    "STANDARD",
-  );
   const [isApprobationVisible, setIsApprobationVisible] = useState(false);
-  const [, contextHolder] = message.useMessage();
+  const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const tariffs = [
-    {
-      id: "STANDARD",
-      name: t("doctor.profile.tariffs.standard.name", "СТАНДАРТ"),
-      price: 65000,
-      features: [
-        t(
-          "doctor.profile.tariffs.standard.f1",
-          "Письменное заключение Европейского Эксперта",
-        ),
-        t(
-          "doctor.profile.tariffs.standard.f2",
-          "Разбор вашей истории болезни и анализов",
-        ),
-        t(
-          "doctor.profile.tariffs.standard.f3",
-          "Чат с врачом (Экспертная сессия на русском языке)",
-        ),
-      ],
-    },
-    {
-      id: "VIP",
-      name: t("doctor.profile.tariffs.vip.name", "VIP (ПОД КЛЮЧ)"),
-      price: 85000,
-      isRecommended: true,
-      features: [
-        t("doctor.profile.tariffs.vip.f1", "Всё, что входит в тариф Стандарт"),
-        t(
-          "doctor.profile.tariffs.vip.f2",
-          "+ Услуга «Адаптация»: Организация визита к врачу-партнеру MED EXPERT в вашем городе",
-        ),
-        t(
-          "doctor.profile.tariffs.vip.f3",
-          "+ Оплата 1-го визита включена: Вам не нужно платить в кассе клиники за первичный прием",
-        ),
-        t(
-          "doctor.profile.tariffs.vip.f4",
-          "+ «Зеленый коридор»: Приоритетная запись к специалисту через координатора",
-        ),
-      ],
-    },
-  ];
   const navigate = useNavigate();
   const handleLanguageChange = (value: string) => {
     i18n.changeLanguage(value);
@@ -125,16 +79,23 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
   };
 
   const handleStartChat = () => {
-    if (onStartChat) {
-      const tariff = tariffs.find((t) => t.id === selectedTariff);
-      if (tariff) {
-        onStartChat(tariff.price, selectedTariff);
-      }
-    }
+    setIsPaymentModalVisible(true);
   };
 
-  const currentPrice =
-    tariffs.find((t) => t.id === selectedTariff)?.price || 50000;
+  const handlePaymentOption = (option: "KZ" | "RF" | "OTHER") => {
+    if (option === "OTHER") {
+      messageApi.success(t("paymentSelection.otherText"));
+      // Redirect to coordinator after a short delay
+      setTimeout(() => {
+        window.open("https://t.me/m/ZEH5m-TsMTMy", "_blank");
+      }, 2000);
+    } else if (option === "KZ") {
+      messageApi.info(t("paymentSelection.kzText"));
+    } else if (option === "RF") {
+      messageApi.info(t("paymentSelection.rfText"));
+    }
+    setIsPaymentModalVisible(false);
+  };
 
   return (
     <div className={styles.container}>
@@ -181,7 +142,6 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
               className={styles.name}
               onClick={() => {
                 navigate("/order/20/questionnaire");
-                console.log("fsfd");
               }}
             >
               {name}
@@ -246,52 +206,60 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
           </div>
         </div>
 
-        <div className={styles.tariffsSection}>
-          <div className={styles.aboutTitle}>
-            {t("doctor.profile.tariffs.title", "Выберите тариф")}
-          </div>
-          <div className={styles.tariffsList}>
-            {tariffs.map((tariff) => (
-              <div
-                key={tariff.id}
-                className={`${styles.tariffItem} ${selectedTariff === tariff.id ? styles.selected : ""} ${tariff.isRecommended ? styles.recommended : ""}`}
-                onClick={() =>
-                  setSelectedTariff(tariff.id as "STANDARD" | "VIP")
-                }
-              >
-                {tariff.isRecommended && (
-                  <div className={styles.recommendedBadge}>
-                    {t("doctor.profile.tariffs.recommended", "Рекомендуем")}
-                  </div>
-                )}
-                <div className={styles.tariffHeader}>
-                  <div className={styles.tariffName}>{tariff.name}</div>
-                  <div className={styles.tariffPrice}>
-                    {tariff.price.toLocaleString("ru-RU")} ₸
-                  </div>
-                </div>
-                <ul className={styles.featuresList}>
-                  {tariff.features.map((feature, index) => (
-                    <li key={index} className={styles.featureItem}>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-
         <Button
           type="primary"
           className={styles.chatButton}
           onClick={handleStartChat}
+          style={{ marginTop: "24px" }}
         >
-          {t("doctor.profile.startChatWithPrice", "Начать чат за {{price}} ₸", {
-            price: currentPrice.toLocaleString("ru-RU"),
-          })}
+          {t("paymentSelection.getExpertise")}
         </Button>
       </div>
+
+      <Modal
+        title={t("paymentSelection.title")}
+        open={isPaymentModalVisible}
+        onCancel={() => setIsPaymentModalVisible(false)}
+        footer={null}
+        centered
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+            padding: "8px 0",
+          }}
+        >
+          <Button
+            size="large"
+            type="default"
+            block
+            onClick={() => handlePaymentOption("KZ")}
+            style={{ height: "auto", padding: "12px", textAlign: "left" }}
+          >
+            <div style={{ fontWeight: 600 }}>{t("paymentSelection.kz")}</div>
+          </Button>
+          <Button
+            size="large"
+            type="default"
+            block
+            onClick={() => handlePaymentOption("RF")}
+            style={{ height: "auto", padding: "12px", textAlign: "left" }}
+          >
+            <div style={{ fontWeight: 600 }}>{t("paymentSelection.rf")}</div>
+          </Button>
+          <Button
+            size="large"
+            type="default"
+            block
+            onClick={() => handlePaymentOption("OTHER")}
+            style={{ height: "auto", padding: "12px", textAlign: "left" }}
+          >
+            <div style={{ fontWeight: 600 }}>{t("paymentSelection.other")}</div>
+          </Button>
+        </div>
+      </Modal>
 
       <Modal
         title={t("doctor.profile.approbationTitle", "Подтверждающий документ")}

@@ -13,35 +13,37 @@ interface DoctorCardProps {
   selected?: boolean;
 }
 
-export const DoctorCard = memo<DoctorCardProps>(({
-  name,
-  country,
-  countryFlag,
-  rating,
-  image,
-  onSelect,
-  onMouseEnter,
-  selected,
-}) => {
-  return (
-    <Card
-      className={`${styles.card} ${selected ? styles.selected : ""}`}
-      onClick={onSelect}
-      onMouseEnter={onMouseEnter}
-      variant="borderless"
-    >
-      <div className={styles.content}>
-        <Avatar size={50} src={image} />
-        <div className={styles.info}>
-          <div className={styles.name}>{name}</div>
-          <div className={styles.country}>
-            Из {country} <span>{countryFlag}</span>
+export const DoctorCard = memo<DoctorCardProps>(
+  ({
+    name,
+    country,
+    countryFlag,
+    rating,
+    image,
+    onSelect,
+    onMouseEnter,
+    selected,
+  }) => {
+    return (
+      <Card
+        className={`${styles.card} ${selected ? styles.selected : ""}`}
+        onClick={onSelect}
+        onMouseEnter={onMouseEnter}
+        variant="borderless"
+      >
+        <div className={styles.content}>
+          <Avatar size={50} src={image} />
+          <div className={styles.info}>
+            <div className={styles.name}>{name}</div>
+            <div className={styles.country}>
+              Из {country} <span>{countryFlag}</span>
+            </div>
+          </div>
+          <div className={styles.rating}>
+            <span>⭐ {rating}</span>
           </div>
         </div>
-        <div className={styles.rating}>
-          <span>⭐ {rating}</span>
-        </div>
-      </div>
-    </Card>
-  );
-});
+      </Card>
+    );
+  },
+);

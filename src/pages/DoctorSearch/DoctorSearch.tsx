@@ -13,30 +13,17 @@ import { useTranslation } from "react-i18next";
 const preloadDoctorProfile = () =>
   import("../../pages/DoctorProfile/DoctorProfilePage");
 
-const doctorCategories = [
-  "gynecologist",
-  "ent",
-  "neurologist",
-  "ophthalmologist",
-  "pediatrician",
-  "psychiatrist",
-  "therapist",
-  "dentist",
-  "surgeon",
-  "cardiologist",
-  "dermatologist",
-  "oncologist",
-];
+const doctorCategories = ["oncologist"];
 
 const getCountryFlag = (country: string): string => {
   const flags: { [key: string]: string } = {
-    Казахстан: "🇰🇿",
-    Россия: "🇷🇺",
-    Германия: "🇩🇪",
-    Франция: "🇫🇷",
-    Италия: "🇮🇹",
-    США: "🇺🇸",
-    Великобритания: "🇬🇧",
+    KZ: "🇰🇿",
+    RU: "🇷🇺",
+    DE: "🇩🇪",
+    FR: "🇫🇷",
+    IT: "🇮🇹",
+    USA: "🇺🇸",
+    UK: "🇬🇧",
   };
   return flags[country] || "🌍";
 };
@@ -152,7 +139,8 @@ const DoctorSearchPage: React.FC = () => {
         renderItem={(item: string) => {
           const categoryDoctors = doctors.filter(
             (d: DoctorCardData) =>
-              d.specialization === item || d.category === item,
+              (d.specialization === item || d.category === item) &&
+              (d.name.includes("Феликс") || d.name.includes("Felix")),
           );
 
           return (

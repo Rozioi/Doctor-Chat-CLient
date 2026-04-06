@@ -229,8 +229,8 @@ const ChatListPage: React.FC = () => {
       <Card className={styles.card}>
         <Title level={3} className={styles.title}>
           {user?.role === "DOCTOR"
-            ? t("chats.myPatients", "Мои пациенты")
-            : t("chats.myDoctors", "Мои врачи")}
+            ? t("chats.myPatients", "Мои эксперты")
+            : t("chats.myDoctors", "Мои эксперты")}
         </Title>
 
         {chats.length === 0 ? (
@@ -238,8 +238,8 @@ const ChatListPage: React.FC = () => {
             <MessageOutlined className={styles.emptyIcon} />
             <Text className={styles.emptyText}>
               {user?.role === "DOCTOR"
-                ? t("chats.emptyDoctor", "У вас пока нет пациентов")
-                : t("chats.empty", "У вас пока нет чатов с врачами")}
+                ? t("chats.emptyDoctor", "История экспертиз пуста")
+                : t("chats.empty", "История экспертиз пуста")}
             </Text>
           </div>
         ) : (

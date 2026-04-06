@@ -18,7 +18,7 @@ const Main = memo(() => {
   }, [goTo]);
 
   const handleCoordinatorClick = useCallback(() => {
-    setIsOpenModal(true);
+    window.open("https://t.me/m/ZEH5m-TsMTMy", "_blank");
   }, []);
 
   return (

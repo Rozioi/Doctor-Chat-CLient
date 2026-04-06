@@ -174,13 +174,6 @@ export const DoctorProfilePage: React.FC = () => {
     }
   };
 
-  const handleStartChat = (price: number, tariffType: string) => {
-    if (doctorId) {
-      goTo(
-        `/payment?doctorId=${String(doctorId)}&serviceType=consultation&amount=${price}&tariffType=${tariffType}`,
-      );
-    }
-  };
 
   return (
     <DoctorProfile
@@ -189,7 +182,6 @@ export const DoctorProfilePage: React.FC = () => {
       onOpenReviews={handleOpenReviews}
       reviewsCount={doctorData.reviewsCount}
       onBack={goBack}
-      onStartChat={handleStartChat}
     />
   );
 };

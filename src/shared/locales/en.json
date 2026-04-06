@@ -66,22 +66,22 @@
   },
   "chats": {
     "title": "Chats",
-    "myDoctors": "My doctors",
-    "myPatients": "My patients",
-    "empty": "You don't have any chats with doctors yet",
-    "emptyDoctor": "You don't have any patients yet",
+    "myDoctors": "My Experts",
+    "myPatients": "My Patients",
+    "empty": "Audit history is empty",
+    "emptyDoctor": "Audit history is empty",
     "active": "Active",
     "completed": "Completed",
     "cancelled": "Cancelled",
     "consultation": "Consultation",
-    "analysis": "Analysis interpretation",
+    "analysis": "Lab results interpretation",
     "doctor": "Doctor",
     "patient": "Patient",
     "goToChat": "Go to chat",
     "errors": {
-      "unknownUser": "Failed to identify user",
+      "unknownUser": "Could not identify user",
       "loadError": "Failed to load chats",
-      "openError": "Failed to open chat in Telegram"
+      "openError": "Could not open Telegram chat"
     }
   },
   "nav": {
@@ -137,10 +137,10 @@
       "approbationTitle": "Confirmation Document"
     },
     "search": {
-      "title": "Find a doctor",
-      "description": "Choose a direction, Order a specialization that requires a European passport",
-      "enCatANDName": "Find a specialization",
-      "noResults": "No doctors found"
+      "title": "Field of Expertise",
+      "description": "Select a profile category for an independent audit of your documents by a European specialist:",
+      "enCatANDName": "Select specialization",
+      "noResults": "No specialists found"
     }
   },
   "analysis": {
@@ -282,7 +282,7 @@
       "ophthalmologist": "Ophthalmologist",
       "psychiatrist": "Psychiatrist",
       "dermatologist": "Dermatologist",
-      "oncologist": "Oncologist"
+      "oncologist": "Histology Review"
     },
     "qualifications": {
       "first": "First Category Doctor",
@@ -316,109 +316,110 @@
       "title": "About Us:",
       "europeanStandards": {
         "title": "WHAT IS MED EXPERT EU?",
-        "point1": "Independent expertise from European doctors.",
-        "point2": "Objective evaluation of diagnosis and treatment without visas or language barriers.",
-        "point3": "Second Opinion Service.",
-        "point4": "Not a primary consultation, but a strategic analysis."
+        "point1": "Independent medical data expertise provided by specialists from Europe.",
+        "point2": "Evaluation of provided documentation for compliance with international standards without visas or language barriers.",
+        "point3": "Independent audit service ('Second Opinion').",
+        "point4": "Not a clinical appointment, but a strategic informational analysis."
       },
       "speed": {
         "title": "WHO CONDUCTS THE AUDIT?",
-        "point1": "Specialized experts in Europe (*Fachärzte*).",
-        "point2": "These are current certified specialist doctors from clinics in Germany and other European countries..",
-        "point3": "Prompt response - Ready conclusion within 24 hours."
+        "point1": "Specialized experts and medical analysts from Europe (Fachärzte).",
+        "point2": "Specialists with years of experience working according to European standards of evidence-based medicine.",
+        "point3": "Prompt response — finished analytical report starting from 24 hours."
       },
       "channels": {
         "title": "WHAT DO YOU RECEIVE?",
-        "point1": "Expert medical opinion (PDF): a professional document with conclusions from an EU-based specialist.",
-        "point2": "Independent expert review of the established diagnosis and current treatment strategy for compliance with international protocols.",
-        "point3": "Clear medical recommendations supported by current international standards.",
-        "point4": "Adaptation of recommendations by a partner physician for implementation in your country."
+        "point1": "Expert Report (PDF): a professional document with conclusions from a specialized European specialist.",
+        "point2": "Analytical review of the current situation regarding compliance with international protocols.",
+        "point3": "Clear informational recommendations and justifications based on current global standards.",
+        "point4": "Adaptation of recommendations by a partner doctor for implementation in your country."
       },
       "privacy": {
-        "title": "How does the audit process work?",
-        "point1": "You upload your medical data (MRI, CT scans, lab tests) and submit your question in a secure chat.",
-        "point2": "Case analysis: the expert reviews your documents and may ask additional clarifying questions if necessary.",
-        "point3": "Guideline verification: your case is evaluated according to current international guidelines (ESMO, ESC, EAU).",
-        "point4": "Final result: a PDF file with an expert medical opinion and a personalized patient roadmap."
+        "title": "HOW DOES THE AUDIT WORK?",
+        "point1": "You upload your medical data and formulate your request in a secure chat.",
+        "point2": "Situation analysis: the expert reviews the documents and asks clarifying questions if necessary.",
+        "point3": "Protocol verification: assessment of the case for compliance with current international recommendations (ESMO, ESC, EAU).",
+        "point4": "Result: a PDF file with a detailed expert audit."
       },
       "alternative": {
         "title": "WHAT TO DO WITH THE EUROPEAN REPORT?",
-        "point1": "The European expert provides a strategy, but prescriptions and referrals are valid only from a local doctor. We bridge this gap."
+        "point1": "The received report is a powerful information base for joint discussion with your attending physician."
       },
       "feedback": {
-        "title": "Feedback and Service Improvement:",
-        "point1": "Click the green button in the menu. A coordinator will match you with a licensed doctor in your city.",
-        "point2": "Attend the consultation. The doctor is ready to work according to international standards.",
-        "point3": "The doctor reviews the Med Expert report and adapts European protocols to your country (medications and tests).",
-        "point4": "You receive a PDF with a clear treatment strategy based on evidence-based medicine."
+        "title": "FEEDBACK:",
+        "point1": "You provide the translated PDF report to a local specialist in your city.",
+        "point2": "Your attending physician reviews the document and the analysis of European protocols.",
+        "point3": "The doctor can adapt the tactics within the framework of your country's legislation.",
+        "point4": "We have organized this bridge between experts and local doctors."
       },
       "joy": {
-        "title": "You leave the office with official documents:",
-        "point1": "Valid prescriptions.",
-        "point2": "Referrals for procedures and tests.",
-        "point3": "Treatment plan under supervision of a local specialist."
+        "title": "LEAVING THE APPOINTMENT WITH RESULTS:",
+        "point1": "Valid prescriptions for medications based on the audit.",
+        "point2": "Referrals for necessary procedures and examinations.",
+        "point3": "A treatment plan under the supervision of a local specialist."
       },
       "important": {
-        "title": "Only MED EXPERT EU partner doctors work with our expertise form.",
-        "point1": "External clinics may refuse to process European-style documents. Our local doctor:",
-        "point2": "Adapts prescriptions.",
-        "point3": "Provides referrals for procedures and tests.",
-        "point4": "Takes treatment under supervision."
+        "title": "PARTNER DOCTORS WORKING WITH OUR EXPERTISE:",
+        "point1": "Our local doctor adapts the findings into prescriptions.",
+        "point2": "They will refer you to procedures and tests based on the audit results.",
+        "point3": "They will take over your further treatment management.",
+        "point4": "Guaranteed consideration of the European-standard document."
       },
       "profit": {
-        "title": "WHY IS THIS COST-EFFECTIVE?",
-        "point1": "European expertise at the price of a dinner.",
-        "point2": "Access to the 'Gold Standard' of medicine without travel costs.",
+        "title": "WHY IS IT BENEFICIAL?",
+        "point1": "European analytics at an affordable price without travel expenses.",
+        "point2": "Access to information on 'Gold Standards' of medicine.",
         "point3": "In-person consultation in the EU: from €2,000.",
-        "point4": "Med Expert online audit—98% savings at the same expertise level.",
-        "point5": "EU: ~€3,000 (consultation + flight), Med Expert: ~€40."
+        "point4": "Med Expert online audit — 98% savings while accessing the same level of expertise.",
+        "point5": "Expenses in the EU: ~€3,000 (fee + flight), Med Expert: ~€40."
       }
     },
     "problems": {
-      "title": "Why do people turn to us?",
+      "title": "Why do people contact us?",
       "diagnosis": {
-        "title": "DO YOU DOUBT YOUR DIAGNOSIS?",
-        "point1": "You received a diagnosis but are unsure of its accuracy?",
-        "point2": "Our experts conduct an independent audit to confirm or refute your doctor’s conclusions.",
-        "point3": "No attempt to sell unnecessary services."
+        "title": "FOR MEDICAL DATA ANALYSIS",
+        "point1": "Do you have test results and need an independent evaluation?",
+        "point2": "Our experts will audit the documents for compliance with modern international protocols.",
+        "point3": "Objective conclusions without attempts to sell unnecessary services."
       },
       "treatment": {
-        "title": "TREATMENT NOT WORKING?",
-        "point1": "Therapy has been ongoing for months without results?",
-        "point2": "The protocol may be outdated.",
-        "point3": "Experts will propose a treatment strategy."
+        "title": "FOR ACCESS TO INTERNATIONAL PROTOCOLS",
+        "point1": "Do you want to learn about modern trends in global medicine?",
+        "point2": "We provide an analytical summary of alternative methods available in Europe.",
+        "point3": "A base for discussing new treatment options with your doctor."
       },
       "surgery": {
-        "title": "WAS SURGERY RECOMMENDED?",
-        "point1": "Don’t rush under the knife.",
-        "point2": "Often, conservative treatment methods are available in Europe.",
-        "point3": "We check if your problem can be solved without surgery."
+        "title": "SCHEDULED FOR SURGERY?",
+        "point1": "Do not rush; there are often conservative treatment methods available in Europe.",
+        "point2": "We will find out if your problem can be solved without surgery.",
+        "point3": "Verification of the case against the latest global recommendations."
       },
       "check": {
-        "title": "WANT TO VERIFY PRESCRIPTIONS?",
-        "point1": "Taking a pile of pills?",
-        "point2": "We check each prescription against Evidence-Based Medicine principles."
+        "title": "FOR INFORMATION VERIFICATION (EBM)",
+        "point1": "We perform a technical check of your medical summaries and prescriptions.",
+        "point2": "Compliance with the principles of Evidence-Based Medicine (EBM).",
+        "point3": "Elimination of ineffective methods and medications."
       },
       "secondOpinion": {
-        "title": "THE 'SECOND OPINION' ISSUE:",
-        "point1": "Patients visit 3–4 doctors and get different diagnoses.",
-        "point2": "You need an authoritative figure to make a final decision.",
-        "point3": "A doctor from Europe acts as an independent expert of international level."
+        "title": "THE 'SECOND OPINION' PROBLEM:",
+        "point1": "When doctors' opinions differ, an independent expert provides clarity.",
+        "point2": "An objective report helps to make an informed decision.",
+        "point3": "A doctor from Europe acts as an independent international-level expert."
       },
       "trust": {
-        "title": "CRISIS OF TRUST:",
-        "point1": "Stereotypes: 'they don’t treat properly,' 'over-treat,' or give wrong diagnoses.",
-        "point2": "People go abroad for treatment.",
-        "point3": "SOLUTION: 'Medical tourism from your sofa.' Access European quality without flights or visas."
+        "title": "EXPERTISE ACCESSIBILITY:",
+        "point1": "Access to European analytics without flights, visas, or language barriers.",
+        "point2": "Medical tourism from your couch — European quality at home.",
+        "point3": "The service provides exclusively information and consulting services."
       }
     },
     "warning": {
       "title": "Important!",
-      "text1": "This report is for informational purposes only and provides an expert strategy (“Second Opinion”), but does not constitute a medical service. The European expert and the service are not responsible for self-treatment based on the provided information.",
-      "text2Title": "Implementation via Partners",
-      "text2": "To turn the European conclusion into official prescriptions and referrals, please use our partner doctor matching service in your region (green button). Only an in-person physician makes decisions regarding the treatment plan and assumes responsibility for it.",
+      "text1": "This report is for informational and analytical purposes only (\"Second Opinion\") and does not constitute a medical service. The service and the expert shall not be held liable for the user's independent use of the data provided.",
+      "text2Title": "Next Steps:",
+      "text2": "All analytical materials in this report are strictly intended for discussion with your treating physician. Only an in-person licensed physician is authorized to make clinical decisions, issue official prescriptions, or provide referrals.",
       "emergencyTitle": "NOT FOR EMERGENCIES!",
-      "emergency": "In case of a life-threatening situation, call 112 immediately."
+      "emergency": "This service is not intended for emergency medical assistance. In the event of a life-threatening situation, dial 112 immediately."
     }
   },
   "profileUpload": {
