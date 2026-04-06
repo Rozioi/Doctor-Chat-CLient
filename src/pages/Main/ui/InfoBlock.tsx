@@ -35,7 +35,6 @@ export const InfoBlock = () => {
             t("info.advantages.channels.point1"),
             t("info.advantages.channels.point2"),
             t("info.advantages.channels.point3"),
-            t("info.advantages.channels.point4"),
           ],
           image: "/images/advantages/3.png",
         },
@@ -63,25 +62,6 @@ export const InfoBlock = () => {
             t("info.advantages.feedback.point4"),
           ],
           image: "/images/advantages/6.png",
-        },
-        {
-          title: t("info.advantages.joy.title"),
-          points: [
-            t("info.advantages.joy.point1"),
-            t("info.advantages.joy.point2"),
-            t("info.advantages.joy.point3"),
-          ],
-          image: "/images/advantages/1.png",
-        },
-        {
-          title: t("info.advantages.important.title"),
-          points: [
-            t("info.advantages.important.point1"),
-            t("info.advantages.important.point2"),
-            t("info.advantages.important.point3"),
-            t("info.advantages.important.point4"),
-          ],
-          image: "/images/advantages/2.png",
         },
         {
           title: t("info.advantages.profit.title"),
