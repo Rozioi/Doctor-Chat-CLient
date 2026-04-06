@@ -294,7 +294,7 @@
   },
   "main": {
     "title": "MED EXPERT EU",
-    "description": "Independent expertise from doctors from Europe. Without visas and language barrier.",
+    "description": "Independent examination of medical documents from specialists from Europe. Without visas and language barrier.",
     "searchSpecialist": "Get an Examination",
     "analysisDecoding": "Adaptation + Local Doctor",
     "contactCoordinator": "Contact Coordinator"
@@ -331,8 +331,7 @@
         "title": "WHAT DO YOU RECEIVE?",
         "point1": "Expert Report (PDF): a professional document with conclusions from a specialized European specialist.",
         "point2": "Analytical review of the current situation regarding compliance with international protocols.",
-        "point3": "Clear informational recommendations and justifications based on current global standards.",
-        "point4": "Adaptation of recommendations by a partner doctor for implementation in your country."
+        "point3": "Clear informational recommendations and justifications based on current global standards."
       },
       "privacy": {
         "title": "HOW DOES THE AUDIT WORK?",
@@ -352,26 +351,14 @@
         "point3": "The doctor can adapt the tactics within the framework of your country's legislation.",
         "point4": "We have organized this bridge between experts and local doctors."
       },
-      "joy": {
-        "title": "LEAVING THE APPOINTMENT WITH RESULTS:",
-        "point1": "Valid prescriptions for medications based on the audit.",
-        "point2": "Referrals for necessary procedures and examinations.",
-        "point3": "A treatment plan under the supervision of a local specialist."
-      },
-      "important": {
-        "title": "PARTNER DOCTORS WORKING WITH OUR EXPERTISE:",
-        "point1": "Our local doctor adapts the findings into prescriptions.",
-        "point2": "They will refer you to procedures and tests based on the audit results.",
-        "point3": "They will take over your further treatment management.",
-        "point4": "Guaranteed consideration of the European-standard document."
-      },
+
       "profit": {
         "title": "WHY IS IT BENEFICIAL?",
         "point1": "European analytics at an affordable price without travel expenses.",
         "point2": "Access to information on 'Gold Standards' of medicine.",
         "point3": "In-person consultation in the EU: from €2,000.",
         "point4": "Med Expert online audit — 98% savings while accessing the same level of expertise.",
-        "point5": "Expenses in the EU: ~€3,000 (fee + flight), Med Expert: ~€40."
+        "point5": "Expenses in the EU: ~€3,000 (fee + flight), Med Expert: ~€120."
       }
     },
     "problems": {
