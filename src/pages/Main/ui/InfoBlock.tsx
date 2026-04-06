@@ -98,15 +98,6 @@ export const InfoBlock = () => {
           image: "/images/problems/2.png",
         },
         {
-          title: t("info.problems.surgery.title"),
-          points: [
-            t("info.problems.surgery.point1"),
-            t("info.problems.surgery.point2"),
-            t("info.problems.surgery.point3"),
-          ],
-          image: "/images/problems/3.png",
-        },
-        {
           title: t("info.problems.check.title"),
           points: [
             t("info.problems.check.point1"),
