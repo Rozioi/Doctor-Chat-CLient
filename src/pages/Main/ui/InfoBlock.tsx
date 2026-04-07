@@ -84,7 +84,6 @@ export const InfoBlock = () => {
           points: [
             t("info.problems.diagnosis.point1"),
             t("info.problems.diagnosis.point2"),
-            t("info.problems.diagnosis.point3"),
           ],
           image: "/images/problems/1.png",
         },
@@ -93,25 +92,17 @@ export const InfoBlock = () => {
           points: [
             t("info.problems.treatment.point1"),
             t("info.problems.treatment.point2"),
-            t("info.problems.treatment.point3"),
           ],
           image: "/images/problems/2.png",
         },
         {
           title: t("info.problems.check.title"),
-          points: [
-            t("info.problems.check.point1"),
-            t("info.problems.check.point2"),
-          ],
+          points: [t("info.problems.check.point1")],
           image: "/images/problems/4.png",
         },
         {
           title: t("info.problems.secondOpinion.title"),
-          points: [
-            t("info.problems.secondOpinion.point1"),
-            t("info.problems.secondOpinion.point2"),
-            t("info.problems.secondOpinion.point3"),
-          ],
+          points: [t("info.problems.secondOpinion.point1")],
           image: "/images/problems/5.png",
         },
         {
@@ -119,7 +110,6 @@ export const InfoBlock = () => {
           points: [
             t("info.problems.trust.point1"),
             t("info.problems.trust.point2"),
-            t("info.problems.trust.point3"),
           ],
           image: "/images/problems/6.png",
         },

@@ -362,37 +362,29 @@
       }
     },
     "problems": {
-      "title": "Why do people contact us?",
+      "title": "Why Choose Us?",
       "diagnosis": {
         "title": "FOR MEDICAL DATA ANALYSIS",
-        "point1": "Do you have test results and need an independent evaluation?",
-        "point2": "Our experts will audit the documents for compliance with modern international protocols.",
-        "point3": "Objective conclusions without attempts to sell unnecessary services."
+        "point1": "Do you have medical test results and require an independent assessment?",
+        "point2": "Our experts will audit your documents for compliance with modern international protocols."
       },
       "treatment": {
         "title": "FOR ACCESS TO INTERNATIONAL PROTOCOLS",
-        "point1": "Do you want to learn about modern trends in global medicine?",
-        "point2": "We provide an analytical summary of alternative methods available in Europe.",
-        "point3": "A base for discussing new treatment options with your doctor."
+        "point1": "Do you want to learn about current trends in world medicine?",
+        "point2": "In our report, we provide an analytical summary of alternative methods available in Europe to discuss with your attending physician."
       },
-
       "check": {
         "title": "FOR INFORMATION VERIFICATION (EBM)",
-        "point1": "We perform a technical check of your medical summaries and prescriptions.",
-        "point2": "Compliance with the principles of Evidence-Based Medicine (EBM).",
-        "point3": "Elimination of ineffective methods and medications."
+        "point1": "We conduct a technical review of your medical records and prescriptions for compliance with the principles of Evidence-Based Medicine (EBM)."
       },
       "secondOpinion": {
         "title": "THE 'SECOND OPINION' PROBLEM:",
-        "point1": "When doctors' opinions differ, an independent expert provides clarity.",
-        "point2": "An objective report helps to make an informed decision.",
-        "point3": "A doctor from Europe acts as an independent international-level expert."
+        "point1": "When opinions differ, an independent international expert provides an objective analytical report to help the patient and their physician make an informed decision."
       },
       "trust": {
-        "title": "EXPERTISE ACCESSIBILITY:",
+        "title": "ACCESSIBILITY OF EXPERTISE:",
         "point1": "Access to European analytics without flights, visas, or language barriers.",
-        "point2": "Medical tourism from your couch — European quality at home.",
-        "point3": "The service provides exclusively information and consulting services."
+        "point2": "The service provides exclusively information and consulting services."
       }
     },
     "warning": {

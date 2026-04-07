@@ -15,6 +15,7 @@ interface MappedDoctorData {
   experience: string;
   reviewsCount: number;
   price: string;
+  qualification: string;
   rating: number;
   image: string;
   about: string;
@@ -22,7 +23,10 @@ interface MappedDoctorData {
   approbationUrl?: string;
 }
 
-const getExperienceText = (years: number, t: (key: string) => string): string => {
+const getExperienceText = (
+  years: number,
+  t: (key: string) => string,
+): string => {
   if (years === 1) return t("doctorProfilePage.experience.year");
   if (years >= 2 && years <= 4)
     return t("doctorProfilePage.experience.years2_4");
@@ -38,7 +42,6 @@ export const DoctorProfilePage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [doctorData, setDoctorData] = useState<MappedDoctorData | null>(null);
   const [doctorId, setDoctorId] = useState<string | number | null>(null);
-
 
   const fetchDoctor = useCallback(async () => {
     let doctorIdStr: string | null = null;
@@ -173,7 +176,6 @@ export const DoctorProfilePage: React.FC = () => {
       goTo(`/doctor/${String(doctorId)}/reviews`);
     }
   };
-
 
   return (
     <DoctorProfile

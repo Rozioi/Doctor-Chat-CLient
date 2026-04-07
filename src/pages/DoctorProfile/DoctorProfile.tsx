@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button, message, Select, Modal } from "antd";
 import {
   ArrowLeftOutlined,
@@ -19,6 +19,7 @@ interface DoctorProfileProps {
   rating: number;
   reviewsCount?: number;
   experience: string;
+  qualification: string;
   price: string;
   about?: string;
   image?: string;
@@ -33,12 +34,13 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
   specialty,
   rating,
   reviewsCount = 0,
+  qualification,
   experience,
   price,
   about,
   image,
   languages = [],
-  approbationUrl,
+  approbationUrl = "https://doctor-chat-backend-production.up.railway.app/uploads/pdfs/docs-felix-1253.pdf",
   onBack,
   onOpenReviews,
 }) => {
@@ -177,7 +179,6 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
               : t("doctor.profile.defaultLanguage", "Русский")}
           </div>
         </div>
-
         {approbationUrl && (
           <div
             className={styles.approbationLink}
@@ -194,18 +195,16 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
           <div className={styles.aboutTitle}>
             {t("doctor.profile.about", "О враче")}
           </div>
-          <div className={styles.aboutText}>
+          <div className={styles.aboutText} style={{ whiteSpace: "pre-line" }}>
             {about || t("doctor.profile.noAbout", "Информация отсутствует")}
           </div>
         </div>
-
         <div className={styles.experienceBlock}>
           <div className={styles.experienceValue}>{experience}</div>
           <div className={styles.experienceLabel}>
             {t("doctor.profile.experience", "Опыт")}
           </div>
         </div>
-
         <Button
           type="primary"
           className={styles.chatButton}
@@ -270,11 +269,12 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
         centered
         className={styles.approbationModal}
       >
-        <div className={styles.approbationImageWrapper}>
-          <img
-            src={approbationUrl}
-            alt="Approbation"
-            className={styles.approbationImage}
+        <div className={styles.approbationWrapper}>
+          <iframe
+            src={`https://docs.google.com/viewer?url=${encodeURIComponent(approbationUrl)}&embedded=true`}
+            width="100%"
+            height="600px"
+            style={{ border: "none" }}
           />
         </div>
       </Modal>
