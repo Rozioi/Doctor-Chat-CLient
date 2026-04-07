@@ -19,7 +19,6 @@ interface DoctorProfileProps {
   rating: number;
   reviewsCount?: number;
   experience: string;
-  qualification: string;
   price: string;
   about?: string;
   image?: string;
