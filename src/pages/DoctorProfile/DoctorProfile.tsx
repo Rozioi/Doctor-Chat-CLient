@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, message, Select, Modal } from "antd";
 import {
   ArrowLeftOutlined,
@@ -34,7 +34,6 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
   specialty,
   rating,
   reviewsCount = 0,
-  qualification,
   experience,
   price,
   about,

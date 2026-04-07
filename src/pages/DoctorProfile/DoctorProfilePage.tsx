@@ -15,7 +15,6 @@ interface MappedDoctorData {
   experience: string;
   reviewsCount: number;
   price: string;
-  qualification: string;
   rating: number;
   image: string;
   about: string;
