@@ -137,7 +137,7 @@
       "approbationTitle": "Confirmation Document"
     },
     "search": {
-      "title": "Field of Expertise",
+      "title": "Field of Audit",
       "description": "Select a profile category for an independent audit of your documents by a European specialist:",
       "enCatANDName": "Select specialization",
       "noResults": "No specialists found"
@@ -294,15 +294,15 @@
   },
   "main": {
     "title": "MED EXPERT EU",
-    "description": "Independent examination of medical documents from specialists from Europe. Without visas and language barrier.",
-    "searchSpecialist": "Get an Examination",
+    "description": "Independent medical record review by European specialists. No visas or language barriers required.",
+    "searchSpecialist": "Get Medical Opinion",
     "analysisDecoding": "Adaptation + Local Doctor",
     "contactCoordinator": "Contact Coordinator"
   },
   "adaptModal": {
     "title": "Adaptation and support",
     "fstText": "The conclusions of European doctors are an expert opinion, but they are not an official document in pharmacies in your city.",
-    "secondText": "It is important: only MED EXPERT EU partner doctors work with our examination form. Third-party clinics may refuse to review euro-sample documents.",
+    "secondText": "It is important: only MED EXPERT EU partner doctors work with our audit form. Third-party clinics may refuse to review euro-sample documents.",
     "list": {
       "title": "Our local doctor:",
       "one": "Adapts the appointment to prescriptions",
@@ -316,7 +316,7 @@
       "title": "About Us:",
       "europeanStandards": {
         "title": "WHAT IS MED EXPERT EU?",
-        "point1": "Independent medical data expertise provided by specialists from Europe.",
+        "point1": "Independent medical data audit provided by specialists from Europe.",
         "point2": "Evaluation of provided documentation for compliance with international standards without visas or language barriers.",
         "point3": "Independent audit service ('Second Opinion').",
         "point4": "Not a clinical appointment, but a strategic informational analysis."
@@ -357,7 +357,7 @@
         "point1": "European analytics at an affordable price without travel expenses.",
         "point2": "Access to information on 'Gold Standards' of medicine.",
         "point3": "In-person consultation in the EU: from €2,000.",
-        "point4": "Med Expert online audit — 98% savings while accessing the same level of expertise.",
+        "point4": "Med Expert online audit — 98% savings while accessing the same level of audit.",
         "point5": "Expenses in the EU: ~€3,000 (fee + flight), Med Expert: ~€120."
       }
     },
@@ -382,7 +382,7 @@
         "point1": "When opinions differ, an independent international expert provides an objective analytical report to help the patient and their physician make an informed decision."
       },
       "trust": {
-        "title": "ACCESSIBILITY OF EXPERTISE:",
+        "title": "ACCESSIBILITY OF AUDIT:",
         "point1": "Access to European analytics without flights, visas, or language barriers.",
         "point2": "The service provides exclusively information and consulting services."
       }
@@ -439,7 +439,7 @@
     "title": "Personal Coordinator",
     "subtitle": "Have questions? We are always in touch.",
     "point1": "Help you choose the right medical expert specialization if you are unsure.",
-    "point2": "Add the 'Adaptation' service (organization of a visit to a partner doctor) if you only have the Expert Review.",
+    "point2": "Add the 'Adaptation' service (organization of a visit to a partner doctor) if you only have the Audit.",
     "point3": "Assist with payment or document upload issues.",
     "button": "Contact via Telegram"
   },
@@ -452,5 +452,23 @@
     "text1": "Have questions or suggestions? We are always in touch!",
     "phone": "Phone / WhatsApp: {{phone}}",
     "email": "E-mail: {{email}}"
+  },
+  "paymentSelection": {
+    "title": "Choose payment method",
+    "kz": "Pay from Kazakhstan (65000₸)",
+    "rf": "Pay with RU card (14900₽)",
+    "other": "Payment from other countries (Europe/CIS)",
+    "kzText": "Gateway is being connected, our support team will send you a secure payment link",
+    "rfText": "Gateway is being connected, our support team will send you a secure payment link. (Note: price in RUB includes conversion and fee)",
+    "otherText": "Your application is accepted! Coordinator will contact you for an international invoice (SWIFT)",
+    "getExpertise": "Get Audit",
+    "kzKaspiTitle": "Payment via Kaspi.kz",
+    "kzKaspiPhoneLabel": "Enter the phone number linked to your Kaspi.kz app. We will issue an invoice for you to confirm and pay in the Kaspi app within 5 minutes",
+    "kzKaspiPhonePlaceholder": "Phone number",
+    "kzKaspiGetInvoice": "Get invoice in Kaspi ({{amount}} ₸)",
+    "kzKaspiInvoiceSent": "Invoice sent! Check Push notification in Kaspi app. Waiting for payment...",
+    "kzKaspiWaitPayment": "Waiting for payment confirmation...",
+    "kzKaspiSuccess": "Payment received! Expert access opened.",
+    "kzKaspiError": "Error creating invoice. Please try again."
   }
 }

@@ -238,8 +238,8 @@ const ChatListPage: React.FC = () => {
             <MessageOutlined className={styles.emptyIcon} />
             <Text className={styles.emptyText}>
               {user?.role === "DOCTOR"
-                ? t("chats.emptyDoctor", "История экспертиз пуста")
-                : t("chats.empty", "История экспертиз пуста")}
+                ? t("chats.emptyDoctor", "История аудитов пуста")
+                : t("chats.empty", "История аудитов пуста")}
             </Text>
           </div>
         ) : (

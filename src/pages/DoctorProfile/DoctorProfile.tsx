@@ -11,6 +11,7 @@ import styles from "./styles/DoctorProfile.module.scss";
 import { useTranslation } from "react-i18next";
 import { tg } from "../../shared/lib/telegram";
 import { useNavigate } from "react-router";
+import { KaspiPaymentModal } from "../../shared/ui/KaspiPaymentModal/KaspiPaymentModal";
 
 interface DoctorProfileProps {
   id: string | number;
@@ -29,6 +30,7 @@ interface DoctorProfileProps {
 }
 
 export const DoctorProfile: FC<DoctorProfileProps> = ({
+  id,
   name,
   specialty,
   rating,
@@ -46,6 +48,7 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [isApprobationVisible, setIsApprobationVisible] = useState(false);
   const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
+  const [isKaspiModalVisible, setIsKaspiModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
 
   const navigate = useNavigate();
@@ -90,11 +93,17 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
         window.open("https://t.me/m/ZEH5m-TsMTMy", "_blank");
       }, 2000);
     } else if (option === "KZ") {
-      messageApi.info(t("paymentSelection.kzText"));
+      setIsKaspiModalVisible(true);
     } else if (option === "RF") {
       messageApi.info(t("paymentSelection.rfText"));
     }
     setIsPaymentModalVisible(false);
+  };
+
+  const handleKaspiSuccess = (chatId: number) => {
+    setIsKaspiModalVisible(false);
+    // Redirect to the new chat
+    navigate(`/chat/${chatId}`);
   };
 
   return (
@@ -276,6 +285,17 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
           />
         </div>
       </Modal>
+
+      <KaspiPaymentModal
+        isVisible={isKaspiModalVisible}
+        onClose={() => setIsKaspiModalVisible(false)}
+        amount={65000}
+        doctorId={id}
+        serviceType="consultation"
+        tariffType="Standard"
+        telegramId={tg.initDataUnsafe?.user?.id?.toString() || ""}
+        onSuccess={handleKaspiSuccess}
+      />
     </div>
   );
 };
