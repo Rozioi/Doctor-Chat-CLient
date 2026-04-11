@@ -38,7 +38,7 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [paymentId, setPaymentId] = useState<number | null>(null);
   const [status, setStatus] = useState<
-    "IDLE" | "PENDING" | "COMPLETED" | "FAILED"
+    "IDLE" | "PENDING" | "COMPLETED" | "FAILED" | "CANCELLED" | "REFUNDED"
   >("IDLE");
 
   const API_URL =
@@ -65,6 +65,14 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
             setStatus("FAILED");
             clearInterval(interval);
             message.error(t("paymentSelection.kzKaspiError"));
+          } else if (response.data.status === "CANCELLED") {
+            setStatus("CANCELLED");
+            clearInterval(interval);
+            message.warning("Платеж был отменен или истек");
+          } else if (response.data.status === "REFUNDED") {
+            setStatus("REFUNDED");
+            clearInterval(interval);
+            message.info("Платеж был возвращен");
           }
         } catch (error) {
           console.error("Error polling payment status:", error);
@@ -214,6 +222,44 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
               size="large"
             >
               {t("common.back")}
+            </Button>
+          </div>
+        )}
+
+        {status === "CANCELLED" && (
+          <div className={styles.statusContainer}>
+            <div className={`${styles.iconWrapper} ${styles.errorIcon}`}>
+              <CloseOutlined />
+            </div>
+            <h3 className={styles.statusTitle}>Оплата отменена</h3>
+            <p className={styles.statusSubtitle}>
+              Счет был отменен или время на оплату истекло. Пожалуйста, попробуйте создать новый счет.
+            </p>
+            <Button
+              className={styles.backButton}
+              onClick={() => setStatus("IDLE")}
+              size="large"
+            >
+              {t("common.back")}
+            </Button>
+          </div>
+        )}
+
+        {status === "REFUNDED" && (
+          <div className={styles.statusContainer}>
+            <div className={`${styles.iconWrapper} ${styles.successIcon}`} style={{ backgroundColor: '#f0f0f0', color: '#8c8c8c' }}>
+              <CheckOutlined />
+            </div>
+            <h3 className={styles.statusTitle}>Средства возвращены</h3>
+            <p className={styles.statusSubtitle}>
+              Ваш платеж был возвращен. Если у вас возникли вопросы, обратитесь в поддержку.
+            </p>
+            <Button
+              className={styles.backButton}
+              onClick={onClose}
+              size="large"
+            >
+              Закрыть
             </Button>
           </div>
         )}
