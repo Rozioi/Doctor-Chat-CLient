@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 const preloadDoctorProfile = () =>
   import("../../pages/DoctorProfile/DoctorProfilePage");
 
-const doctorCategories = ["oncologist"];
+const doctorCategories = ["oncologist", "therapist"];
 
 const getCountryFlag = (country: string): string => {
   const flags: { [key: string]: string } = {
