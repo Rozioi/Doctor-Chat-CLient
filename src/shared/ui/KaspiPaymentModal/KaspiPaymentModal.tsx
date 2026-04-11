@@ -43,7 +43,7 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
 
   const API_URL =
     import.meta.env.SERVER_API_BASE_URL ||
-    "https://frightfully-desirable-baboon.cloudpub.ru";
+    "https://doctor-chat-backend-production.up.railway.app";
 
   useEffect(() => {
     let interval: any;
