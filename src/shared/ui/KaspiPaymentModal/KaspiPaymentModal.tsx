@@ -122,7 +122,9 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
       }
     } catch (error) {
       console.error("Error creating Kaspi invoice:", error);
-      message.error(t("paymentSelection.kzKaspiError"));
+      message.error(
+        t("paymentSelection.kzKaspiError", "Проверьте введенный номер!"),
+      );
     } finally {
       setIsLoading(false);
     }
@@ -233,7 +235,8 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
             </div>
             <h3 className={styles.statusTitle}>Оплата отменена</h3>
             <p className={styles.statusSubtitle}>
-              Счет был отменен или время на оплату истекло. Пожалуйста, попробуйте создать новый счет.
+              Счет был отменен или время на оплату истекло. Пожалуйста,
+              попробуйте создать новый счет.
             </p>
             <Button
               className={styles.backButton}
@@ -247,12 +250,16 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
 
         {status === "REFUNDED" && (
           <div className={styles.statusContainer}>
-            <div className={`${styles.iconWrapper} ${styles.successIcon}`} style={{ backgroundColor: '#f0f0f0', color: '#8c8c8c' }}>
+            <div
+              className={`${styles.iconWrapper} ${styles.successIcon}`}
+              style={{ backgroundColor: "#f0f0f0", color: "#8c8c8c" }}
+            >
               <CheckOutlined />
             </div>
             <h3 className={styles.statusTitle}>Средства возвращены</h3>
             <p className={styles.statusSubtitle}>
-              Ваш платеж был возвращен. Если у вас возникли вопросы, обратитесь в поддержку.
+              Ваш платеж был возвращен. Если у вас возникли вопросы, обратитесь
+              в поддержку.
             </p>
             <Button
               className={styles.backButton}
