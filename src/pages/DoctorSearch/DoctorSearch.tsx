@@ -140,7 +140,9 @@ const DoctorSearchPage: React.FC = () => {
           const categoryDoctors = doctors.filter(
             (d: DoctorCardData) =>
               (d.specialization === item || d.category === item) &&
-              (d.name.includes("Феликс") || d.name.includes("Felix")),
+              (d.name.includes("Феликс") ||
+                d.name.includes("Felix") ||
+                d.specialization?.includes("therapist")),
           );
 
           return (
