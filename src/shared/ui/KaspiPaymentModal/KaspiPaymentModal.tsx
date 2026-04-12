@@ -60,7 +60,7 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
             messageApi.success(t("paymentSelection.kzKaspiSuccess"));
             setTimeout(() => {
               onSuccess(response.data.chatId);
-            }, 2000);
+            }, 1000);
           } else if (response.data.status === "FAILED") {
             setStatus("FAILED");
             clearInterval(interval);
@@ -77,7 +77,7 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
         } catch (error) {
           console.error("Error polling payment status:", error);
         }
-      }, 5000);
+      }, 2000);
     }
 
     return () => {
@@ -193,6 +193,14 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
             <p className={styles.statusSubtitle}>
               {t("paymentSelection.kzKaspiWaitPayment")}
             </p>
+            <div className={styles.statusInfoWrapper}>
+              <p className={styles.processingTime}>
+                {t("paymentSelection.kzKaspiProcessingTime")}
+              </p>
+              <p className={styles.autoChatInfo}>
+                {t("paymentSelection.kzKaspiAutoChatInfo")}
+              </p>
+            </div>
           </div>
         )}
 

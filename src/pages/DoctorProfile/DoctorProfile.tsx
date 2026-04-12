@@ -102,8 +102,26 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
 
   const handleKaspiSuccess = (chatId: number) => {
     setIsKaspiModalVisible(false);
-    // Redirect to the new chat
-    navigate(`/chat/${chatId}`);
+
+    // Open Telegram chat link directly
+    const botUsername = import.meta.env.VITE_BOT_USERNAME || "medexperteu_bot";
+    const url = `https://t.me/${botUsername}?start=chat_${chatId}`;
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if ((tg as any).openLink) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (tg as any).openLink(url);
+      } else {
+        window.open(url, "_blank");
+      }
+    } catch (error) {
+      console.error("Error opening Telegram link:", error);
+      window.open(url, "_blank");
+    }
+
+    // Redirect to the chats list
+    navigate("/chat");
   };
 
   return (

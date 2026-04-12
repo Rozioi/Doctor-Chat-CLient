@@ -106,6 +106,29 @@
     font-size: 15px;
     color: #6b7280;
     line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.statusInfoWrapper {
+    margin-top: 12px;
+    padding: 16px;
+    background-color: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #f3f4f6;
+}
+
+.processingTime {
+    font-size: 13px;
+    color: #4b5563;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.autoChatInfo {
+    font-size: 12px;
+    color: #9ca3af;
+    line-height: 1.4;
+    font-style: italic;
 }
 
 .iconWrapper {
