@@ -90,8 +90,10 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
 
     let finalPhone = sanitized;
 
-    if (!finalPhone.startsWith("8")) {
-      finalPhone = "+" + finalPhone;
+    // Convert international 7... format to domestic 8... format for Kaspi/ApiPay
+    // react-phone-input-2 with country="kz" returns "770..."
+    if (finalPhone.startsWith("7") && finalPhone.length === 11) {
+      finalPhone = "8" + finalPhone.slice(1);
     }
 
     if (!sanitized || sanitized.length < 10) {
@@ -154,18 +156,12 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
                 country={"kz"}
                 value={phoneNumber}
                 onChange={(value) => {
-                  // If user starts typing 8 after the prefix 7, we strip the 8
-                  // value from react-phone-input-2 is just digits (e.g., '7807...')
-                  if (value.startsWith("78") && value.length > 2) {
-                    setPhoneNumber("8" + value.slice(2));
-                  } else {
-                    setPhoneNumber(value);
-                  }
+                  setPhoneNumber(value);
                 }}
                 placeholder={t("paymentSelection.kzKaspiPhonePlaceholder")}
-                onlyCountries={["kz", "ru"]}
+                onlyCountries={["kz"]}
                 disableDropdown
-                countryCodeEditable={true}
+                countryCodeEditable={false}
               />
             </div>
             <Button
