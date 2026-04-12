@@ -40,7 +40,7 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
   const [status, setStatus] = useState<
     "IDLE" | "PENDING" | "COMPLETED" | "FAILED" | "CANCELLED" | "REFUNDED"
   >("IDLE");
-
+  const [messageApi, contextHolder] = message.useMessage();
   const API_URL =
     import.meta.env.SERVER_API_BASE_URL ||
     "https://doctor-chat-backend-production.up.railway.app";
@@ -57,22 +57,22 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
           if (response.data.status === "COMPLETED") {
             setStatus("COMPLETED");
             clearInterval(interval);
-            message.success(t("paymentSelection.kzKaspiSuccess"));
+            messageApi.success(t("paymentSelection.kzKaspiSuccess"));
             setTimeout(() => {
               onSuccess(response.data.chatId);
             }, 2000);
           } else if (response.data.status === "FAILED") {
             setStatus("FAILED");
             clearInterval(interval);
-            message.error(t("paymentSelection.kzKaspiError"));
+            messageApi.error(t("paymentSelection.kzKaspiError"));
           } else if (response.data.status === "CANCELLED") {
             setStatus("CANCELLED");
             clearInterval(interval);
-            message.warning("Платеж был отменен или истек");
+            messageApi.warning("Платеж был отменен или истек");
           } else if (response.data.status === "REFUNDED") {
             setStatus("REFUNDED");
             clearInterval(interval);
-            message.info("Платеж был возвращен");
+            messageApi.info("Платеж был возвращен");
           }
         } catch (error) {
           console.error("Error polling payment status:", error);
@@ -95,7 +95,7 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
     }
 
     if (!sanitized || sanitized.length < 10) {
-      message.warning(t("auth.errors.invalidData"));
+      messageApi.warning(t("auth.errors.invalidData"));
       return;
     }
 
@@ -116,23 +116,16 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
       if (response.data.success) {
         setPaymentId(response.data.paymentId);
         setStatus("PENDING");
-        message.info(t("paymentSelection.kzKaspiInvoiceSent"));
+        messageApi.info(t("paymentSelection.kzKaspiInvoiceSent"));
       } else {
-        message.error(
+        messageApi.error(
           t("paymentSelection.kzKaspiError", "Проверьте введенный номер!"),
         );
       }
-    } catch (error: any) {
-      console.error("Full error object:", error.response?.data);
-
-      // Вытаскиваем сообщение об ошибке из ответа сервера
-      const serverErrorMessage =
-        error.response?.data?.error || error.response?.data?.message;
-
-      message.error(
-        serverErrorMessage === "Validation failed"
-          ? "Ошибка валидации: Проверьте формат номера телефона"
-          : t("paymentSelection.kzKaspiError"),
+    } catch (error) {
+      console.error("Error creating Kaspi invoice:", error);
+      messageApi.error(
+        t("paymentSelection.kzKaspiError", "Проверьте введенный номер!"),
       );
     } finally {
       setIsLoading(false);
@@ -148,6 +141,8 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
       className="kaspi-premium-modal"
       width={420}
     >
+      {contextHolder}
+
       <div className={styles.modalContent}>
         {status === "IDLE" && (
           <>
