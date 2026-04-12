@@ -118,12 +118,21 @@ export const KaspiPaymentModal: FC<KaspiPaymentModalProps> = ({
         setStatus("PENDING");
         message.info(t("paymentSelection.kzKaspiInvoiceSent"));
       } else {
-        message.error(t("paymentSelection.kzKaspiError"));
+        message.error(
+          t("paymentSelection.kzKaspiError", "Проверьте введенный номер!"),
+        );
       }
-    } catch (error) {
-      console.error("Error creating Kaspi invoice:", error);
+    } catch (error: any) {
+      console.error("Full error object:", error.response?.data);
+
+      // Вытаскиваем сообщение об ошибке из ответа сервера
+      const serverErrorMessage =
+        error.response?.data?.error || error.response?.data?.message;
+
       message.error(
-        t("paymentSelection.kzKaspiError", "Проверьте введенный номер!"),
+        serverErrorMessage === "Validation failed"
+          ? "Ошибка валидации: Проверьте формат номера телефона"
+          : t("paymentSelection.kzKaspiError"),
       );
     } finally {
       setIsLoading(false);
