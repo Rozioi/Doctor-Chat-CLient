@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import { tg } from "../../shared/lib/telegram";
 import { useNavigate } from "react-router";
 import { KaspiPaymentModal } from "../../shared/ui/KaspiPaymentModal/KaspiPaymentModal";
-import { useTelegramWebApp } from "../../processes/telegram-integration/useTelegramWebApp";
 
 interface DoctorProfileProps {
   id: string | number;
@@ -51,7 +50,7 @@ export const DoctorProfile: FC<DoctorProfileProps> = ({
   const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
   const [isKaspiModalVisible, setIsKaspiModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  import { telegram } from useTelegramWebApp();
+
   const navigate = useNavigate();
   const handleLanguageChange = (value: string) => {
     i18n.changeLanguage(value);
