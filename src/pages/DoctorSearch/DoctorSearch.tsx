@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 const preloadDoctorProfile = () =>
   import("../../pages/DoctorProfile/DoctorProfilePage");
 
-const doctorCategories = ["oncologist", "therapist"];
+const doctorCategories = ["oncologist"];
 
 const getCountryFlag = (country: string): string => {
   const flags: { [key: string]: string } = {
@@ -140,9 +140,7 @@ const DoctorSearchPage: React.FC = () => {
           const categoryDoctors = doctors.filter(
             (d: DoctorCardData) =>
               (d.specialization === item || d.category === item) &&
-              (d.name.includes("Феликс") ||
-                d.name.includes("Felix") ||
-                d.specialization?.includes("therapist")),
+              (d.name.includes("Феликс") || d.name.includes("Felix")),
           );
 
           return (
